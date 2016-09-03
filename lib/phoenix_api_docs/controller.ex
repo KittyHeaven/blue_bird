@@ -17,9 +17,10 @@ defmodule PhoenixApiDocs.Controller do
   defmacro api(method, path, do: block) do
     route_method = method |> atom_to_string |> String.upcase
     metadata = extract_metadata(block)
-    group = metadata |> Keyword.get(:group, ["No group"]) |> List.first
+    group = metadata |> Keyword.get(:group, []) |> List.first
     title = metadata |> Keyword.get(:title, ["Action"]) |> List.first
     description = metadata |> Keyword.get(:description, []) |> List.first
+    note = metadata |> Keyword.get(:note, []) |> List.first
     parameters = extract_parameters(metadata)
 
     quote do
@@ -28,6 +29,7 @@ defmodule PhoenixApiDocs.Controller do
           group: unquote(group),
           title: unquote(title),
           description: unquote(description),
+          note: unquote(note),
           method: unquote(route_method),
           path: unquote(path),
           parameters: unquote(Macro.escape(parameters))

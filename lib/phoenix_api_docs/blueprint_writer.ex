@@ -66,7 +66,7 @@ defmodule PhoenixApiDocs.BlueprintWriter do
     """
   end
 
-  defp process_note(%{note: note}) do
+  defp process_note(%{note: note}) when is_binary(note) do
     """
 
     ::: note

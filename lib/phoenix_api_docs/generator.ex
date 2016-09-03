@@ -85,6 +85,7 @@ defmodule PhoenixApiDocs.Generator do
     try do
       route_docs =
         apply(controller, :api_doc, [method, route.path])
+        |> set_default_group(route)
         |> Map.put(:requests, route_requests)
 
       {:ok, route_docs}
@@ -95,5 +96,14 @@ defmodule PhoenixApiDocs.Generator do
         :error
     end
   end
+
+  defp set_default_group(%{group: group} = route_docs, route) when is_nil(group) do
+    group = route.plug |> Phoenix.Naming.resource_name("Controller") |> Phoenix.Naming.humanize
+
+    route_docs
+    |> Map.put(:group, group)
+  end
+
+  defp set_default_group(route_docs, _), do: route_docs
 
 end
