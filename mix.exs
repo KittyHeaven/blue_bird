@@ -27,7 +27,8 @@ defmodule PhoenixApiDocs.Mixfile do
   defp deps do
     [
       {:plug, ">= 0.0.0"},
-      {:poison, ">= 0.0.0"}
+      {:poison, ">= 0.0.0"},
+      {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
 
