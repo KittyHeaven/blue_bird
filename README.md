@@ -29,6 +29,23 @@ ExUnit.start(formatters: [ExUnit.CLIFormatter, PhoenixApiDocs.Formatter])
 
 ## Usage
 
+Add `api_docs_info` to your `mix.exs`:
+
+```elixir
+def api_docs_info do
+  [
+    host: "https://api.acme.com",
+    title: "ACME API",
+    description: "API requires authorization. All requests must have valid `auth_token`"
+  ]
+end
+```
+
+Options:
+* `host`: API host.
+* `title`: Documentation title (can use Blueprint format).
+* `description`: Documentation description (can use Blueprint format).
+
 Add `PhoenixApiDocs.Controller` to your `phoenix` controller and use `api\3` macro to generate specification for the controller action:
 
 ```elixir
@@ -125,8 +142,8 @@ config :phoenix_api_docs,
 ```
 
 Config options:
-* `:docs_path`: Specify the path where the documentation will be generated. If you want to serve the documentation directly from the `phoenix` you can specify `priv/static/docs`.
-* `:theme`: HTML theme is generated using the [Aglio renderer](https://github.com/danielgtaylor/aglio).
+* `docs_path`: Specify the path where the documentation will be generated. If you want to serve the documentation directly from the `phoenix` you can specify `priv/static/docs`.
+* `theme`: HTML theme is generated using the [Aglio renderer](https://github.com/danielgtaylor/aglio).
 
 
 ## Common problems
