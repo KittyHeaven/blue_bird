@@ -106,6 +106,8 @@ defmodule PhoenixApiDocs.BlueprintWriter do
 
   defp process_requests(%{requests: requests}) when is_list(requests) do
     Enum.reduce requests, "", fn(request, docs) ->
+      docs
+      <>
       case Map.fetch(request, :body) do
         {:ok, body} ->
           """
