@@ -49,7 +49,7 @@ defmodule PhoenixApiDocs.Controller do
       case parameter do
         {:parameter, [name, type, :required, description]} ->
           list ++ [%{name: atom_to_string(name), type: atom_to_string(type), required: true, description: description}]
-        {:parameter, [path, name, type, :required]} ->
+        {:parameter, [_path, name, type, :required]} ->
           list ++ [%{name: atom_to_string(name), type: atom_to_string(type), required: true, description: ""}]
         {:parameter, [name, type, description]} ->
           list ++ [%{name: atom_to_string(name), type: atom_to_string(type), required: false, description: description}]
