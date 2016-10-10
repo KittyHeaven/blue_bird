@@ -106,32 +106,35 @@ defmodule PhoenixApiDocs.BlueprintWriter do
 
   defp process_requests(%{requests: requests}) when is_list(requests) do
     Enum.reduce requests, "", fn(request, docs) ->
-      docs
-      <>
-      case Map.fetch(request, :body) do
-        {:ok, body} ->
-          """
-
-          + Request json (application/json)
-            #{body}
-          """
-        :error ->
-          ""
-      end
-      <>
-      case Map.fetch(request, :response) do
-        {:ok, response} ->
-          """
-
-          + Response #{response.status}
-            #{response.body}
-          """
-        :error ->
-          ""
-      end
+      docs <> request_body(request) <> response_body(request)
     end
   end
 
   defp process_requests(_), do: ""
 
+  defp request_body(request) do
+    case Map.fetch(request, :body) do
+      {:ok, body} ->
+        """
+
+        + Request json (application/json)
+          #{body}
+        """
+      :error ->
+        ""
+    end
+  end
+
+  defp response_body(request) do
+    case Map.fetch(request, :response) do
+      {:ok, response} ->
+        """
+
+        + Response #{response.status}
+          #{response.body}
+        """
+      :error ->
+        ""
+    end
+  end
 end
