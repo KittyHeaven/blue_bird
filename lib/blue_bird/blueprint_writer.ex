@@ -11,13 +11,11 @@ defmodule BlueBird.BlueprintWriter do
     documentation_header = proces_documentation_header(api_docs)
 
     api_docs.routes
-    |> Enum.sort_by(fn(route) -> route.group end)
-    |> Enum.group_by(fn(route) -> route.group end)
-    |> Enum.to_list
+    |> Enum.sort_by(&(&1.group))
+    |> Enum.group_by(&(&1.group))
+    |> Enum.to_list()
     |> Enum.reduce(documentation_header, fn({group_name, group_routes}, docs) ->
-      docs
-      <>
-      """
+      docs <> """
       # Group #{group_name}
 
       #{process_routes(group_name, group_routes)}
@@ -41,14 +39,10 @@ defmodule BlueBird.BlueprintWriter do
   defp process_routes(group, routes) do
     Enum.reduce routes, "", fn(route, docs) ->
       docs
-      <>
-      process_header(group, route)
-      <>
-      process_note(route)
-      <>
-      process_parameters(route)
-      <>
-      process_requests(route)
+      <> process_header(group, route)
+      <> process_note(route)
+      <> process_parameters(route)
+      <> process_requests(route)
     end
   end
 

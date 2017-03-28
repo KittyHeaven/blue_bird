@@ -63,10 +63,8 @@ defmodule BlueBird.Controller do
 
   defp atom_to_string(atom_or_string) do
     cond do
-      is_atom(atom_or_string) ->
-        atom_or_string |> Atom.to_string
-      true ->
-        atom_or_string
+      is_atom(atom_or_string) -> atom_or_string |> Atom.to_string
+      true                    -> atom_or_string
     end
   end
 

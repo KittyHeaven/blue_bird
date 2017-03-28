@@ -1,15 +1,16 @@
 # Blue Bird
 
-`PhoenixApiDocs` is a library written in the `Elixir` for the [Phoenix framework](http://www.phoenixframework.org/). It lets you generate API documentation in the [API Blueprint](https://apiblueprint.org/) format from annotations in controllers and automated tests.
+`BlueBird` is a library written in the `Elixir` for the [Phoenix framework](http://www.phoenixframework.org/).
+It lets you generate API documentation in the [API Blueprint](https://apiblueprint.org/) format from annotations in controllers and automated tests.
 
 
 ## Installation
 
-Add PhoenixApiDocs to your mix.exs dependencies:
+Add BlueBird to your mix.exs dependencies:
 
 ```elixir
 defp deps do
-  [{:phoenix_api_docs, "~> 0.1.0"}]
+  [{:blue_bird, "~> 0.1.0"}]
 end
 ```
 
@@ -19,11 +20,11 @@ Run `mix deps.get` to fetch the dependencies:
 $ mix deps.get
 ```
 
-In your `test/test_helper.exs` start gen server `PhoenixApiDocs.start` for logging requests and configure `ExUnit` to use `PhoenixApiDocs.Formatter`:
+In your `test/test_helper.exs` start gen server `BlueBird.start` for logging requests and configure `ExUnit` to use `BlueBird.Formatter`:
 
 ```elixir
-PhoenixApiDocs.start
-ExUnit.start(formatters: [ExUnit.CLIFormatter, PhoenixApiDocs.Formatter])
+BlueBird.start
+ExUnit.start(formatters: [ExUnit.CLIFormatter, BlueBird.Formatter])
 ```
 
 
@@ -46,12 +47,12 @@ Options:
 * `title`: Documentation title (can use Blueprint format).
 * `description`: Documentation description (can use Blueprint format).
 
-Add `PhoenixApiDocs.Controller` to your `phoenix` controller and use `api\3` macro to generate specification for the controller action:
+Add `BlueBird.Controller` to your `phoenix` controller and use `api\3` macro to generate specification for the controller action:
 
 ```elixir
 defmodule App.CommentController do
   use App.Web, :controller
-  use PhoenixApiDocs.Controller
+  use BlueBird.Controller
 
   api :GET, "/posts/:post_id/comments" do
     group "Comment" # If not provided, it will be guessed from the controller name (resource name)
@@ -88,7 +89,7 @@ API specification options:
   * optional - `parameter :post_id, :integer, "Post ID"`
 
 
-In your tests select what requests and responses you want to include in the documentation by saving `conn` to `PhoenixApiDocs.ConnLogger`:
+In your tests select what requests and responses you want to include in the documentation by saving `conn` to `BlueBird.ConnLogger`:
 
 ```elixir
   test "list comments for post", %{conn: conn} do
@@ -102,17 +103,17 @@ In your tests select what requests and responses you want to include in the docu
 
     assert json_response(conn, 200)
 
-    PhoenixApiDocs.ConnLogger.save(conn)
+    BlueBird.ConnLogger.save(conn)
   end
 ```
 
-`PhoenixApiDocs.ConnLogger.save` can be also piped:
+`BlueBird.ConnLogger.save` can be also piped:
 
 ```elixir
     conn = get(
       conn,
       comments_path(conn, :index, post)
-    ) |> PhoenixApiDocs.ConnLogger.save
+    ) |> BlueBird.ConnLogger.save
   end
 ```
 

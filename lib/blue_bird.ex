@@ -19,5 +19,4 @@ defmodule BlueBird do
     end
     :ok
   end
-
 end
