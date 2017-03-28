@@ -7,7 +7,7 @@ defmodule BlueBird.BlueprintWriter do
 
     File.mkdir_p(path)
     File.write(filename, blueprint_text(api_docs))
-    File.write(filename, "#{inspect api_docs}")
+    File.write(filename2, "#{inspect api_docs}")
   end
 
   defp blueprint_text(api_docs) do

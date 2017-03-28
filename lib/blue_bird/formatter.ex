@@ -1,7 +1,7 @@
 defmodule BlueBird.Formatter do
   use GenEvent
 
-  @docs_path    Application.get_env(:blue_bird, :docs_path, "docs")
+  @docs_path Application.get_env(:blue_bird, :docs_path, "docs")
 
   def init(_config), do: {:ok, nil}
 
