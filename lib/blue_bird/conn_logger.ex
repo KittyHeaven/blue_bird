@@ -12,7 +12,6 @@ defmodule BlueBird.ConnLogger do
     conn
   end
 
-
   # --- Private Interface ---
   def handle_cast({:save, conn}, conns), do: {:noreply, conns ++ [conn]}
   def handle_call(:conns, _from, conns), do: {:reply, conns, conns}

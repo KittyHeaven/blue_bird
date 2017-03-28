@@ -1,10 +1,11 @@
 defmodule BlueBird.Formatter do
   use GenEvent
 
-  @project_path Mix.Project.load_paths |> Enum.at(0) |> String.split("_build") |> Enum.at(0)
   @docs_path    Application.get_env(:blue_bird, :docs_path, "docs")
-
-  def init(_config), do: {:ok, nil}
+  @project_path Mix.Project.load_paths
+                |> Enum.at(0)
+                |> String.split("_build")
+                |> Enum.at(0)
 
   def handle_event({:suite_finished, _run_us, _load_us}, nil) do
     save_blueprint_file()
