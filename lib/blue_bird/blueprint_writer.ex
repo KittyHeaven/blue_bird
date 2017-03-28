@@ -3,8 +3,11 @@ defmodule BlueBird.BlueprintWriter do
   def run(api_docs, path) do
     filename = Path.join(path, "api.apib")
 
+    filename2 = Path.join(path, "debug")
+
     File.mkdir_p(path)
     File.write(filename, blueprint_text(api_docs))
+    File.write(filename, "#{inspect api_docs}")
   end
 
   defp blueprint_text(api_docs) do
