@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Phoenix.ApiDocs do
+defmodule Mix.Tasks.Bird.Gen do
   use Mix.Task
 
   @shortdoc "Generates HTML API Docs from api.apib using Aglio"
