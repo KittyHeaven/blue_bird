@@ -1,8 +1,8 @@
-defmodule PhoenixApiDocs.Controller do
+defmodule BlueBird.Controller do
 
   defmacro __using__(_) do
     quote do
-      import PhoenixApiDocs.Controller, only: [api: 3]
+      import BlueBird.Controller, only: [api: 3]
     end
   end
 

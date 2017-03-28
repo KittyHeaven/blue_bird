@@ -1,4 +1,4 @@
-defmodule PhoenixApiDocs.Formatter do
+defmodule BlueBird.Formatter do
   use GenEvent
 
   def init(_config) do
@@ -6,7 +6,7 @@ defmodule PhoenixApiDocs.Formatter do
   end
 
   def handle_event({:suite_finished, _run_us, _load_us}, nil) do
-    save_blueprint_file
+    save_blueprint_file()
     :remove_handler
   end
 
@@ -16,12 +16,12 @@ defmodule PhoenixApiDocs.Formatter do
 
   defp save_blueprint_file do
     project_path = Mix.Project.load_paths |> Enum.at(0) |> String.split("_build") |> Enum.at(0)
-    docs_path = Application.get_env(:phoenix_api_docs, :docs_path, "docs")
+    docs_path = Application.get_env(:blue_bird, :docs_path, "docs")
     path = Path.join(project_path, docs_path)
 
-    api_docs = PhoenixApiDocs.Generator.run
+    api_docs = BlueBird.Generator.run
 
-    PhoenixApiDocs.BlueprintWriter.run(api_docs, path)
+    BlueBird.BlueprintWriter.run(api_docs, path)
   end
 
 end

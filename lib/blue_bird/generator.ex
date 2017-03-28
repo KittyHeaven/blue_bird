@@ -1,14 +1,14 @@
-defmodule PhoenixApiDocs.Generator do
+defmodule BlueBird.Generator do
 
   def run do
-    test_conns = PhoenixApiDocs.ConnLogger.conns
+    test_conns = BlueBird.ConnLogger.conns
     app_module = Mix.Project.get.application |> Keyword.get(:mod) |> elem(0)
-    router_module = Module.concat([app_module, :Router])
+    router_module = Application.get_env(:blue_bird, :router, Module.concat([app_module, :Router]))
 
     %{
-      host: Keyword.get(api_docs_info, :host, "http://localhost"),
-      title: Keyword.get(api_docs_info, :title, "API Documentation"),
-      description: Keyword.get(api_docs_info, :description, "Enter API description in mix.exs - api_docs_info"),
+      host: Keyword.get(api_docs_info(), :host, "http://localhost"),
+      title: Keyword.get(api_docs_info(), :title, "API Documentation"),
+      description: Keyword.get(api_docs_info(), :description, "Enter API description in mix.exs - api_docs_info"),
       routes: routes_docs(router_module, test_conns)
     }
   end

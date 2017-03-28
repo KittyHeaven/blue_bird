@@ -1,4 +1,4 @@
-defmodule PhoenixApiDocs.BlueprintWriter do
+defmodule BlueBird.BlueprintWriter do
 
   def run(api_docs, path) do
     filename = Path.join(path, "api.apib")

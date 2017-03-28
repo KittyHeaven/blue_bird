@@ -1,4 +1,4 @@
-defmodule PhoenixApiDocs.ConnLogger do
+defmodule BlueBird.ConnLogger do
   use GenServer
 
   def start_link do
