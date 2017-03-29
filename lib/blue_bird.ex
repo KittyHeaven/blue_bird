@@ -1,9 +1,9 @@
 defmodule BlueBird do
   use Application
 
-  def start(_type, []) do
-    import Supervisor.Spec
+  import Supervisor.Spec
 
+  def start(_type, []) do
     children = [
       worker(BlueBird.ConnLogger, []),
     ]
