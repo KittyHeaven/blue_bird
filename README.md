@@ -128,7 +128,7 @@ To generate the documentation in a HTML format use [Aglio renderer](https://gith
 ```
 $ npm install aglio -g
 
-$ mix phoenix.api_docs
+$ mix bird.gen.docs
 ```
 
 
