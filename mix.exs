@@ -28,6 +28,8 @@ defmodule BlueBird.Mixfile do
   # Should work with all versions
   defp deps do
     [
+      # Static code analysis
+      {:credo, "~> 0.7.2", only: :dev},
       {:plug, ">= 1.3.0"},
       {:poison, ">= 3.0.0"},
       {:ex_doc, ">= 0.15.0", only: :dev}
