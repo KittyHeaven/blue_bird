@@ -1,7 +1,7 @@
 defmodule BlueBird.Generator do
 
   def run do
-    test_conns = BlueBird.ConnLogger.conns
+    test_conns = BlueBird.ConnLogger.conns()
     app_module = Mix.Project.get.application |> Keyword.get(:mod) |> elem(0)
     router_module = Application.get_env(:blue_bird, :router, Module.concat([app_module, :Router]))
 
