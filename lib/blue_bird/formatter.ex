@@ -5,8 +5,18 @@ defmodule BlueBird.Formatter do
 
   def init(_config), do: {:ok, nil}
 
-  def handle_event({:suite_finished, _run_us, _load_us}, nil), do: save_blueprint_file()
-  def handle_event(_event, nil),                               do: {:ok, nil}
+  @doc """
+  When the tests suite did its job, trigger the file generator.
+  """
+  def handle_event({:suite_finished, _run_us, _load_us}, nil) do
+    save_blueprint_file()
+    :remove_handler
+  end
+
+  @doc """
+  Ignore all other events.
+  """
+  def handle_event(_event, nil), do: {:ok, nil}
 
   defp save_blueprint_file do
     project_path = Mix.Project.load_paths
