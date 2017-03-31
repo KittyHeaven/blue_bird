@@ -1,4 +1,13 @@
 defmodule BlueBird.Formatter do
+  @moduledoc """
+  `BlueBird.Formatter` has to be another ExUnit formatter.
+
+  This module will catch the `:suite_finished` event (fired by `ExUnit`). Afterwards it will trigger
+  the generation of the api blueprint file.
+
+  Usage: In your `test_helper.exs` add `BlueBird.Formatter` as formatter.
+  It shoud look like: `ExUnit.start(formatters: [ExUnit.CLIFormatter, BlueBird.Formatter])`.
+  """
   use GenEvent
 
   @docs_path Application.get_env(:blue_bird, :docs_path, "docs")
