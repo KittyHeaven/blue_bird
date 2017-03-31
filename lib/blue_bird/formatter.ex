@@ -5,11 +5,8 @@ defmodule BlueBird.Formatter do
 
   def init(_config), do: {:ok, nil}
 
-  def handle_event(_event, nil), do: {:ok, nil}
-  def handle_event({:suite_finished, _run_us, _load_us}, nil) do
-    save_blueprint_file()
-    :remove_handler
-  end
+  def handle_event({:suite_finished, _run_us, _load_us}, nil), do: save_blueprint_file()
+  def handle_event(_event, nil),                               do: {:ok, nil}
 
   defp save_blueprint_file do
     project_path = Mix.Project.load_paths
