@@ -13,6 +13,12 @@ defmodule BlueBird.Formatter do
   @docs_path Application.get_env(:blue_bird, :docs_path, "docs")
 
   @doc """
+  `init` function of this module.
+  See `https://hexdocs.pm/elixir/GenEvent.html#c:init/1`
+  """
+  def init(_config), do: {:ok, nil}
+
+  @doc """
   When the tests suite did its job, trigger the file generator.
   """
   def handle_event({:suite_finished, _run_us, _load_us}, nil) do
