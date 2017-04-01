@@ -66,10 +66,8 @@ defmodule BlueBird.Generator do
   defp requests(routes, test_conns) do
     Enum.reduce test_conns, [], fn(conn, list) ->
       case find_route(routes, conn.request_path) do
-        nil ->
-          list
-        route ->
-          list ++ [request_map(route, conn)]
+        nil   -> list
+        route -> list ++ [request_map(route, conn)]
       end
     end
   end
