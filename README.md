@@ -155,6 +155,19 @@ Config options:
 
 Please make sure that the route you are using in the annotation matches exactly the route from the `phoenix router` (including params). Run `mix phoenix.routes` and compare the routes.
 
-## Tasks to do
+## TODO:
 
-* `raise error` when route that is used in the annotation is not available in the `phoenix router`
+- [ ] `raise error` when route that is used in the annotation is not available in the `phoenix router`
+- [ ] Overwork README
+- [ ] Set `content-type` default to `application/json`
+- [ ] Make `content-type` editable
+- [ ] Fetch response headers and render them
+- [ ] Fetch request headers and render them
+- [ ] Document, that the routes has to be in the :api pipeline
+- [ ] Make it configurable to set
+
+- [ ] Overwork `BlueBird.BlueprintWriter`
+- [x] Overwork `BlueBird.ConnLogger`
+- [ ] Overwork `BlueBird.Controller`
+- [x] Overwork `BlueBird.Formatter`
+- [ ] Overwork `BlueBird.Generator`
