@@ -68,14 +68,14 @@ defmodule BlueBird.Generator do
   defp find_route(routes, path) do
     routes
     |> Enum.sort_by(fn(route) -> -byte_size(route.path) end)
-    |> Enum.find(fn(route) ->
-      route_match?(route.path, path)
-    end)
+    |> Enum.find(fn(route) -> route_match?(route.path, path) end)
   end
 
   defp route_match?(route, path) do
-    route_regex = Regex.replace(~r/(:[^\/]+)/, route, "([^/]+)") |> Regex.compile!
-    Regex.match?(route_regex, path)
+    ~r/(:[^\/]+)/
+    |> Regex.replace(route, "([^/]+)")
+    |> Regex.compile!
+    |> Regex.match?(path)
   end
 
   defp process_route(route, requests) do
