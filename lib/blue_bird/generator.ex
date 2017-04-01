@@ -84,9 +84,14 @@ defmodule BlueBird.Generator do
     request = %{
       method: conn.method,
       path: route.path,
+      headers: conn.req_headers,
+      path_params: conn.path_params,
+      params: conn.params,
+      body: Poison.encode!(conn.body_params), # TODO: Do we need this???
       response: %{
         status: conn.status,
-        body: conn.resp_body
+        body: conn.resp_body,
+        headers: conn.resp_headers
       }
     }
     if conn.body_params == %{} do
