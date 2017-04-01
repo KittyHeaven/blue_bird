@@ -157,11 +157,7 @@ defmodule BlueBird.BlueprintWriter do
   defp process_headers(headers) when is_list(headers), do: print_headers(headers)
   defp process_headers(_), do: ""
   defp print_headers(headers) do
-    Enum.each(headers, fn(t) ->
-      """
-      #{elem(t, 0)} #{elem(t, 1)}
-      """
-    end)
+    Enum.each(headers, fn(t) -> IO.puts "#{elem(t, 0)} #{elem(t, 1)}" end)
   end
 
 end
