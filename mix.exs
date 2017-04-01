@@ -1,17 +1,25 @@
 defmodule BlueBird.Mixfile do
   use Mix.Project
 
+  @version "0.1.0"
+  @url "https://github.com/rhazdon/blue_bird"
+  @maintainers [
+    "Djordje Atlialp"
+  ]
+
   def project do
     [
+      name: "BlueBird",
       app: :blue_bird,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.4",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
       test_coverage: [tool: ExCoveralls],
       description: description(),
       package: package(),
-      deps: deps()
+      deps: deps(),
+      docs: docs(),
     ]
   end
 
@@ -31,10 +39,10 @@ defmodule BlueBird.Mixfile do
   defp deps do
     [
       # Static code analysis
-      {:credo, "~> 0.7.2", only: :dev},
+      {:credo, "~> 0.7.2", only: [:dev, :test]},
 
       # Coverage
-      {:excoveralls, "~> 0.6.3"},
+      {:excoveralls, "~> 0.6.3", only: [:dev, :test]},
 
       # Docs
       {:ex_doc, ">= 0.15.0", only: :dev},
@@ -47,6 +55,13 @@ defmodule BlueBird.Mixfile do
     ]
   end
 
+  defp docs do
+    [
+      extras: ["README.md"],
+      source_ref: "v#{@version}"
+    ]
+  end
+
   defp description do
     """
     BlueBird generates API documentation from annotations in controllers actions and tests cases.
@@ -55,13 +70,10 @@ defmodule BlueBird.Mixfile do
 
   defp package do
     [
-      name: :blue_bird,
-      files: ["lib", "mix.exs", "README*", "readme*", "LICENSE*", "license*"],
-      maintainers: ["Paul Smoczyk", "Djordje Atlialp"],
+      maintainers: @maintainers,
       licenses: ["MIT"],
-      links: %{
-        "GitHub" => "https://github.com/rhazdon/blue_bird"
-      }
+      links: %{github: @url},
+      files: ~w(lib) ++ ~w(mix.exs, README.md, LICENSE)
     ]
   end
 end
