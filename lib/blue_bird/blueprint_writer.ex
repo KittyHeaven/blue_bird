@@ -52,14 +52,14 @@ defmodule BlueBird.BlueprintWriter do
   defp process_routes(group, routes) do
     Enum.reduce routes, "", fn(route, docs) ->
       docs
-      <> process_header(group, route)
+      <> process_doc_header(group, route)
       <> process_note(route)
       <> process_parameters(route)
       <> process_requests(route)
     end
   end
 
-  defp process_header(group, route) do
+  defp process_doc_header(group, route) do
     path = Regex.replace(~r/:([^\/]+)/, route.path, "{\\1}")
 
     """
@@ -73,7 +73,9 @@ defmodule BlueBird.BlueprintWriter do
     """
   end
 
-  defp process_note(%{note: note}) when is_binary(note) do
+  defp process_note(%{note: note}) when is_binary(note), do: print_note(note)
+  defp process_note(_), do: ""
+  defp print_note(note) do
     """
 
     ::: note
@@ -83,14 +85,16 @@ defmodule BlueBird.BlueprintWriter do
     """
   end
 
-  defp process_note(_), do: ""
 
-  defp process_parameters(%{parameters: parameters}) when is_list(parameters) do
+  defp process_parameters(%{parameters: parameters}) when is_list(parameters), do: print_parameters(parameters)
+  defp process_parameters(_), do: ""
+  defp print_parameters(parameters) do
     docs =
       """
 
       + Parameters
       """
+
     Enum.reduce parameters, docs, fn(param, docs) ->
       required_option = if Map.get(param, :required), do: "required", else: "optional"
 
@@ -109,15 +113,15 @@ defmodule BlueBird.BlueprintWriter do
     end
   end
 
-  defp process_parameters(_), do: ""
 
-  defp process_requests(%{requests: requests}) when is_list(requests) do
+  defp process_requests(%{requests: requests}) when is_list(requests), do: print_requests(requests)
+  defp process_requests(_), do: ""
+  defp print_requests(requests) do
     Enum.reduce requests, "", fn(request, docs) ->
       docs <> request_params(request) <> response_body(request)
     end
   end
 
-  defp process_requests(_), do: ""
 
   defp request_params(request) do
     case Map.fetch(request, :params) do
