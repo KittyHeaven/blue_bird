@@ -39,12 +39,12 @@ defmodule BlueBird.Generator do
 
     router_module.__routes__
     |> Enum.filter(fn(route) -> Enum.member?(route.pipe_through, :api) end)
-    |> Enum.reduce([], fn(route, routes_docs) ->
+    |> Enum.reduce([], fn(route, generate_docs_for_routes) ->
       case process_route(route, requests_list) do
         {:ok, route_doc} ->
-          routes_docs ++ [route_doc]
+          generate_docs_for_routes ++ [route_doc]
         _ ->
-          routes_docs
+          generate_docs_for_routes
       end
     end)
   end
