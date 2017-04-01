@@ -1,22 +1,34 @@
 defmodule BlueBird.Generator do
 
   def run do
-    test_conns = BlueBird.ConnLogger.conns()
-    app_module = Mix.Project.get.application |> Keyword.get(:mod) |> elem(0)
-    router_module = Application.get_env(:blue_bird, :router, Module.concat([app_module, :Router]))
+    get_app_module()
+    |> get_router_module()
+    |> generate_blueprint(BlueBird.ConnLogger.conns())
+  end
 
+  defp get_app_module do
+    Mix.Project.get.application
+    |> Keyword.get(:mod)
+    |> elem(0)
+  end
+
+  defp get_router_module(app_module) do
+    Application.get_env(:blue_bird, :router, Module.concat([app_module, :Router]))
+  end
+
+  defp generate_blueprint(router_module, test_conns) do
     %{
-      host: Keyword.get(api_docs_info(), :host, "http://localhost"),
-      title: Keyword.get(api_docs_info(), :title, "API Documentation"),
-      description: Keyword.get(api_docs_info(), :description, "Enter API description in mix.exs - api_docs_info"),
+      host: Keyword.get(blue_bird_info(), :host, "http://localhost"),
+      title: Keyword.get(blue_bird_info(), :title, "API Documentation"),
+      description: Keyword.get(blue_bird_info(), :description, "Enter API description in mix.exs - blue_bird_info"),
       routes: routes_docs(router_module, test_conns)
     }
   end
 
-  defp api_docs_info do
-    case function_exported?(Mix.Project.get, :api_docs_info, 0) do
+  defp blue_bird_info do
+    case function_exported?(Mix.Project.get, :blue_bird_info, 0) do
       true ->
-        Mix.Project.get.api_docs_info
+        Mix.Project.get.blue_bird_info
       false ->
         []
     end

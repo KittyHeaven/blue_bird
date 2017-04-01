@@ -30,10 +30,10 @@ ExUnit.start(formatters: [ExUnit.CLIFormatter, BlueBird.Formatter])
 
 ## Usage
 
-Add `api_docs_info` to your `mix.exs`:
+Add `blue_bird_info` to your `mix.exs`:
 
 ```elixir
-def api_docs_info do
+def blue_bird_info do
   [
     host: "https://api.acme.com",
     title: "ACME API",
@@ -137,7 +137,7 @@ $ mix bird.gen.docs
 The configuration options can be setup in `config.exs`:
 
 ```elixir
-config :phoenix_api_docs,
+config :blue_bird,
   docs_path: "priv/static/docs",
   theme: "triple",
   router: YourApp.Web.Router
