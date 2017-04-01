@@ -10,34 +10,27 @@ defmodule BlueBird.Formatter do
   """
   use GenEvent
 
-  @docs_path Application.get_env(:blue_bird, :docs_path, "docs")
-
   @doc """
   `init` function of this module.
-  See `https://hexdocs.pm/elixir/GenEvent.html#c:init/1`
+  See https://hexdocs.pm/elixir/GenEvent.html#c:init/1.
   """
   def init(_config), do: {:ok, nil}
 
   @doc """
-  When the tests suite did its job, trigger the file generator.
+  Listen to events.
+
+  If the event is `:suite_finished`, trigger the generation of api blueprint file.
+
+  Ignore  all other events.
   """
   def handle_event({:suite_finished, _run_us, _load_us}, nil) do
-    save_blueprint_file()
+    generate_blue_print_file()
     :remove_handler
   end
 
-  @doc """
-  Ignore all other events.
-  """
   def handle_event(_event, nil), do: {:ok, nil}
 
-  defp save_blueprint_file do
-    project_path = Mix.Project.load_paths
-    |> Enum.at(0)
-    |> String.split("_build")
-    |> Enum.at(0)
-
-    BlueBird.Generator.run()
-    |> BlueBird.BlueprintWriter.run(Path.join(project_path, @docs_path))
+  defp generate_blue_print_file do
+    BlueBird.BlueprintWriter.run(BlueBird.Generator.run())
   end
 end

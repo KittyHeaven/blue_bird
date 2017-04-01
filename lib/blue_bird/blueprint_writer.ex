@@ -1,13 +1,23 @@
 defmodule BlueBird.BlueprintWriter do
 
-  def run(api_docs, path) do
-    filename = Path.join(path, "api.apib")
+  @docs_path Application.get_env(:blue_bird, :docs_path, "docs")
 
-    filename2 = Path.join(path, "debug")
+  def run(api_docs) do
+    filename = Path.join(path(), "api.apib")
 
-    File.mkdir_p(path)
+    filename2 = Path.join(path(), "debug")
+
+    File.mkdir_p(path())
     File.write(filename, blueprint_text(api_docs))
     File.write(filename2, "#{inspect api_docs}")
+  end
+
+  defp path do
+    Mix.Project.load_paths
+    |> Enum.at(0)
+    |> String.split("_build")
+    |> Enum.at(0)
+    |> Path.join(@docs_path)
   end
 
   defp blueprint_text(api_docs) do
