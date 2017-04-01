@@ -94,12 +94,6 @@ defmodule BlueBird.Generator do
         headers: conn.resp_headers
       }
     }
-    if conn.body_params == %{} do
-      request
-    else
-      request
-      |> Map.put(:body, Poison.encode!(conn.body_params))
-    end
   end
 
   defp find_route(routes, path) do
