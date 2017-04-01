@@ -142,10 +142,26 @@ defmodule BlueBird.BlueprintWriter do
         """
 
         + Response #{response.status}
-          #{response.body}
+
+          + Headers
+            #{process_headers(response.headers)}
+
+          + Body
+            #{response.body}
         """
       :error ->
         ""
     end
   end
+
+  defp process_headers(headers) when is_list(headers), do: print_headers(headers)
+  defp process_headers(_), do: ""
+  defp print_headers(headers) do
+    Enum.each(headers, fn(t) ->
+      """
+      #{elem(t, 0)} #{elem(t, 1)}
+      """
+    end)
+  end
+
 end
