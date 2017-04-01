@@ -37,7 +37,16 @@ defmodule BlueBird.Generator do
   def generate_docs_for_routes(router_module, test_conns) do
     requests_list = requests(router_module.__routes__, test_conns)
 
-    router_module.__routes__
+    IO.puts "-------------------"
+    IO.puts "-------------------"
+    IO.puts "#{inspect test_conns}"
+    IO.puts "-------------------"
+    IO.puts "-------------------"
+    IO.puts "#{inspect requests_list}"
+    IO.puts "-------------------"
+    IO.puts "-------------------"
+
+    b = router_module.__routes__
     |> Enum.filter(fn(route) -> Enum.member?(route.pipe_through, :api) end)
     |> Enum.reduce([], fn(route, generate_docs_for_routes) ->
       case process_route(route, requests_list) do
@@ -47,6 +56,11 @@ defmodule BlueBird.Generator do
           generate_docs_for_routes
       end
     end)
+
+    IO.puts "#{inspect b}"
+    IO.puts "-------------------"
+    IO.puts "-------------------"
+    b
   end
 
   defp requests(routes, test_conns) do
@@ -61,6 +75,14 @@ defmodule BlueBird.Generator do
   end
 
   defp request_map(route, conn) do
+    IO.puts "!!!!!!!!!!!!!!!!!!!!!!!!"
+    IO.puts "!!!!!!!!!!!!!!!!!!!!!!!!"
+    IO.puts "#{inspect conn.body_params}"
+    IO.puts "#{inspect route.path}"
+    IO.puts "#{inspect conn.method}"
+    IO.puts "#{inspect conn.req_headers}"
+    IO.puts "!!!!!!!!!!!!!!!!!!!!!!!!"
+    IO.puts "!!!!!!!!!!!!!!!!!!!!!!!!"
     request = %{
       method: conn.method,
       path: route.path,
