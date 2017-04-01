@@ -75,7 +75,6 @@ defmodule BlueBird.Generator do
   defp request_map(route, conn) do
     IO.puts "!!!!!!!!!!!!!!!!!!!!!!!!"
     IO.puts "!!!!!!!!!!!!!!!!!!!!!!!!"
-    IO.puts "#{inspect conn.body_params}"
     IO.puts "#{inspect route.path}"
     IO.puts "#{inspect conn.method}"
     IO.puts "#{inspect conn.req_headers}"
@@ -86,8 +85,7 @@ defmodule BlueBird.Generator do
       path: route.path,
       headers: conn.req_headers,
       path_params: conn.path_params,
-      params: conn.params,
-      body: Poison.encode!(conn.body_params), # TODO: Do we need this???
+      params: Poison.encode!(conn.params),
       response: %{
         status: conn.status,
         body: conn.resp_body,

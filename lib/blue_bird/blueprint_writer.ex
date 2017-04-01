@@ -113,19 +113,19 @@ defmodule BlueBird.BlueprintWriter do
 
   defp process_requests(%{requests: requests}) when is_list(requests) do
     Enum.reduce requests, "", fn(request, docs) ->
-      docs <> request_body(request) <> response_body(request)
+      docs <> request_params(request) <> response_body(request)
     end
   end
 
   defp process_requests(_), do: ""
 
-  defp request_body(request) do
-    case Map.fetch(request, :body) do
-      {:ok, body} ->
+  defp request_params(request) do
+    case Map.fetch(request, :params) do
+      {:ok, params} ->
         """
 
         + Request json (application/json)
-          #{body}
+          #{params}
         """
       :error ->
         ""
