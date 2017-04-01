@@ -15,33 +15,63 @@ defmodule BlueBird.Controller do
   end
   """
   defmacro api(method, path, do: block) do
-    route_method = method |> atom_to_string |> String.upcase
-    metadata = extract_metadata(block)
-    group = metadata |> Keyword.get(:group, []) |> List.first
-    title = metadata |> Keyword.get(:title, ["Action"]) |> List.first
-    description = metadata |> Keyword.get(:description, []) |> List.first
-    note = metadata |> Keyword.get(:note, []) |> List.first
-    parameters = extract_parameters(metadata)
+    route_method  = extract_route_method(method)
+    metadata      = extract_metadata(block)
+    group         = extract_group(metadata)
+    title         = extract_title(metadata)
+    description   = extract_desctiption(metadata)
+    note          = extract_note(metadata)
+    parameters    = extract_parameters(metadata)
 
     quote do
       def api_doc(unquote(route_method), unquote(path)) do
         %{
-          group: unquote(group),
-          title: unquote(title),
-          description: unquote(description),
-          note: unquote(note),
-          method: unquote(route_method),
-          path: unquote(path),
-          parameters: unquote(Macro.escape(parameters))
+          group:        unquote(group),
+          title:        unquote(title),
+          description:  unquote(description),
+          note:         unquote(note),
+          method:       unquote(route_method),
+          path:         unquote(path),
+          parameters:   unquote(Macro.escape(parameters))
         }
       end
     end
+  end
+
+  defp extract_route_method(method) do
+    method
+    |> atom_to_string
+    |> String.upcase
   end
 
   defp extract_metadata({:__block__, _, data}) do
     Enum.map data, fn({name, _line, params}) ->
       {name, params}
     end
+  end
+
+  defp extract_group(metadata) do
+    metadata
+    |> Keyword.get(:group, [])
+    |> List.first
+  end
+
+  defp extract_title(metadata) do
+    metadata
+    |> Keyword.get(:title, ["Action"])
+    |> List.first
+  end
+
+  defp extract_desctiption(metadata) do
+    metadata
+    |> Keyword.get(:description, [])
+    |> List.first
+  end
+
+  defp extract_note(metadata) do
+    metadata
+    |> Keyword.get(:note, [])
+    |> List.first
   end
 
   defp extract_parameters(metadata) do
