@@ -31,6 +31,7 @@ defmodule BlueBird.Formatter do
   def handle_event(_event, nil), do: {:ok, nil}
 
   defp generate_blue_print_file do
-    BlueBird.BlueprintWriter.run(BlueBird.Generator.run())
+    BlueBird.Generator.run()
+    |> BlueBird.BlueprintWriter.run()
   end
 end
