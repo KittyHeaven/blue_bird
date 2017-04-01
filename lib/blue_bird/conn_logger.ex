@@ -9,7 +9,6 @@ defmodule BlueBird.ConnLogger do
   end
 
   # --- Public Interface ---
-
   def conns, do: GenServer.call(__MODULE__, :conns)
   def reset, do: GenServer.call(__MODULE__, :reset)
   def save(conn), do: GenServer.cast(__MODULE__, {:save, conn})
