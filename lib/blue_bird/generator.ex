@@ -91,8 +91,12 @@ defmodule BlueBird.Generator do
 
   defp process_route(route, requests) do
     controller = Module.concat([:Elixir | Module.split(route.plug)])
-    method = route.verb |> Atom.to_string |> String.upcase
-    route_requests = Enum.filter(requests, fn(request) -> request.method == method and request.path == route.path end)
+    method     = route.verb |> Atom.to_string |> String.upcase
+
+    route_requests = Enum.filter(requests, fn(request) ->
+      request.method == method and request.path == route.path
+    end)
+
     try do
       route_docs =
         apply(controller, :api_doc, [method, route.path])
