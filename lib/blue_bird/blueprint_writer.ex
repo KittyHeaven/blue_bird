@@ -3,13 +3,11 @@ defmodule BlueBird.BlueprintWriter do
   @docs_path Application.get_env(:blue_bird, :docs_path, "docs")
 
   def run(api_docs) do
-    filename = Path.join(path(), "api.apib")
-
-    filename2 = Path.join(path(), "debug")
-
     File.mkdir_p(path())
-    File.write(filename, blueprint_text(api_docs))
-    File.write(filename2, "#{inspect api_docs}")
+
+    path()
+    |> Path.join("api.apib")
+    |> File.write(blueprint_text(api_docs))
   end
 
   defp path do
@@ -85,7 +83,6 @@ defmodule BlueBird.BlueprintWriter do
     """
   end
 
-
   defp process_parameters(%{parameters: parameters}) when is_list(parameters), do: print_parameters(parameters)
   defp process_parameters(_), do: ""
   defp print_parameters(parameters) do
@@ -112,7 +109,6 @@ defmodule BlueBird.BlueprintWriter do
       end
     end
   end
-
 
   defp process_requests(%{requests: requests}) when is_list(requests), do: print_requests(requests)
   defp process_requests(_), do: ""
