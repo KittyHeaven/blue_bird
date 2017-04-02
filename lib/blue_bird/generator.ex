@@ -9,17 +9,17 @@ defmodule BlueBird.Generator do
     |> generate_blueprint_file(BlueBird.ConnLogger.conns())
   end
 
-  defp get_app_module do
+  def get_app_module do
     Mix.Project.get.application
     |> Keyword.get(:mod)
     |> elem(0)
   end
 
-  defp get_router_module(app_module) do
+  def get_router_module(app_module) do
     Application.get_env(:blue_bird, :router, Module.concat([app_module, :Router]))
   end
 
-  def generate_blueprint_file(router_module, test_conns) do
+  defp generate_blueprint_file(router_module, test_conns) do
     %{
       host: Keyword.get(blue_bird_info(), :host, "http://localhost"),
       title: Keyword.get(blue_bird_info(), :title, "API Documentation"),
@@ -40,7 +40,7 @@ defmodule BlueBird.Generator do
   @doc """
 
   """
-  def generate_docs_for_routes(router_module, test_conns) do
+  defp generate_docs_for_routes(router_module, test_conns) do
     requests_list = requests(router_module.__routes__, test_conns)
 
     router_module.__routes__
