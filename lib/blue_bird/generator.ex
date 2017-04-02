@@ -37,9 +37,6 @@ defmodule BlueBird.Generator do
     end
   end
 
-  @doc """
-
-  """
   defp generate_docs_for_routes(router_module, test_conns) do
     requests_list = requests(router_module.__routes__, test_conns)
 
