@@ -39,6 +39,7 @@ defmodule TestController do
   api :POST, "/post" do
     group "Test"
     title "Test POST"
+    note "This is a note"
   end
   def post(conn, _params), do: send_resp(conn, 201, @ok)
 
@@ -51,6 +52,7 @@ defmodule TestController do
   api :PATCH, "/patch" do
     group "Test"
     title "Test PATCH"
+    parameter :post_id, :integer, :required, "Post ID or slug"
   end
   def patch(conn, _params), do: send_resp(conn, 201, @ok)
 
