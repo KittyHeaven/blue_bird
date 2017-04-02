@@ -21,4 +21,10 @@ use Mix.Config
 # Configuration from the imported file will override the ones defined
 # here (which is why it is important to import them last).
 #
+
+config :blue_bird,
+  docs_path: "priv/static/docs",
+  theme: "triple",
+  router: TestRouter
+
 import_config "#{Mix.env}.exs"
