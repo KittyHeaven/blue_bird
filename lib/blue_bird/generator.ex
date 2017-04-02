@@ -1,4 +1,7 @@
 defmodule BlueBird.Generator do
+  @moduledoc """
+
+  """
 
   def run do
     get_app_module()
@@ -34,6 +37,9 @@ defmodule BlueBird.Generator do
     end
   end
 
+  @doc """
+
+  """
   def generate_docs_for_routes(router_module, test_conns) do
     requests_list = requests(router_module.__routes__, test_conns)
 
