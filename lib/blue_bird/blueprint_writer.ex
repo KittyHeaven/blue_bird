@@ -118,15 +118,47 @@ defmodule BlueBird.BlueprintWriter do
     end
   end
 
+  defp process_headers(headers) when is_list(headers), do: print_headers(headers)
+  defp process_headers(_), do: ""
+  defp print_headers(headers) do
+    """
+      + Headers
+    """
+    <>
+    split_headers(headers)
+  end
+
+  defp split_headers(headers), do: split_headers(headers, "")
+  defp split_headers([], l), do: l
+  defp split_headers([h|t], l) do
+    l = l <> """
+        #{elem(h, 0)}: #{elem(h, 1)}
+    """
+    split_headers(t, l)
+  end
+
+  defp process_body(body) when is_binary(body), do: print_body(body)
+  defp process_body(_), do: ""
+  defp print_body(body) do
+    """
+      + Body
+        #{body}
+
+    """
+  end
 
   defp request_params(request) do
     case Map.fetch(request, :params) do
       {:ok, params} ->
         """
 
-        + Request json (application/json)
-          #{params}
+        + Request json
+
         """
+        <>
+        process_headers(request.headers)
+        <>
+        process_body(params)
       :error ->
         ""
     end
@@ -139,21 +171,13 @@ defmodule BlueBird.BlueprintWriter do
 
         + Response #{response.status}
 
-          + Headers
-            #{process_headers(response.headers)}
-
-          + Body
-            #{response.body}
         """
+        <>
+        process_headers(response.headers)
+        <>
+        process_body(response.body)
       :error ->
         ""
     end
   end
-
-  defp process_headers(headers) when is_list(headers), do: print_headers(headers)
-  defp process_headers(_), do: ""
-  defp print_headers(headers) do
-    Enum.each(headers, fn(t) -> IO.puts "#{elem(t, 0)} #{elem(t, 1)}" end)
-  end
-
 end
