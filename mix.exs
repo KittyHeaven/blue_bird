@@ -20,6 +20,7 @@ defmodule BlueBird.Mixfile do
       package: package(),
       deps: deps(),
       docs: docs(),
+      dialyzer: dialyzer()
     ]
   end
 
@@ -40,6 +41,7 @@ defmodule BlueBird.Mixfile do
     [
       # Static code analysis
       {:credo, "~> 0.7.2", only: [:dev, :test]},
+      {:dialyxir, "~> 0.5.0", only: [:dev, :test], runtime: false},
 
       # Coverage
       {:excoveralls, "~> 0.6.3", only: [:dev, :test]},
@@ -63,6 +65,10 @@ defmodule BlueBird.Mixfile do
       extras: ["README.md"],
       source_ref: "v#{@version}"
     ]
+  end
+
+  defp dialyzer do
+    []
   end
 
   defp description do
