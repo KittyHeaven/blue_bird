@@ -6,32 +6,34 @@ It lets you generate API documentation in the [API Blueprint](https://apibluepri
 
 ## Installation
 
-Add BlueBird to your mix.exs dependencies:
 
+1. Add BlueBird to your mix.exs dependencies:
 ```elixir
 defp deps do
   [{:blue_bird, "~> 0.1.0"}]
 end
 ```
 
-Run `mix deps.get` to fetch the dependencies:
-
+2. Run `mix deps.get` to fetch the dependencies:
 ```
 $ mix deps.get
 ```
 
-In your `test/test_helper.exs` start gen server `BlueBird.start` for logging requests and configure `ExUnit` to use `BlueBird.Formatter`:
-
+3. In your `test/test_helper.exs` start gen server `BlueBird.start()` for logging requests and configure `ExUnit` to use `BlueBird.Formatter`:
 ```elixir
-BlueBird.start
+BlueBird.start()
 ExUnit.start(formatters: [ExUnit.CLIFormatter, BlueBird.Formatter])
 ```
 
+4. Add this stuff to your `config.exs`:
+```elixir
+config :blue_bird,
+  docs_path: "priv/static/docs",
+  theme: "triple",
+  router: YourApp.Web.Router
+```
 
-## Usage
-
-Add `blue_bird_info` to your `mix.exs`:
-
+5. Add `blue_bird_info` to your `mix.exs`:
 ```elixir
 def blue_bird_info do
   [
@@ -42,10 +44,7 @@ def blue_bird_info do
 end
 ```
 
-Options:
-* `host`: API host.
-* `title`: Documentation title (can use Blueprint format).
-* `description`: Documentation description (can use Blueprint format).
+## Usage
 
 Add `BlueBird.Controller` to your `phoenix` controller and use `api\3` macro to generate specification for the controller action:
 
@@ -134,6 +133,8 @@ $ mix bird.gen.docs
 
 ## Configuration
 
+### `config.exs`:
+
 The configuration options can be setup in `config.exs`:
 
 ```elixir
@@ -143,10 +144,20 @@ config :blue_bird,
   router: YourApp.Web.Router
 ```
 
-Config options:
+**Options**:
+
 * `docs_path`: Specify the path where the documentation will be generated. If you want to serve the documentation directly from the `phoenix` you can specify `priv/static/docs`.
 * `theme`: HTML theme is generated using the [Aglio renderer](https://github.com/danielgtaylor/aglio).
 * `router`: Router of your application, in Phoenix 1.3 it will be YourAppName.Web.Router
+
+
+### `blue_bird_info()`:
+
+**Options**:
+
+* `host`: API host.
+* `title`: Documentation title (can use Blueprint format).
+* `description`: Documentation description (can use Blueprint format).
 
 
 ## Common problems
@@ -158,16 +169,5 @@ Please make sure that the route you are using in the annotation matches exactly 
 ## TODO:
 
 - [ ] `raise error` when route that is used in the annotation is not available in the `phoenix router`
-- [ ] Overwork README
-- [ ] Set `content-type` default to `application/json`
-- [ ] Make `content-type` editable
-- [ ] Fetch response headers and render them
-- [ ] Fetch request headers and render them
 - [ ] Document, that the routes has to be in the :api pipeline
 - [ ] Make it configurable to set
-
-- [ ] Overwork `BlueBird.BlueprintWriter`
-- [x] Overwork `BlueBird.ConnLogger`
-- [ ] Overwork `BlueBird.Controller`
-- [x] Overwork `BlueBird.Formatter`
-- [ ] Overwork `BlueBird.Generator`
