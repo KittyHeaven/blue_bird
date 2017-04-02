@@ -126,6 +126,10 @@ defmodule BlueBird.BlueprintWriter do
     """
     <>
     split_headers(headers)
+    <>
+    """
+
+    """
   end
 
   defp split_headers(headers), do: split_headers(headers, "")
