@@ -21,8 +21,6 @@ defmodule GeneratorTest do
   test "run/0" do
     BlueBird.ConnLogger.reset()
 
-    blue_print_raw =
-
     assert BlueBird.Generator.run == %{
       description: "Enter API description in mix.exs - blue_bird_info",
       host: "http://localhost",
