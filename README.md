@@ -1,16 +1,16 @@
 # Blue Bird
 
-`BlueBird` is a library written in the `Elixir` for the [Phoenix framework](http://www.phoenixframework.org/).
+`BlueBird` is a library written in the `Elixir` programming language for the [Phoenix framework](http://www.phoenixframework.org/).
 It lets you generate API documentation in the [API Blueprint](https://apiblueprint.org/) format from annotations in controllers and automated tests.
 
 
 ## Installation
 
 
-1. Add BlueBird to your mix.exs dependencies:
+1. Add BlueBird to your mix.exs dependencies (directly from Github until released):
 ```elixir
 defp deps do
-  [{:blue_bird, "~> 0.1.0"}]
+  [{:blue_bird, github: "rhazdon/blue_bird"}]
 end
 ```
 
@@ -19,13 +19,13 @@ end
 $ mix deps.get
 ```
 
-3. In your `test/test_helper.exs` start gen server `BlueBird.start()` for logging requests and configure `ExUnit` to use `BlueBird.Formatter`:
+3. In your `test/test_helper.exs` start the BlueBird logger via `BlueBird.start()` and configure the results formatter as follows:
 ```elixir
 BlueBird.start()
 ExUnit.start(formatters: [ExUnit.CLIFormatter, BlueBird.Formatter])
 ```
 
-4. Add this stuff to your `config.exs`:
+4. Configre BlueBird by adding to `config.exs`:
 ```elixir
 config :blue_bird,
   docs_path: "priv/static/docs",
@@ -33,7 +33,7 @@ config :blue_bird,
   router: YourApp.Web.Router
 ```
 
-5. Add `blue_bird_info` to your `mix.exs`:
+5. Add `blue_bird_info` to your `mix.exs` to improve the generated docs:
 ```elixir
 def blue_bird_info do
   [
@@ -46,13 +46,19 @@ end
 
 ## Usage
 
-Add `BlueBird.Controller` to your `phoenix` controller and use `api\3` macro to generate specification for the controller action:
+Add `BlueBird.Controller` to your `web.ex` controller function:
+```elixir
+  def controller do
+    quote do
+      use BlueBird.Controller
+  ...
+```
+Use `api\3` macro to generate the specification for the controller action:
 
 ```elixir
 defmodule App.CommentController do
   use App.Web, :controller
-  use BlueBird.Controller
-
+  
   api :GET, "/posts/:post_id/comments" do
     group "Comment" # If not provided, it will be guessed from the controller name (resource name)
     title "List comments for specific docs"
@@ -88,7 +94,7 @@ API specification options:
   * optional - `parameter :post_id, :integer, "Post ID"`
 
 
-In your tests select what requests and responses you want to include in the documentation by saving `conn` to `BlueBird.ConnLogger`:
+In your tests select which requests and responses you want to include in the documentation by saving `conn` to `BlueBird.ConnLogger`:
 
 ```elixir
   test "list comments for post", %{conn: conn} do
@@ -106,7 +112,7 @@ In your tests select what requests and responses you want to include in the docu
   end
 ```
 
-`BlueBird.ConnLogger.save` can be also piped:
+`BlueBird.ConnLogger.save` can be also piped into:
 
 ```elixir
     conn = get(
@@ -116,13 +122,13 @@ In your tests select what requests and responses you want to include in the docu
   end
 ```
 
-After you run your tests, documentation in an API Blueprint format will be generate in a file `api.apib`
+After you run your tests, documentation in the API Blueprint format will be saved to `api.apib`
 
 ```
 $ mix test
 ```
 
-To generate the documentation in a HTML format use [Aglio renderer](https://github.com/danielgtaylor/aglio)
+To generate the documentation in a HTML format use the convenience wrapper tothe [Aglio renderer](https://github.com/danielgtaylor/aglio)
 
 ```
 $ npm install aglio -g
@@ -162,12 +168,12 @@ config :blue_bird,
 
 ## Common problems
 
-#### Route is not generated after adding api annotation in the controller
+#### Route is not generated after adding API annotations to the controller
 
-Please make sure that the route you are using in the annotation matches exactly the route from the `phoenix router` (including params). Run `mix phoenix.routes` and compare the routes.
+Please make sure that the route you are using in the annotation matches the route from the `phoenix router` (including params) exactly. Run `mix phoenix.routes` (or `mix phx.routes` if Phoenix >= 1.3) and compare the routes.
 
 ## TODO:
 
 - [ ] `raise error` when route that is used in the annotation is not available in the `phoenix router`
-- [ ] Document, that the routes has to be in the :api pipeline
-- [ ] Make it configurable to set
+- [ ] Document that routes have to be part of the api pipeline for now
+- [ ] Make the pipelines configurable
