@@ -1,5 +1,7 @@
 # Blue Bird
 
+[![Build Status](https://travis-ci.org/rhazdon/blue_bird.svg?branch=master)](https://travis-ci.org/rhazdon/blue_bird)
+
 `BlueBird` is a library written in the `Elixir` programming language for the [Phoenix framework](http://www.phoenixframework.org/).
 It lets you generate API documentation in the [API Blueprint](https://apiblueprint.org/) format from annotations in controllers and automated tests.
 
