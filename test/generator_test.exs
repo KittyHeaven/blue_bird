@@ -60,30 +60,166 @@ defmodule GeneratorTest do
 
     BlueBird.ConnLogger.save(conn)
 
-    BlueBird.Generator.run()
-    |> BlueBird.BlueprintWriter.run()
+    assert BlueBird.Generator.run() ==
+    %{description: "Enter API description in mix.exs - blue_bird_info",
+      host: "http://localhost",
+      routes: [
+        %{description: nil,
+          group: "Test",
+          method: "GET",
+          note: nil,
+          parameters: [],
+          path: "/get",
+          requests: [
+            %{headers: [
+                {"accept", "application/json"},
+                {"accept-language", "de-de"}
+              ],
+              method: "GET",
+              params: "{\"aspect\":\"params\"}",
+              path: "/get",
+              path_params: %{},
+              response: %{
+                body: "{\"status\":\"ok\"}",
+                headers: [{"cache-control", "max-age=0, private, must-revalidate"}],
+                status: 200
+              }
+            }
+          ],
+          title: "Test GET"
+        },
+        %{description: nil,
+          group: "Test",
+          method: "POST",
+          note: "This is a note",
+          parameters: [],
+          path: "/post",
+          requests: [],
+          title: "Test POST"
+        },
+        %{description: nil,
+          group: "Test",
+          method: "PUT",
+          note: nil,
+          parameters: [],
+          path: "/put",
+          requests: [],
+          title: "Test PUT"
+        },
+        %{description: nil,
+          group: "Test",
+          method: "PATCH",
+          note: nil,
+          parameters: [
+            %{description: "Post ID or slug",
+              name: "post_id",
+              required: true,
+              type: "integer"
+            }
+          ],
+          path: "/patch",
+          requests: [],
+          title: "Test PATCH"
+        },
+        %{description: nil,
+          group: "Test",
+          method: "DELETE",
+          note: nil,
+          parameters: [],
+          path: "/delete",
+          requests: [],
+          title: "Test DELETE"
+        }
+      ],
+      title: "API Documentation"
+    }
   end
 
-  # test "post" do
-  #   # Create a test connection
-  #   conn = conn(:post, "/post", %{p: 5}) |> put_req_header("content-type", "application/json")
+  test "generator run with POST" do
+    BlueBird.ConnLogger.reset()
 
-  #   # Invoke the plug
-  #   conn = TestRouter.call(conn, @opts)
+    # Create a test connection
+    conn = conn(:post, "/post", %{p: 5})
+    |> put_req_header("content-type", "application/json")
 
-  #   # IO.puts "================"
-  #   # IO.puts "================"
-  #   # IO.puts "#{inspect conn}"
-  #   # IO.puts "================"
-  #   # IO.puts "================"
+    # Invoke the plug
+    conn = TestRouter.call(conn, @opts)
 
-  #   # Assert the response and status
-  #   assert conn.state == :sent
-  #   assert conn.status == 201
+    # Assert the response and status
+    assert conn.state == :sent
+    assert conn.status == 201
 
-  #   BlueBird.Generator.generate_docs_for_routes(TestRouter, [conn])
+    BlueBird.ConnLogger.save(conn)
 
-  #   abc = BlueBird.Generator.generate_blueprint_file(TestRouter, [conn])
-  #   BlueBird.BlueprintWriter.run(abc)
-  # end
+    assert BlueBird.Generator.run() ==
+    %{description: "Enter API description in mix.exs - blue_bird_info",
+      host: "http://localhost",
+      routes: [
+        %{description: nil,
+          group: "Test",
+          method: "GET",
+          note: nil,
+          parameters: [],
+          path: "/get",
+          requests: [],
+          title: "Test GET"
+        },
+        %{description: nil,
+          group: "Test",
+          method: "POST",
+          note: "This is a note",
+          parameters: [],
+          path: "/post",
+          requests: [
+            %{headers: [{"content-type", "application/json"}],
+              method: "POST",
+              params: "{\"p\":5}",
+              path: "/post",
+              path_params: %{},
+              response: %{
+                body: "{\"status\":\"ok\"}",
+                headers: [{"cache-control", "max-age=0, private, must-revalidate"}],
+                status: 201
+              }
+            }
+          ],
+          title: "Test POST"
+        },
+        %{description: nil,
+          group: "Test",
+          method: "PUT",
+          note: nil,
+          parameters: [],
+          path: "/put",
+          requests: [],
+          title: "Test PUT"
+        },
+        %{description: nil,
+          group: "Test",
+          method: "PATCH",
+          note: nil,
+          parameters: [
+            %{description: "Post ID or slug",
+              name: "post_id",
+              required: true,
+              type: "integer"
+            }
+          ],
+          path: "/patch",
+          requests: [],
+          title: "Test PATCH"
+        },
+        %{description: nil,
+          group: "Test",
+          method: "DELETE",
+          note: nil,
+          parameters: [],
+          path: "/delete",
+          requests: [],
+          title: "Test DELETE"
+        }
+      ],
+      title: "API Documentation"
+    }
+  end
 end
