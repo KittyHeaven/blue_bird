@@ -1,5 +1,5 @@
 defmodule BlueBird.BlueprintWriter do
-
+  @moduledoc false
   @docs_path Application.get_env(:blue_bird, :docs_path, "docs")
 
   def run(api_docs) do

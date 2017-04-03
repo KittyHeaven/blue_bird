@@ -1,4 +1,6 @@
 defmodule Mix.Tasks.Bird.Gen.Docs do
+  @moduledoc false
+
   use Mix.Task
 
   @shortdoc "Generates HTML API Docs from api.apib using Aglio"

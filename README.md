@@ -58,7 +58,7 @@ Use `api\3` macro to generate the specification for the controller action:
 ```elixir
 defmodule App.CommentController do
   use App.Web, :controller
-  
+
   api :GET, "/posts/:post_id/comments" do
     group "Comment" # If not provided, it will be guessed from the controller name (resource name)
     title "List comments for specific docs"
@@ -177,3 +177,6 @@ Please make sure that the route you are using in the annotation matches the rout
 - [ ] `raise error` when route that is used in the annotation is not available in the `phoenix router`
 - [ ] Document that routes have to be part of the api pipeline for now
 - [ ] Make the pipelines configurable
+- [ ] Document `BlueBird.Controller`
+- [ ] Document `BlueBird.BlueprintWriter`
+- [ ] Document `Mix.Tasks.Bird.Gen.Docs`

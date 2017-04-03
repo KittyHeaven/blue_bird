@@ -1,4 +1,5 @@
 defmodule BlueBird do
+  @moduledoc false
   use Application
 
   import Supervisor.Spec

@@ -1,5 +1,5 @@
 defmodule BlueBird.Controller do
-
+  @moduledoc false
   defmacro __using__(_) do
     quote do
       import BlueBird.Controller, only: [api: 3]
@@ -92,9 +92,10 @@ defmodule BlueBird.Controller do
   end
 
   defp atom_to_string(atom_or_string) do
-    cond do
-      is_atom(atom_or_string) -> atom_or_string |> Atom.to_string
-      true                    -> atom_or_string
+    if is_atom(atom_or_string) do
+      atom_or_string |> Atom.to_string
+    else
+      atom_or_string
     end
   end
 

@@ -2,7 +2,6 @@ defmodule BlueBird.Generator do
   @moduledoc """
 
   """
-
   def run do
     get_app_module()
     |> get_router_module()
@@ -62,8 +61,7 @@ defmodule BlueBird.Generator do
   end
 
   defp request_map(route, conn) do
-    request = %{
-      method: conn.method,
+    %{method: conn.method,
       path: route.path,
       headers: conn.req_headers,
       path_params: conn.path_params,
@@ -98,8 +96,8 @@ defmodule BlueBird.Generator do
     end)
 
     try do
-      route_docs =
-        apply(controller, :api_doc, [method, route.path])
+      route_docs = controller
+        |> apply(:api_doc, [method, route.path])
         |> set_default_group(route)
         |> Map.put(:requests, route_requests)
 

@@ -1,0 +1,11 @@
+language: elixir
+matrix:
+  include:
+    - opt_release: 19.0
+      elixir: 1.4.2
+sudo: false
+before_script:
+  - mix deps.get
+script:
+  - mix credo
+  - mix coveralls
