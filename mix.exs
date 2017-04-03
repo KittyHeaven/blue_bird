@@ -82,7 +82,7 @@ defmodule BlueBird.Mixfile do
       maintainers: @maintainers,
       licenses: ["MIT"],
       links: %{github: @url},
-      files: ~w(lib) ++ ~w(mix.exs, README.md, LICENSE)
+      files: ~w(lib) ++ ~w(mix.exs README.md LICENSE)
     ]
   end
 end
