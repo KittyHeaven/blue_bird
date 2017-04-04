@@ -12,7 +12,7 @@ defmodule BlueBird.Mixfile do
       name: "BlueBird",
       app: :blue_bird,
       version: @version,
-      elixir: "~> 1.4",
+      elixir: "~> 1.3",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
       test_coverage: [tool: ExCoveralls],
@@ -50,13 +50,13 @@ defmodule BlueBird.Mixfile do
       {:ex_doc, ">= 0.15.0", only: :dev},
 
       # Phoenix Framework
-      {:phoenix, "~> 1.3.0-rc", optional: true},
+      {:phoenix, "~> 1.2", optional: true},
 
       # Composable modules
       {:plug, ">= 1.3.0"},
 
       # JSON library
-      {:poison, ">= 3.0.0"}
+      {:poison, ">= 2.0.0"}
     ]
   end
 
