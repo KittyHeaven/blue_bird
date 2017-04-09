@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/rhazdon/blue_bird.svg?branch=master)](https://travis-ci.org/rhazdon/blue_bird)
 [![Hex.pm](https://img.shields.io/hexpm/v/blue_bird.svg)](https://hex.pm/packages/blue_bird)
+[![Coverage Status](https://coveralls.io/repos/github/rhazdon/blue_bird/badge.svg?branch=master)](https://coveralls.io/github/rhazdon/blue_bird?branch=master)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/rhazdon/blue_bird/blob/master/LICENSE)
 [![Deps Status](https://beta.hexfaktor.org/badge/all/github/rhazdon/blue_bird.svg)](https://beta.hexfaktor.org/github/rhazdon/blue_bird)
 
