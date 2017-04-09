@@ -29,10 +29,8 @@ defmodule BlueBird.Generator do
 
   defp blue_bird_info do
     case function_exported?(Mix.Project.get, :blue_bird_info, 0) do
-      true ->
-        Mix.Project.get.blue_bird_info
-      false ->
-        []
+      false -> []
+      true  -> Mix.Project.get.blue_bird_info()
     end
   end
 
@@ -43,10 +41,8 @@ defmodule BlueBird.Generator do
     |> Enum.filter(fn(route) -> Enum.member?(route.pipe_through, :api) end)
     |> Enum.reduce([], fn(route, generate_docs_for_routes) ->
       case process_route(route, requests_list) do
-        {:ok, route_doc} ->
-          generate_docs_for_routes ++ [route_doc]
-        _ ->
-          generate_docs_for_routes
+        {:ok, route_doc} -> generate_docs_for_routes ++ [route_doc]
+        _                -> generate_docs_for_routes
       end
     end)
   end
@@ -83,7 +79,7 @@ defmodule BlueBird.Generator do
   defp route_match?(route, path) do
     ~r/(:[^\/]+)/
     |> Regex.replace(route, "([^/]+)")
-    |> Regex.compile!
+    |> Regex.compile!()
     |> Regex.match?(path)
   end
 
@@ -111,7 +107,9 @@ defmodule BlueBird.Generator do
   end
 
   defp set_default_group(%{group: group} = route_docs, route) when is_nil(group) do
-    group = route.plug |> Phoenix.Naming.resource_name("Controller") |> Phoenix.Naming.humanize
+    group = route.plug
+    |> Phoenix.Naming.resource_name("Controller")
+    |> Phoenix.Naming.humanize
 
     route_docs
     |> Map.put(:group, group)
