@@ -50,17 +50,26 @@ def blue_bird_info do
 end
 ```
 
+6. Install aglio:
+```bash
+$ npm install aglio -g
+```
+
 ## Usage
 
-Add `BlueBird.Controller` to your `web.ex` controller function:
+#### Controller
+
+* Add `BlueBird.Controller` to your `web.ex` controller function:
 ```elixir
   def controller do
     quote do
+      ...
       use BlueBird.Controller
-  ...
+      ...
+  end
 ```
-Use `api\3` macro to generate the specification for the controller action:
 
+* Use `api\3` macro to generate the specification for the controller action:
 ```elixir
 defmodule App.CommentController do
   use App.Web, :controller
@@ -83,11 +92,10 @@ defmodule App.CommentController do
   def update(conn, %{"comment" => comment_params}) do
     ...
   end
-
 end
 ```
 
-API specification options:
+**API specification options**:
 
 * `method`: HTTP method - GET, POST, PUT, PATCH, DELETE
 * `url`: URL route from `phoenix router``
@@ -99,32 +107,54 @@ API specification options:
   * required - `parameter :post_id, :integer, :required, "Post ID"`
   * optional - `parameter :post_id, :integer, "Post ID"`
 
+#### Router
 
-In your tests select which requests and responses you want to include in the documentation by saving `conn` to `BlueBird.ConnLogger`:
+Currently, BlueBird expects that the routes are piped through `:api`.
+
+```elixir
+defmodule TestRouter do
+  use Phoenix.Router
+  import Plug.Conn
+  import Phoenix.Controller
+
+  pipeline :api do
+    ...
+  end
+
+  pipeline :foo do
+    ...
+  end
+
+  scope "/" do
+    pipe_through :api
+    get "/get", TestController, :get  # This will work
+  end
+
+  scope "/" do
+    pipe_through [:api, :foo]
+    get "/get", TestController, :get  # This will work
+  end
+
+  scope "/" do
+    pipe_through :foo
+    get "/get", TestController, :get  # This will not work
+  end
+end
+```
+
+#### Tests
+
+* In your tests select which requests and responses you want to include in the documentation by saving `conn` to `BlueBird.ConnLogger`:
 
 ```elixir
   test "list comments for post", %{conn: conn} do
-    post = insert(:post)
-    insert_list(5, :comment, post: post)
+    insert_posts_with_comments()
 
-    conn = get(
-      conn,
-      comments_path(conn, :index, post)
-    )
+    conn = conn
+    |> get(comments_path(conn, :index)
+    |> BlueBird.ConnLogger.save()
 
     assert json_response(conn, 200)
-
-    BlueBird.ConnLogger.save(conn)
-  end
-```
-
-`BlueBird.ConnLogger.save` can be also piped into:
-
-```elixir
-    conn = get(
-      conn,
-      comments_path(conn, :index, post)
-    ) |> BlueBird.ConnLogger.save
   end
 ```
 
@@ -137,8 +167,6 @@ $ mix test
 To generate the documentation in a HTML format use the convenience wrapper tothe [Aglio renderer](https://github.com/danielgtaylor/aglio)
 
 ```
-$ npm install aglio -g
-
 $ mix bird.gen.docs
 ```
 
