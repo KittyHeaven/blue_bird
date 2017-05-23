@@ -141,12 +141,13 @@ defmodule BlueBird.BlueprintWriter do
     split_headers(t, l)
   end
 
-  defp process_body(body) when is_binary(body), do: print_body(body)
+  defp process_body(body) when body == %{}, do: ""
+  defp process_body(body) when is_map(body), do: print_body(body)
   defp process_body(_), do: ""
   defp print_body(body) do
     """
       + Body
-        #{body}
+        #{Poison.encode!(body)}
 
     """
   end
