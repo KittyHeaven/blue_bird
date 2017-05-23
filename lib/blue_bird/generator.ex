@@ -61,7 +61,7 @@ defmodule BlueBird.Generator do
       path: route.path,
       headers: conn.req_headers,
       path_params: conn.path_params,
-      params: Poison.encode!(conn.params),
+      body_params: conn.params,
       response: %{
         status: conn.status,
         body: conn.resp_body,

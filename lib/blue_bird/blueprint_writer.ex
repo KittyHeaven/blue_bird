@@ -152,8 +152,8 @@ defmodule BlueBird.BlueprintWriter do
   end
 
   defp request_params(request) do
-    case Map.fetch(request, :params) do
-      {:ok, params} ->
+    case Map.fetch(request, :body_params) do
+      {:ok, body_params} ->
         """
 
         + Request json
@@ -162,7 +162,7 @@ defmodule BlueBird.BlueprintWriter do
         <>
         process_headers(request.headers)
         <>
-        process_body(params)
+        process_body(body_params)
       :error ->
         ""
     end
