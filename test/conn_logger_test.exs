@@ -1,5 +1,6 @@
-defmodule ConnLoggerTest do
-  use ExUnit.Case
+defmodule BlueBird.Test.ConnLoggerTest do
+  use BlueBird.Test.Support.ConnCase
+
   doctest BlueBird
 
   test "save/1" do

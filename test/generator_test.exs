@@ -1,10 +1,11 @@
-defmodule GeneratorTest do
-  use ExUnit.Case, async: true
-  use Plug.Test
+defmodule BlueBird.Test.GeneratorTest do
+  use BlueBird.Test.Support.ConnCase
+
+  alias BlueBird.Test.Support.Router
 
   doctest BlueBird
 
-  @opts TestRouter.init([])
+  @opts Router.init([])
 
   test "get_app_module/0" do
     app_module = BlueBird.Generator.get_app_module
@@ -15,7 +16,7 @@ defmodule GeneratorTest do
     router_module = BlueBird.Generator.get_app_module
     |> BlueBird.Generator.get_router_module
 
-    assert router_module == TestRouter
+    assert router_module == Router
   end
 
   test "BlueBird.Generator.run/0" do
@@ -108,12 +109,12 @@ defmodule GeneratorTest do
     BlueBird.ConnLogger.reset()
 
     # Create a test connection
-    conn = conn(:get, "/get")
+    conn = build_conn(:get, "/get")
     |> put_req_header("accept", "application/json")
     |> put_req_header("accept-language", "de-de")
 
     # Invoke the plug
-    conn = TestRouter.call(conn, @opts)
+    conn = Router.call(conn, @opts)
 
     # Assert the response and status
     assert conn.state == :sent
@@ -140,6 +141,7 @@ defmodule GeneratorTest do
               body_params: %{},
               path: "/get",
               path_params: %{},
+              query_params: %{},
               response: %{
                 body: "{\"status\":\"ok\"}",
                 headers: [{"cache-control", "max-age=0, private, must-revalidate"}],
@@ -165,12 +167,12 @@ defmodule GeneratorTest do
     BlueBird.ConnLogger.reset()
 
     # Create a test connection
-    conn = conn(:get, "/get/3")
+    conn = build_conn(:get, "/get/3")
     |> put_req_header("accept", "application/json")
     |> put_req_header("accept-language", "de-de")
 
     # Invoke the plug
-    conn = TestRouter.call(conn, @opts)
+    conn = Router.call(conn, @opts)
 
     # Assert the response and status
     assert conn.state == :sent
@@ -203,6 +205,7 @@ defmodule GeneratorTest do
               body_params: %{},
               path: "/get/:param",
               path_params: %{"param" => "3"},
+              query_params: %{},
               response: %{
                 body: "{\"status\":\"ok\"}",
                 headers: [{"cache-control", "max-age=0, private, must-revalidate"}],
@@ -227,11 +230,11 @@ defmodule GeneratorTest do
     BlueBird.ConnLogger.reset()
 
     # Create a test connection
-    conn = conn(:post, "/post", Poison.encode! %{p: 5})
+    conn = build_conn(:post, "/post", Poison.encode! %{p: 5})
     |> put_req_header("content-type", "application/json")
 
     # Invoke the plug
-    conn = TestRouter.call(conn, @opts)
+    conn = Router.call(conn, @opts)
 
     # Assert the response and status
     assert conn.state == :sent
@@ -257,6 +260,7 @@ defmodule GeneratorTest do
               body_params: %{"p" => 5},
               path: "/post",
               path_params: %{},
+              query_params: %{},
               response: %{
                 body: "{\"status\":\"ok\"}",
                 headers: [{"cache-control", "max-age=0, private, must-revalidate"}],
@@ -280,11 +284,11 @@ defmodule GeneratorTest do
     BlueBird.ConnLogger.reset()
 
     # Create a test connection
-    conn = conn(:post, "/post/5", Poison.encode! %{p: 5})
+    conn = build_conn(:post, "/post/5", Poison.encode! %{p: 5})
     |> put_req_header("content-type", "application/json")
 
     # Invoke the plug
-    conn = TestRouter.call(conn, @opts)
+    conn = Router.call(conn, @opts)
 
     # Assert the response and status
     assert conn.state == :sent
@@ -316,6 +320,7 @@ defmodule GeneratorTest do
               body_params: %{"p" => 5},
               path: "/post/:param",
               path_params: %{"param" => "5"},
+              query_params: %{},
               response: %{
                 body: "{\"status\":\"ok\"}",
                 headers: [{"cache-control", "max-age=0, private, must-revalidate"}],
@@ -338,11 +343,11 @@ defmodule GeneratorTest do
     BlueBird.ConnLogger.reset()
 
     # Create a test connection
-    conn = conn(:put, "/put", Poison.encode! %{p: 5})
+    conn = build_conn(:put, "/put", Poison.encode! %{p: 5})
     |> put_req_header("content-type", "application/json")
 
     # Invoke the plug
-    conn = TestRouter.call(conn, @opts)
+    conn = Router.call(conn, @opts)
 
     # Assert the response and status
     assert conn.state == :sent
@@ -370,6 +375,7 @@ defmodule GeneratorTest do
               body_params: %{"p" => 5},
               path: "/put",
               path_params: %{},
+              query_params: %{},
               response: %{
                 body: "{\"status\":\"ok\"}",
                 headers: [{"cache-control", "max-age=0, private, must-revalidate"}],
@@ -391,11 +397,11 @@ defmodule GeneratorTest do
     BlueBird.ConnLogger.reset()
 
     # Create a test connection
-    conn = conn(:patch, "/patch", Poison.encode! %{p: 5})
+    conn = build_conn(:patch, "/patch", Poison.encode! %{p: 5})
     |> put_req_header("content-type", "application/json")
 
     # Invoke the plug
-    conn = TestRouter.call(conn, @opts)
+    conn = Router.call(conn, @opts)
 
     # Assert the response and status
     assert conn.state == :sent
@@ -424,6 +430,7 @@ defmodule GeneratorTest do
               body_params: %{"p" => 5},
               path: "/patch",
               path_params: %{},
+              query_params: %{},
               response: %{
                 body: "{\"status\":\"ok\"}",
                 headers: [{"cache-control", "max-age=0, private, must-revalidate"}],
@@ -444,11 +451,11 @@ defmodule GeneratorTest do
     BlueBird.ConnLogger.reset()
 
     # Create a test connection
-    conn = conn(:delete, "/delete", Poison.encode! %{p: 5})
+    conn = build_conn(:delete, "/delete", Poison.encode! %{p: 5})
     |> put_req_header("content-type", "application/json")
 
     # Invoke the plug
-    conn = TestRouter.call(conn, @opts)
+    conn = Router.call(conn, @opts)
 
     # Assert the response and status
     assert conn.state == :sent
@@ -478,6 +485,7 @@ defmodule GeneratorTest do
               body_params: %{"p" => 5},
               path: "/delete",
               path_params: %{},
+              query_params: %{},
               response: %{
                 body: "{\"status\":\"ok\"}",
                 headers: [{"cache-control", "max-age=0, private, must-revalidate"}],

@@ -26,15 +26,13 @@ defmodule BlueBird.Controller do
 
     quote do
       def api_doc(unquote(route_method), unquote(path)) do
-        %{
-          group:        unquote(group),
+        %{group:        unquote(group),
           title:        unquote(title),
           description:  unquote(description),
           note:         unquote(note),
           method:       unquote(route_method),
           path:         unquote(path),
-          parameters:   unquote(Macro.escape(parameters))
-        }
+          parameters:   unquote(Macro.escape(parameters))}
       end
     end
   end

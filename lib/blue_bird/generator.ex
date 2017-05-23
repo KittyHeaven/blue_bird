@@ -19,12 +19,10 @@ defmodule BlueBird.Generator do
   end
 
   defp generate_blueprint_file(router_module, test_conns) do
-    %{
-      host: Keyword.get(blue_bird_info(), :host, "http://localhost"),
+    %{host: Keyword.get(blue_bird_info(), :host, "http://localhost"),
       title: Keyword.get(blue_bird_info(), :title, "API Documentation"),
       description: Keyword.get(blue_bird_info(), :description, "Enter API description in mix.exs - blue_bird_info"),
-      routes: generate_docs_for_routes(router_module, test_conns)
-    }
+      routes: generate_docs_for_routes(router_module, test_conns)}
   end
 
   defp blue_bird_info do
@@ -62,12 +60,11 @@ defmodule BlueBird.Generator do
       headers: conn.req_headers,
       path_params: conn.path_params,
       body_params: conn.body_params,
+      query_params: conn.query_params,
       response: %{
         status: conn.status,
         body: conn.resp_body,
-        headers: conn.resp_headers
-      }
-    }
+        headers: conn.resp_headers}}
   end
 
   defp find_route(routes, path) do
