@@ -14,7 +14,7 @@ It lets you generate API documentation in the [API Blueprint](https://apibluepri
 
 
 1. Add BlueBird to your mix.exs dependencies (directly from Github until released):
-```elixir
+``` elixir
 defp deps do
   [{:blue_bird, "~> 0.1.1"}]
 end
@@ -26,13 +26,13 @@ $ mix deps.get
 ```
 
 3. In your `test/test_helper.exs` start the BlueBird logger via `BlueBird.start()` and configure the results formatter as follows:
-```elixir
+``` elixir
 BlueBird.start()
 ExUnit.start(formatters: [ExUnit.CLIFormatter, BlueBird.Formatter])
 ```
 
-4. Configre BlueBird by adding to `config.exs`:
-```elixir
+4. Configure BlueBird by adding to `config.exs`:
+``` elixir
 config :blue_bird,
   docs_path: "priv/static/docs",
   theme: "triple",
@@ -40,7 +40,7 @@ config :blue_bird,
 ```
 
 5. Add `blue_bird_info` to your `mix.exs` to improve the generated docs:
-```elixir
+``` elixir
 def blue_bird_info do
   [
     host: "https://api.acme.com",
@@ -50,7 +50,17 @@ def blue_bird_info do
 end
 ```
 
-6. Install aglio:
+6. Add `BlueBird.Controller` to your `web.ex` controller function:
+``` elixir
+def controller do
+  quote do
+    ...
+    use BlueBird.Controller
+    ...
+end
+```
+
+7. Install aglio:
 ```bash
 $ npm install aglio -g
 ```
@@ -58,16 +68,6 @@ $ npm install aglio -g
 ## Usage
 
 #### Controller
-
-* Add `BlueBird.Controller` to your `web.ex` controller function:
-```elixir
-  def controller do
-    quote do
-      ...
-      use BlueBird.Controller
-      ...
-  end
-```
 
 * Use `api\3` macro to generate the specification for the controller action:
 ```elixir
@@ -98,7 +98,7 @@ end
 **API specification options**:
 
 * `method`: HTTP method - GET, POST, PUT, PATCH, DELETE
-* `url`: URL route from `phoenix router``
+* `url`: URL route from `phoenix router`
 * `group`: Documentation routes are grouped by a group name (defaults to resource name guessed from the controller name)
 * `title`: Title (can use Blueprint format)
 * `description`: Description (optional, can use Blueprint format)
@@ -111,7 +111,7 @@ end
 
 Currently, BlueBird expects that the routes are piped through `:api`.
 
-```elixir
+``` elixir
 defmodule TestRouter do
   use Phoenix.Router
   import Plug.Conn
@@ -146,7 +146,7 @@ end
 
 * In your tests select which requests and responses you want to include in the documentation by saving `conn` to `BlueBird.ConnLogger`:
 
-```elixir
+``` elixir
   test "list comments for post", %{conn: conn} do
     insert_posts_with_comments()
 
@@ -200,11 +200,23 @@ config :blue_bird,
 * `description`: Documentation description (can use Blueprint format).
 
 
-## Common problems
+## FAQ
 
-#### Route is not generated after adding API annotations to the controller
+##### Route is not generated after adding API annotations to the controller
 
 Please make sure that the route you are using in the annotation matches the route from the `phoenix router` (including params) exactly. Run `mix phoenix.routes` (or `mix phx.routes` if Phoenix >= 1.3) and compare the routes.
+
+##### Body Parameter are not rendered
+
+BlueBird reads the `body_params` from `%Plug.Conn{}`. These map is only set if `body_params` is a binary.
+
+Example:
+
+``` elixir
+post build_conn(), "/", Poison.encode! %{my: data}  # recommended
+post build_conn(), "/", "my=data"
+```
+
 
 ## TODO:
 
@@ -213,4 +225,4 @@ Please make sure that the route you are using in the annotation matches the rout
 - [ ] Make the pipelines configurable
 - [ ] Document `BlueBird.Controller`
 - [ ] Document `BlueBird.BlueprintWriter`
-- [ ] Document `Mix.Tasks.Bird.Gen.Docs`
+- [x] Document `Mix.Tasks.Bird.Gen.Docs`
