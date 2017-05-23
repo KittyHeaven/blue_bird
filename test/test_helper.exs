@@ -8,9 +8,6 @@ defmodule TestRouter do
 
   pipeline :api do
     plug :accepts, ["json"]
-    # if Mix.env == :test do
-    #   plug BlueBird.Plug
-    # end
   end
 
   scope "/" do
