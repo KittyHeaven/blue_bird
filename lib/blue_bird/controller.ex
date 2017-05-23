@@ -1,5 +1,6 @@
 defmodule BlueBird.Controller do
   @moduledoc false
+
   defmacro __using__(_) do
     quote do
       import BlueBird.Controller, only: [api: 3]

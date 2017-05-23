@@ -1,11 +1,11 @@
 defmodule Mix.Tasks.Bird.Gen.Docs do
-  @moduledoc false
-
   use Mix.Task
 
   @shortdoc "Generates HTML API Docs from api.apib using Aglio"
+  @moduledoc @shortdoc
 
-  def run(_) do
+  @doc false
+  def run(_args) do
     if System.find_executable("aglio") == nil do
       raise "Install Aglio to convert Blueprint API to HTML: \"npm install aglio -g\""
     end
