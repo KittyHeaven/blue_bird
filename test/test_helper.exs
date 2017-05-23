@@ -13,11 +13,13 @@ defmodule TestRouter do
   scope "/" do
     pipe_through :api
 
-    get     "/get",       TestController, :get
-    post    "/post",      TestController, :post
-    put     "/put",       TestController, :put
-    patch   "/patch",     TestController, :patch
-    delete  "/delete",    TestController, :delete
+    get     "/get",             TestController, :get
+    get     "/get/:param",      TestController, :get_param
+    post    "/post",            TestController, :post
+    post    "/post/:param",     TestController, :post_param
+    put     "/put",             TestController, :put
+    patch   "/patch",           TestController, :patch
+    delete  "/delete",          TestController, :delete
   end
 end
 
@@ -34,7 +36,14 @@ defmodule TestController do
     group "Test"
     title "Test GET"
   end
-  def get(conn, _params), do: send_resp(conn, 200, @ok)
+  def get(conn, params), do: send_resp(conn, 200, @ok)
+
+  api :GET, "/get/:param" do
+    group "Test"
+    title "Test GET with param"
+    parameter :param, :integer, :required, "GET param"
+  end
+  def get_param(conn, _params), do: send_resp(conn, 200, @ok)
 
   api :POST, "/post" do
     group "Test"
@@ -42,6 +51,20 @@ defmodule TestController do
     note "This is a note"
   end
   def post(conn, _params), do: send_resp(conn, 201, @ok)
+
+  api :POST, "/post/:param" do
+    group "Test"
+    title "Test POST with param"
+    note "This is a note"
+    parameter :param, :integer, :required, "Post param"
+  end
+  def post_param(conn, _params) do
+    conn
+    |> put_private(:my_body_1, Map.fetch(conn, :body_params))
+    |> put_private(:my_body_2, Plug.Conn.read_body(conn))
+    |> IO.inspect
+    |> send_resp(201, @ok)
+  end
 
   api :PUT, "/put" do
     group "Test"
@@ -52,7 +75,6 @@ defmodule TestController do
   api :PATCH, "/patch" do
     group "Test"
     title "Test PATCH"
-    parameter :post_id, :integer, :required, "Post ID or slug"
   end
   def patch(conn, _params), do: send_resp(conn, 201, @ok)
 
