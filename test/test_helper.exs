@@ -7,6 +7,9 @@ defmodule TestRouter do
   import Phoenix.Controller
 
   pipeline :api do
+    plug Plug.Parsers, parsers: [:urlencoded, :multipart, :json],
+                       pass:  ["*/*"],
+                       json_decoder: Poison
     plug :accepts, ["json"]
   end
 
@@ -36,7 +39,7 @@ defmodule TestController do
     group "Test"
     title "Test GET"
   end
-  def get(conn, params), do: send_resp(conn, 200, @ok)
+  def get(conn, _params), do: send_resp(conn, 200, @ok)
 
   api :GET, "/get/:param" do
     group "Test"
@@ -58,13 +61,7 @@ defmodule TestController do
     note "This is a note"
     parameter :param, :integer, :required, "Post param"
   end
-  def post_param(conn, _params) do
-    conn
-    |> put_private(:my_body_1, Map.fetch(conn, :body_params))
-    |> put_private(:my_body_2, Plug.Conn.read_body(conn))
-    |> IO.inspect
-    |> send_resp(201, @ok)
-  end
+  def post_param(conn, _params), do: send_resp(conn, 201, @ok)
 
   api :PUT, "/put" do
     group "Test"

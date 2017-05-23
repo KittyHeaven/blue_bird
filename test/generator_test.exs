@@ -24,23 +24,83 @@ defmodule GeneratorTest do
     assert BlueBird.Generator.run == %{
       description: "Enter API description in mix.exs - blue_bird_info",
       host: "http://localhost",
+      title: "API Documentation",
       routes: [
-        %{description: nil, group: "Test", method: "GET",
-          note: nil, parameters: [], path: "/get", requests: [],
-          title: "Test GET"},
-        %{description: nil, group: "Test", method: "POST", note: "This is a note",
-          parameters: [], path: "/post", requests: [],
-          title: "Test POST"},
-        %{description: nil, group: "Test", method: "PUT", note: nil,
-          parameters: [], path: "/put", requests: [], title: "Test PUT"},
-        %{description: nil, group: "Test", method: "PATCH", note: nil,
-          parameters: [%{description: "Post ID or slug", name: "post_id", required: true, type: "integer"}],
-          path: "/patch", requests: [],
-          title: "Test PATCH"},
-        %{description: nil, group: "Test", method: "DELETE", note: nil,
-          parameters: [], path: "/delete", requests: [],
-          title: "Test DELETE"}],
-      title: "API Documentation"}
+        %{description: nil,
+          group: "Test",
+          method: "GET",
+          note: nil,
+          parameters: [],
+          path: "/get",
+          requests: [],
+          title: "Test GET"
+        },
+        %{description: nil,
+          group: "Test",
+          requests: [],
+          method: "GET",
+          note: nil,
+          parameters: [
+            %{description: "GET param",
+              name: "param",
+              required: true,
+              type: "integer"
+          }],
+          path: "/get/:param",
+          title: "Test GET with param"
+        },
+        %{description: nil,
+          group: "Test",
+          parameters: [],
+          requests: [],
+          method: "POST",
+          note: "This is a note",
+          path: "/post",
+          title: "Test POST"
+        },
+        %{description: nil,
+          group: "Test",
+          requests: [],
+          method: "POST",
+          note: "This is a note",
+          parameters: [
+            %{required: true,
+              type: "integer",
+              description: "Post param",
+              name: "param"
+          }],
+          path: "/post/:param",
+          title: "Test POST with param"
+        },
+        %{description: nil,
+          group: "Test",
+          note: nil,
+          parameters: [],
+          requests: [],
+          method: "PUT",
+          path: "/put",
+          title: "Test PUT"
+        },
+        %{description: nil,
+          group: "Test",
+          method: "PATCH",
+          note: nil,
+          parameters: [],
+          path: "/patch",
+          requests: [],
+          title: "Test PATCH"
+        },
+        %{description: nil,
+          group: "Test",
+          method: "DELETE",
+          note: nil,
+          parameters: [],
+          path: "/delete",
+          requests: [],
+          title: "Test DELETE"
+        }
+      ]
+    }
   end
 
   @tag :get
@@ -77,7 +137,7 @@ defmodule GeneratorTest do
                 {"accept-language", "de-de"}
               ],
               method: "GET",
-              body_params: "{\"aspect\":\"body_params\"}",
+              body_params: %{},
               path: "/get",
               path_params: %{},
               response: %{
@@ -140,7 +200,7 @@ defmodule GeneratorTest do
                 {"accept-language", "de-de"}
               ],
               method: "GET",
-              body_params: "{\"aspect\":\"body_params\"}",
+              body_params: %{},
               path: "/get/:param",
               path_params: %{"param" => "3"},
               response: %{
@@ -167,7 +227,7 @@ defmodule GeneratorTest do
     BlueBird.ConnLogger.reset()
 
     # Create a test connection
-    conn = conn(:post, "/post", %{p: 5})
+    conn = conn(:post, "/post", Poison.encode! %{p: 5})
     |> put_req_header("content-type", "application/json")
 
     # Invoke the plug
@@ -194,7 +254,7 @@ defmodule GeneratorTest do
           requests: [
             %{headers: [{"content-type", "application/json"}],
               method: "POST",
-              body_params: "{\"p\":5}",
+              body_params: %{"p" => 5},
               path: "/post",
               path_params: %{},
               response: %{
@@ -220,7 +280,7 @@ defmodule GeneratorTest do
     BlueBird.ConnLogger.reset()
 
     # Create a test connection
-    conn = conn(:post, "/post/5", %{p: 6})
+    conn = conn(:post, "/post/5", Poison.encode! %{p: 5})
     |> put_req_header("content-type", "application/json")
 
     # Invoke the plug
@@ -253,7 +313,7 @@ defmodule GeneratorTest do
           requests: [
             %{headers: [{"content-type", "application/json"}],
               method: "POST",
-              body_params: "{\"p\":5}",
+              body_params: %{"p" => 5},
               path: "/post/:param",
               path_params: %{"param" => "5"},
               response: %{
@@ -278,7 +338,7 @@ defmodule GeneratorTest do
     BlueBird.ConnLogger.reset()
 
     # Create a test connection
-    conn = conn(:put, "/put", %{p: 5})
+    conn = conn(:put, "/put", Poison.encode! %{p: 5})
     |> put_req_header("content-type", "application/json")
 
     # Invoke the plug
@@ -307,7 +367,7 @@ defmodule GeneratorTest do
           requests: [
             %{headers: [{"content-type", "application/json"}],
               method: "PUT",
-              body_params: "{\"p\":5}",
+              body_params: %{"p" => 5},
               path: "/put",
               path_params: %{},
               response: %{
@@ -331,7 +391,7 @@ defmodule GeneratorTest do
     BlueBird.ConnLogger.reset()
 
     # Create a test connection
-    conn = conn(:patch, "/patch", %{p: 5})
+    conn = conn(:patch, "/patch", Poison.encode! %{p: 5})
     |> put_req_header("content-type", "application/json")
 
     # Invoke the plug
@@ -361,7 +421,7 @@ defmodule GeneratorTest do
           requests: [
             %{headers: [{"content-type", "application/json"}],
               method: "PATCH",
-              body_params: "{\"p\":5}",
+              body_params: %{"p" => 5},
               path: "/patch",
               path_params: %{},
               response: %{
@@ -384,7 +444,7 @@ defmodule GeneratorTest do
     BlueBird.ConnLogger.reset()
 
     # Create a test connection
-    conn = conn(:delete, "/delete", %{p: 5})
+    conn = conn(:delete, "/delete", Poison.encode! %{p: 5})
     |> put_req_header("content-type", "application/json")
 
     # Invoke the plug
@@ -415,7 +475,7 @@ defmodule GeneratorTest do
           requests: [
             %{headers: [{"content-type", "application/json"}],
               method: "DELETE",
-              body_params: "{\"p\":5}",
+              body_params: %{"p" => 5},
               path: "/delete",
               path_params: %{},
               response: %{
