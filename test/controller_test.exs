@@ -10,6 +10,7 @@ defmodule BlueBird.Test.ControllerTest do
       title "List all users"
       description "This route returns a list of all users."
       note "Please don't use this route if you are a customer."
+      warning "May have undocumented side effects."
     end
 
     api :POST, "/users" do
@@ -37,6 +38,7 @@ defmodule BlueBird.Test.ControllerTest do
         title: "List all users",
         description: "This route returns a list of all users.",
         note: "Please don't use this route if you are a customer.",
+        warning: "May have undocumented side effects.",
         method: "GET",
         path: "/users",
         parameters: []
@@ -54,6 +56,7 @@ defmodule BlueBird.Test.ControllerTest do
         title: nil,
         description: nil,
         note: nil,
+        warning: nil,
         method: "DELETE",
         path: "/users/:id",
         parameters: []

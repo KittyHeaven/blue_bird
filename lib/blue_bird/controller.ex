@@ -40,7 +40,7 @@ defmodule BlueBird.Controller do
     title         = extract_single_value(metadata, :title)
     description   = extract_single_value(metadata, :description)
     note          = extract_single_value(metadata, :note)
-    option        = extract_single_value(metadata, :option)
+    warning       = extract_single_value(metadata, :warning)
     parameters    = extract_parameters(metadata)
 
     quote do

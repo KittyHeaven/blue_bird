@@ -6,7 +6,7 @@ defmodule BlueBird.Generator do
   def run do
     get_app_module()
     |> get_router_module()
-    |> prepare_docs(BlueBird.ConnLogger.conns())
+    |> prepare_docs(BlueBird.ConnLogger.get_conns())
   end
 
   def get_app_module do
