@@ -127,8 +127,8 @@ defmodule BlueBird.BlueprintWriter do
   defp split_headers([], l), do: l
   defp split_headers([h|t], l), do: split_headers(t, l <> "        #{elem(h, 0)}: #{elem(h, 1)}\n")
 
-  defp process_body(body) when body == %{}, do: ""
-  defp process_body(body) when is_map(body) do
+  defp process_body({:ok, body}) when body == %{}, do: ""
+  defp process_body({:ok, body}) when is_map(body) do
     """
       + Body
 
@@ -143,23 +143,22 @@ defmodule BlueBird.BlueprintWriter do
   defp process_request(request) do
     processed_headers     = process_headers(request.headers)
     processed_body_params = process_body(request.body_params)
-    print_request(processed_headers, processed_body_params)
+    process_request(processed_headers, processed_body_params)
   end
 
-  defp print_request("", ""), do: ""
-  defp print_request(processed_headers, processed_body_params) do
+  defp process_request("", ""), do: ""
+  defp process_request(processed_headers, processed_body_params) do
     "\n\n+ Request json\n" <> processed_headers <> processed_body_params
   end
 
   defp process_response(request) do
     {:ok, response}       = Map.fetch(request, :response)
     processed_headers     = process_headers(response.headers)
-    processed_body_params = process_body(Poison.decode!response.body)
-    print_response(response, processed_headers, processed_body_params)
+    processed_body_params = process_body(Poison.decode(response.body))
+    process_response(response, processed_headers, processed_body_params)
   end
-
-  defp print_response(_, "", ""), do: ""
-  defp print_response(response, processed_headers, processed_body_params) do
+  defp process_response(_, "", ""), do: ""
+  defp process_response(response, processed_headers, processed_body_params) do
     "\n+ Response #{response.status}\n" <> processed_headers <> processed_body_params
   end
 end

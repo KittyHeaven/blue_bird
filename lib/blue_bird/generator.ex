@@ -5,7 +5,7 @@ defmodule BlueBird.Generator do
   def run do
     get_app_module()
     |> get_router_module()
-    |> generate_blueprint_file(BlueBird.ConnLogger.conns())
+    |> prepare_docs(BlueBird.ConnLogger.conns())
   end
 
   def get_app_module do
@@ -18,7 +18,7 @@ defmodule BlueBird.Generator do
     Application.get_env(:blue_bird, :router, Module.concat([app_module, :Router]))
   end
 
-  defp generate_blueprint_file(router_module, test_conns) do
+  defp prepare_docs(router_module, test_conns) do
     %{host: Keyword.get(blue_bird_info(), :host, "http://localhost"),
       title: Keyword.get(blue_bird_info(), :title, "API Documentation"),
       description: Keyword.get(blue_bird_info(), :description, "Enter API description in mix.exs - blue_bird_info"),
