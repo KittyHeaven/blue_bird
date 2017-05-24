@@ -19,22 +19,27 @@ defmodule BlueBird.BlueprintWriter do
   end
 
   defp blueprint_text(api_docs) do
-    documentation_header = proces_documentation_header(api_docs)
+    documentation_header = print_documentation_header(api_docs)
 
     api_docs.routes
     |> Enum.sort_by(&(&1.group))
     |> Enum.group_by(&(&1.group))
     |> Enum.to_list()
     |> Enum.reduce(documentation_header, fn({group_name, group_routes}, docs) ->
-      docs <> """
-      # Group #{group_name}
+      group_header = "\n# Group #{group_name}\n"
 
-      #{process_routes(group_name, group_routes)}
-      """
+      processed_group_routes = group_routes
+      |> Enum.sort_by(&(&1.path))
+      |> Enum.group_by(&(&1.path))
+      |> Enum.to_list()
+      |> Enum.reduce(group_header, fn({res_name, res_routes}, docs) ->
+        docs <> "\n## #{group_name} [#{Regex.replace(~r/:([^\/]+)/, res_name, "{\\1}")}]\n" <> process_routes(res_routes)
+      end)
+      docs <> processed_group_routes
     end)
   end
 
-  defp proces_documentation_header(api_docs) do
+  defp print_documentation_header(api_docs) do
     """
     FORMAT: 1A
     HOST: #{api_docs.host}
@@ -47,22 +52,18 @@ defmodule BlueBird.BlueprintWriter do
     """
   end
 
-  defp process_routes(group, routes) do
-    Enum.reduce routes, "", fn(route, docs) ->
+  defp process_routes(routes) do
+    Enum.reduce(routes, "", fn(route, docs) ->
       docs
-      <> process_doc_header(group, route)
+      <> process_doc_header(route)
       <> process_note(route)
       <> process_parameters(route)
       <> process_requests(route)
-    end
+    end)
   end
 
-  defp process_doc_header(group, route) do
-    path = Regex.replace(~r/:([^\/]+)/, route.path, "{\\1}")
-
+  defp process_doc_header(route) do
     """
-
-    ## #{group} [#{path}]
 
     ### #{route.title} [#{route.method}]
 
@@ -83,106 +84,81 @@ defmodule BlueBird.BlueprintWriter do
     """
   end
 
-  defp process_parameters(%{parameters: parameters}) when is_list(parameters), do: print_parameters(parameters)
-  defp process_parameters(_), do: ""
-  defp print_parameters(parameters) do
-    docs =
-      """
-
-      + Parameters
-      """
+  defp process_parameters(%{parameters: []}), do: ""
+  defp process_parameters(%{parameters: [_|_] = parameters}) do
+    docs = "\n+ Parameters\n"
 
     Enum.reduce parameters, docs, fn(param, docs) ->
       required_option = if Map.get(param, :required), do: "required", else: "optional"
-
-      docs
-      <>
-      case Map.fetch(param, :example) do
-        {:ok, example} ->
-          """
-            + #{param.name}: `#{example}` (#{param.type}, #{required_option}) - #{param.description}
-          """
-        :error ->
-          """
-            + #{param.name}: (#{param.type}, #{required_option}) - #{param.description}
-          """
-      end
+      docs <> "\n    + #{param.name}: `-` (#{param.type}, #{required_option}) - #{param.description}"
     end
   end
 
-  defp process_requests(%{requests: requests}) when is_list(requests), do: print_requests(requests)
-  defp process_requests(_), do: ""
-  defp print_requests(requests) do
-    Enum.reduce requests, "", fn(request, docs) ->
-      docs <> request_params(request) <> response_body(request)
-    end
+  defp process_requests([]), do: ""
+  defp process_requests(%{requests: [_|_] = requests}) do
+    requests
+    |> Enum.sort_by(&(&1.response.status))
+    |> Enum.split_with(fn(%{response: %{status: status}}) -> status >= 200 && status < 300 end)
+    |> Tuple.to_list()
+    |> List.flatten()
+    |> Enum.reduce("", fn(request, docs) ->
+      docs <> process_request(request) <> process_response(request)
+    end)
   end
 
-  defp process_headers(headers) when is_list(headers), do: print_headers(headers)
-  defp process_headers(_), do: ""
-  defp print_headers(headers) do
+  defp process_headers([]), do: ""
+  defp process_headers([_|_] = headers) do
     """
-      + Headers
+        + Headers
+
+            ```
     """
     <>
     split_headers(headers)
     <>
     """
+            ```
 
     """
   end
+
 
   defp split_headers(headers), do: split_headers(headers, "")
   defp split_headers([], l), do: l
-  defp split_headers([h|t], l) do
-    l = l <> """
-        #{elem(h, 0)}: #{elem(h, 1)}
-    """
-    split_headers(t, l)
-  end
+  defp split_headers([h|t], l), do: split_headers(t, l <> "        #{elem(h, 0)}: #{elem(h, 1)}\n")
 
   defp process_body(body) when body == %{}, do: ""
-  defp process_body(body) when is_map(body), do: print_body(body)
-  defp process_body(_), do: ""
-  defp print_body(body) do
+  defp process_body(body) do
     """
       + Body
-        #{Poison.encode!(body)}
+
+          ```
+          #{Poison.encode!(body)}
+          ```
 
     """
   end
 
-  defp request_params(request) do
-    case Map.fetch(request, :body_params) do
-      {:ok, body_params} ->
-        """
-
-        + Request json
-
-        """
-        <>
-        process_headers(request.headers)
-        <>
-        process_body(body_params)
-      :error ->
-        ""
-    end
+  defp process_request(request) do
+    processed_headers     = process_headers(request.headers)
+    processed_body_params = process_body(request.body_params)
+    print_request processed_headers, processed_body_params
   end
 
-  defp response_body(request) do
-    case Map.fetch(request, :response) do
-      {:ok, response} ->
-        """
+  defp print_request("", ""), do: ""
+  defp print_request(processed_headers, processed_body_params) do
+    "\n\n+ Request json\n" <> processed_headers <> processed_body_params
+  end
 
-        + Response #{response.status}
+  defp process_response(request) do
+    {:ok, response}       = Map.fetch(request, :response)
+    processed_headers     = process_headers(response.headers)
+    processed_body_params = process_body(Poison.decode!response.body)
+    print_response response, processed_headers, processed_body_params
+  end
 
-        """
-        <>
-        process_headers(response.headers)
-        <>
-        process_body(response.body)
-      :error ->
-        ""
-    end
+  defp print_response(_, "", ""), do: ""
+  defp print_response(response, processed_headers, processed_body_params) do
+    "\n+ Response #{response.status}\n" <> processed_headers <> processed_body_params
   end
 end

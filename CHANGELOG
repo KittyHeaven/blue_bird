@@ -1,6 +1,15 @@
 # Changelog BlueBird
 
+
+## v0.1.3
+
+- Fix aglio rendering errors [!6](https://github.com/rhazdon/blue_bird/issues/6)
+- Group requests by group and ressource [!6](https://github.com/rhazdon/blue_bird/issues/6)
+- Sort requests by response status code (optimize docs rendering)
+
+
 ## v0.1.2
 
 - Don't render body part in api.apib if body is empty
 - Use `conn.body_params` instead of `conn.params` to fetch the body parameters [!5](https://github.com/rhazdon/blue_bird/issues/5)
+- Improve testing framework

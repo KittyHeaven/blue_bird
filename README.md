@@ -16,7 +16,7 @@ It lets you generate API documentation in the [API Blueprint](https://apibluepri
 1. Add BlueBird to your mix.exs dependencies (directly from Github until released):
 ``` elixir
 defp deps do
-  [{:blue_bird, "~> 0.1.2"}]
+  [{:blue_bird, "~> 0.1.3"}]
 end
 ```
 
@@ -77,7 +77,7 @@ defmodule App.CommentController do
   api :GET, "/posts/:post_id/comments" do
     group "Comment" # If not provided, it will be guessed from the controller name (resource name)
     title "List comments for specific docs"
-    description "Optiona description that will be displayed in the documentation"
+    description "Optional description that will be displayed in the documentation"
     note "Optional note that will be displayed in the documentation"
     parameter :post_id, :integer, :required, "Post ID or slug"
   end
