@@ -1,27 +1,22 @@
 defmodule BlueBird.Test.ConnLoggerTest do
   use BlueBird.Test.Support.ConnCase
+  alias BlueBird.ConnLogger
 
   doctest BlueBird
 
-  test "save/1" do
-    BlueBird.ConnLogger.reset()
-    BlueBird.ConnLogger.save(get_test_conn())
+  @conn_1 %{mary: "jane"}
+  @conn_2 %{jane: "austen"}
 
-    assert BlueBird.ConnLogger.conns() == [get_test_conn()]
-  end
+  test "ConnLogger saves, returns and resets connections" do
+    ConnLogger.reset()
 
-  test "conns/0" do
-    BlueBird.ConnLogger.reset()
+    ConnLogger.save(@conn_1)
+    ConnLogger.save(@conn_2)
 
-    assert BlueBird.ConnLogger.conns() == []
+    assert ConnLogger.get_conns() == [@conn_1, @conn_2]
 
-    BlueBird.ConnLogger.save(get_test_conn())
-    BlueBird.ConnLogger.save(get_test_conn())
+    ConnLogger.reset()
 
-    assert BlueBird.ConnLogger.conns() == [get_test_conn(), get_test_conn()]
-  end
-
-  defp get_test_conn do
-    %{test: "test"}
+    assert ConnLogger.get_conns() == []
   end
 end
