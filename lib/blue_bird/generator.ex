@@ -27,8 +27,8 @@ defmodule BlueBird.Generator do
 
   defp blue_bird_info do
     case function_exported?(Mix.Project.get, :blue_bird_info, 0) do
-      false -> []
       true  -> Mix.Project.get.blue_bird_info()
+      false -> []
     end
   end
 

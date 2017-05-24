@@ -86,14 +86,6 @@ defmodule App.CommentController do
   def index(conn, %{"post_id" => post_id}) do
     ...
   end
-
-  api :PUT, "/posts/:post_id/comments" do
-    title "Update comment"
-    parameter :post_id, :integer, :required, "Post ID or slug"
-  end
-  def update(conn, %{"comment" => comment_params}) do
-    ...
-  end
 end
 ```
 
