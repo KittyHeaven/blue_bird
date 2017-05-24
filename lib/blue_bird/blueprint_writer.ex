@@ -110,9 +110,6 @@ defmodule BlueBird.BlueprintWriter do
   defp process_requests(%{requests: [_|_] = requests}) do
     requests
     |> Enum.sort_by(&(&1.response.status))
-    |> Enum.split_with(fn(%{response: %{status: status}}) -> status >= 200 && status < 300 end)
-    |> Tuple.to_list()
-    |> List.flatten()
     |> Enum.reduce("", fn(request, docs) ->
       docs <> process_request(request) <> process_response(request)
     end)
@@ -134,7 +131,6 @@ defmodule BlueBird.BlueprintWriter do
     """
   end
   defp process_headers(_), do: ""
-
 
   defp split_headers(headers), do: split_headers(headers, "")
   defp split_headers([], l), do: l
