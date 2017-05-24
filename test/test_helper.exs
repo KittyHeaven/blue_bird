@@ -1,2 +1,1 @@
-# Start ExUnit
 ExUnit.start()
