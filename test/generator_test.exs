@@ -27,79 +27,13 @@ defmodule BlueBird.Test.GeneratorTest do
       host: "http://localhost",
       title: "API Documentation",
       routes: [
-        %{description: nil,
-          group: "Test",
-          method: "GET",
-          note: nil,
-          parameters: [],
-          path: "/get",
-          requests: [],
-          title: "Test GET"
-        },
-        %{description: nil,
-          group: "Test",
-          requests: [],
-          method: "GET",
-          note: nil,
-          parameters: [
-            %{description: "GET param",
-              name: "param",
-              required: true,
-              type: "integer"
-          }],
-          path: "/get/:param",
-          title: "Test GET with param"
-        },
-        %{description: nil,
-          group: "Test",
-          parameters: [],
-          requests: [],
-          method: "POST",
-          note: "This is a note",
-          path: "/post",
-          title: "Test POST"
-        },
-        %{description: nil,
-          group: "Test",
-          requests: [],
-          method: "POST",
-          note: "This is a note",
-          parameters: [
-            %{required: true,
-              type: "integer",
-              description: "Post param",
-              name: "param"
-          }],
-          path: "/post/:param",
-          title: "Test POST with param"
-        },
-        %{description: nil,
-          group: "Test",
-          note: nil,
-          parameters: [],
-          requests: [],
-          method: "PUT",
-          path: "/put",
-          title: "Test PUT"
-        },
-        %{description: nil,
-          group: "Test",
-          method: "PATCH",
-          note: nil,
-          parameters: [],
-          path: "/patch",
-          requests: [],
-          title: "Test PATCH"
-        },
-        %{description: nil,
-          group: "Test",
-          method: "DELETE",
-          note: nil,
-          parameters: [],
-          path: "/delete",
-          requests: [],
-          title: "Test DELETE"
-        }
+        empty_get_route(),
+        empty_get_with_param_route(),
+        empty_post_route(),
+        empty_post_with_param_route(),
+        empty_put_route(),
+        empty_patch_route(),
+        empty_delete_route()
       ]
     }
   end
@@ -128,8 +62,10 @@ defmodule BlueBird.Test.GeneratorTest do
       routes: [
         %{description: nil,
           group: "Test",
+          resource: "",
           method: "GET",
           note: nil,
+          warning: nil,
           parameters: [],
           path: "/get",
           requests: [
@@ -186,9 +122,11 @@ defmodule BlueBird.Test.GeneratorTest do
       routes: [
         empty_get_route(),
         %{description: nil,
+          resource: "",
           group: "Test",
           method: "GET",
           note: nil,
+          warning: nil,
           parameters: [
             %{description: "GET param",
               name: "param",
@@ -249,9 +187,11 @@ defmodule BlueBird.Test.GeneratorTest do
         empty_get_route(),
         empty_get_with_param_route(),
         %{description: nil,
+          resource: "",
           group: "Test",
           method: "POST",
           note: "This is a note",
+          warning: nil,
           parameters: [],
           path: "/post",
           requests: [
@@ -305,8 +245,10 @@ defmodule BlueBird.Test.GeneratorTest do
         empty_post_route(),
         %{description: nil,
           group: "Test",
+          resource: "",
           method: "POST",
           note: "This is a note",
+          warning: nil,
           parameters: [
             %{description: "Post param",
               name: "param",
@@ -365,8 +307,10 @@ defmodule BlueBird.Test.GeneratorTest do
         empty_post_with_param_route(),
         %{description: nil,
           group: "Test",
+          resource: "",
           method: "PUT",
           note: nil,
+          warning: nil,
           parameters: [],
           path: "/put",
           requests: [
@@ -420,8 +364,10 @@ defmodule BlueBird.Test.GeneratorTest do
         empty_put_route(),
         %{description: nil,
           group: "Test",
+          resource: "",
           method: "PATCH",
           note: nil,
+          warning: nil,
           parameters: [],
           path: "/patch",
           requests: [
@@ -475,8 +421,10 @@ defmodule BlueBird.Test.GeneratorTest do
         empty_patch_route(),
         %{description: nil,
           group: "Test",
+          resource: "",
           method: "DELETE",
           note: nil,
+          warning: nil,
           parameters: [],
           path: "/delete",
           requests: [
@@ -505,6 +453,8 @@ defmodule BlueBird.Test.GeneratorTest do
       group: "Test",
       method: "GET",
       note: nil,
+      warning: nil,
+      resource: "",
       parameters: [],
       path: "/get",
       requests: [],
@@ -515,8 +465,10 @@ defmodule BlueBird.Test.GeneratorTest do
   defp empty_get_with_param_route do
     %{description: nil,
       group: "Test",
+      resource: "",
       method: "GET",
       note: nil,
+      warning: nil,
       parameters: [
         %{description: "GET param",
           name: "param",
@@ -532,8 +484,10 @@ defmodule BlueBird.Test.GeneratorTest do
   defp empty_post_route do
     %{description: nil,
       group: "Test",
+      resource: "",
       method: "POST",
       note: "This is a note",
+      warning: nil,
       parameters: [],
       path: "/post",
       requests: [],
@@ -544,8 +498,10 @@ defmodule BlueBird.Test.GeneratorTest do
   defp empty_post_with_param_route do
     %{description: nil,
       group: "Test",
+      resource: "",
       method: "POST",
       note: "This is a note",
+      warning: nil,
       parameters: [
         %{description: "Post param",
           name: "param",
@@ -561,8 +517,10 @@ defmodule BlueBird.Test.GeneratorTest do
   defp empty_put_route do
     %{description: nil,
       group: "Test",
+      resource: "",
       method: "PUT",
       note: nil,
+      warning: nil,
       parameters: [],
       path: "/put",
       requests: [],
@@ -573,8 +531,10 @@ defmodule BlueBird.Test.GeneratorTest do
   defp empty_patch_route do
     %{description: nil,
       group: "Test",
+      resource: "",
       method: "PATCH",
       note: nil,
+      warning: nil,
       parameters: [],
       path: "/patch",
       requests: [],
@@ -585,8 +545,10 @@ defmodule BlueBird.Test.GeneratorTest do
   defp empty_delete_route do
     %{description: nil,
       group: "Test",
+      resource: "",
       method: "DELETE",
       note: nil,
+      warning: nil,
       parameters: [],
       path: "/delete",
       requests: [],
