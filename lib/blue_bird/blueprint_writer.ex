@@ -140,8 +140,9 @@ defmodule BlueBird.BlueprintWriter do
   defp split_headers([], l), do: l
   defp split_headers([h|t], l), do: split_headers(t, l <> "        #{elem(h, 0)}: #{elem(h, 1)}\n")
 
-  defp process_body({:ok, body}) when body == %{}, do: ""
-  defp process_body({:ok, body}) do
+  defp process_body({:ok, body}), do: process_body(body)
+  defp process_body(body) when body == %{}, do: ""
+  defp process_body(body) when is_map(body) do
     """
         + Body
 
