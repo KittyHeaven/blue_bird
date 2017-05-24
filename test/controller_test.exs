@@ -1,5 +1,5 @@
 defmodule BlueBird.Test.ControllerTest do
-  use ExUnit.Case
+  use BlueBird.Test.Support.ConnCase
 
   defmodule Controller do
     use BlueBird.Controller
@@ -92,7 +92,18 @@ defmodule BlueBird.Test.ControllerTest do
       }]
     end
 
-    # test "raises error if single value fields have too many values"
+    test "raises error if single value fields have too many values" do
+      message = "Expected single value for title, got 2"
+
+      assert_compile_time_raise ArgumentError, message, fn ->
+        use BlueBird.Controller
+
+        api :POST, "/toomany" do
+          title "too", "many"
+        end
+      end
+    end
+
     # test "raises error if path parameters are missing"
     # test "raises error if parameter is not in path"
   end
