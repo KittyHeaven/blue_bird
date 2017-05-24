@@ -158,10 +158,9 @@ defmodule BlueBird.BlueprintWriter do
     processed_body_params = process_body(request.body_params)
     process_request(processed_headers, processed_body_params)
   end
-
   defp process_request("", ""), do: ""
   defp process_request(processed_headers, processed_body_params) do
-    "\n\n+ Request json\n" <> processed_headers <> processed_body_params
+    "\n\n+ Request \n" <> processed_headers <> processed_body_params
   end
 
   defp process_response(request) do
