@@ -16,7 +16,7 @@ It lets you generate API documentation in the [API Blueprint](https://apibluepri
 1. Add BlueBird to your mix.exs dependencies (directly from Github until released):
 ``` elixir
 defp deps do
-  [{:blue_bird, "~> 0.1.4"}]
+  [{:blue_bird, "~> 0.2.0"}]
 end
 ```
 

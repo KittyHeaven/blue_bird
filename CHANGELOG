@@ -1,6 +1,17 @@
 # Changelog BlueBird
 
 
+## v0.2.0
+
+- Add warning as option
+- Add resource as option
+- Implement generic function to extract api options
+- Improve function naming
+- Fix indent of body area
+- Remove "json" from request header
+- Cleanup and small improvements
+
+
 ## v0.1.4
 
 - Fix wrong pattern match
