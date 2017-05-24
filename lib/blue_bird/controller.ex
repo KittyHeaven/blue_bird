@@ -40,6 +40,7 @@ defmodule BlueBird.Controller do
     title         = extract_single_value(metadata, :title)
     description   = extract_single_value(metadata, :description)
     note          = extract_single_value(metadata, :note)
+    option        = extract_single_value(metadata, :option)
     parameters    = extract_parameters(metadata)
 
     quote do
@@ -51,6 +52,7 @@ defmodule BlueBird.Controller do
           description:  unquote(description),
           note:         unquote(note),
           method:       unquote(method_str),
+          warning:      unquote(warning),
           path:         unquote(path),
           parameters:   unquote(Macro.escape(parameters))
         }

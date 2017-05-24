@@ -16,7 +16,7 @@ It lets you generate API documentation in the [API Blueprint](https://apibluepri
 1. Add BlueBird to your mix.exs dependencies (directly from Github until released):
 ``` elixir
 defp deps do
-  [{:blue_bird, "~> 0.1.4"}]
+  [{:blue_bird, "~> 0.2.0"}]
 end
 ```
 
@@ -75,21 +75,15 @@ defmodule App.CommentController do
   use App.Web, :controller
 
   api :GET, "/posts/:post_id/comments" do
-    group "Comment" # If not provided, it will be guessed from the controller name (resource name)
+    group "Post Comments" # If not provided, it will be guessed from the controller name (resource name)
+    resource "Comment"
     title "List comments for specific docs"
     description "Optional description that will be displayed in the documentation"
     note "Optional note that will be displayed in the documentation"
+    warn "Optional warn that will be displayed in the documentation"
     parameter :post_id, :integer, :required, "Post ID or slug"
   end
   def index(conn, %{"post_id" => post_id}) do
-    ...
-  end
-
-  api :PUT, "/posts/:post_id/comments" do
-    title "Update comment"
-    parameter :post_id, :integer, :required, "Post ID or slug"
-  end
-  def update(conn, %{"comment" => comment_params}) do
     ...
   end
 end
@@ -100,9 +94,11 @@ end
 * `method`: HTTP method - GET, POST, PUT, PATCH, DELETE
 * `url`: URL route from `phoenix router`
 * `group`: Documentation routes are grouped by a group name (defaults to resource name guessed from the controller name)
+* `resource`: Documentation routes are grouped by the resource (defaults to resource name guessed from the controller name)
 * `title`: Title (can use Blueprint format)
 * `description`: Description (optional, can use Blueprint format)
 * `note`: Note (optional, can use Blueprint format)
+* `warn`: Note (optional, can use Blueprint format)
 * `parameter`: `name, type, required/optional, description`
   * required - `parameter :post_id, :integer, :required, "Post ID"`
   * optional - `parameter :post_id, :integer, "Post ID"`

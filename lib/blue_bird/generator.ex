@@ -6,7 +6,7 @@ defmodule BlueBird.Generator do
   def run do
     get_app_module()
     |> get_router_module()
-    |> generate_blueprint_file(ConnLogger.get_conns())
+    |> prepare_docs(BlueBird.ConnLogger.conns())
   end
 
   def get_app_module do
@@ -23,7 +23,7 @@ defmodule BlueBird.Generator do
     )
   end
 
-  defp generate_blueprint_file(router_module, test_conns) do
+  defp prepare_docs(router_module, test_conns) do
     %{host: Keyword.get(blue_bird_info(), :host, "http://localhost"),
       title: Keyword.get(blue_bird_info(), :title, "API Documentation"),
       description: Keyword.get(blue_bird_info(), :description, "Enter API description in mix.exs - blue_bird_info"),
@@ -32,8 +32,8 @@ defmodule BlueBird.Generator do
 
   defp blue_bird_info do
     case function_exported?(Project.get, :blue_bird_info, 0) do
+      true  -> Mix.Project.get.blue_bird_info()
       false -> []
-      true  -> Project.get.blue_bird_info()
     end
   end
 
@@ -96,7 +96,8 @@ defmodule BlueBird.Generator do
     try do
       route_docs = controller
         |> apply(:api_doc, [method, route.path])
-        |> set_default_group(route)
+        |> set_default(route, :group)
+        |> set_default(route, :resource)
         |> Map.put(:requests, route_requests)
 
       {:ok, route_docs}
@@ -108,15 +109,23 @@ defmodule BlueBird.Generator do
     end
   end
 
-  defp set_default_group(%{group: group} = route_docs, route) when is_nil(group) do
-    group = route.plug
+  defp set_default(%{group: group} = route_docs, route, :group)
+  when is_nil(group) do
+    set_default_to_controller(route_docs, route, :group)
+  end
+
+  defp set_default(%{resource: resource} = route_docs, route, :resource)
+  when is_nil(resource) do
+    set_default_to_controller(route_docs, route, :resource)
+  end
+
+  defp set_default(route_docs, _, _), do: route_docs
+
+  defp set_default_to_controller(route_docs, route, key) do
+    value = route.plug
     |> Naming.resource_name("Controller")
     |> Naming.humanize
 
-    route_docs
-    |> Map.put(:group, group)
+    Map.put(route_docs, key, value)
   end
-
-  defp set_default_group(route_docs, _), do: route_docs
-
 end

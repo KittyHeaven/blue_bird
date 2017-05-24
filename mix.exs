@@ -1,7 +1,7 @@
 defmodule BlueBird.Mixfile do
   use Mix.Project
 
-  @version "0.1.4"
+  @version "0.2.0"
   @url "https://github.com/rhazdon/blue_bird"
   @maintainers [
     "Djordje Atlialp"
@@ -92,7 +92,7 @@ defmodule BlueBird.Mixfile do
     [
       maintainers: @maintainers,
       licenses: ["MIT"],
-      links: %{github: @url},
+      links: %{"Github" => @url},
       files: ~w(lib) ++ ~w(mix.exs README.md LICENSE)
     ]
   end
