@@ -6,7 +6,7 @@ defmodule BlueBird.Generator do
   def run do
     get_app_module()
     |> get_router_module()
-    |> prepare_docs(BlueBird.ConnLogger.get_conns())
+    |> prepare_docs(ConnLogger.get_conns())
   end
 
   def get_app_module do
@@ -32,7 +32,7 @@ defmodule BlueBird.Generator do
 
   defp blue_bird_info do
     case function_exported?(Project.get, :blue_bird_info, 0) do
-      true  -> Mix.Project.get.blue_bird_info()
+      true  -> Project.get.blue_bird_info()
       false -> []
     end
   end
