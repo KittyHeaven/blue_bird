@@ -35,12 +35,12 @@ defmodule BlueBird.Controller do
   defmacro api(method, path, do: block) do
     method_str    = method_to_string(method)
     metadata      = extract_metadata(block)
-    group         = extract_single_value(metadata, :group)
-    resource      = extract_single_value(metadata, :resource)
-    title         = extract_single_value(metadata, :title)
-    description   = extract_single_value(metadata, :description)
-    note          = extract_single_value(metadata, :note)
-    warning       = extract_single_value(metadata, :warning)
+    group         = extract_option(metadata, :group)
+    resource      = extract_option(metadata, :resource)
+    title         = extract_option(metadata, :title)
+    description   = extract_option(metadata, :description)
+    note          = extract_option(metadata, :note)
+    warning       = extract_option(metadata, :warning)
     parameters    = extract_parameters(metadata)
 
     quote do
@@ -74,7 +74,7 @@ defmodule BlueBird.Controller do
   defp extract_metadata({key, _, data}), do: [{key, data}]
   defp extract_metadata(nil), do: []
 
-  defp extract_single_value(metadata, key) do
+  defp extract_option(metadata, key) do
     values = metadata |> Keyword.get(key)
 
     cond do

@@ -24,10 +24,16 @@ defmodule BlueBird.Generator do
   end
 
   defp prepare_docs(router_module, test_conns) do
-    %{host: Keyword.get(blue_bird_info(), :host, "http://localhost"),
+    %{
+      host: Keyword.get(blue_bird_info(), :host, "http://localhost"),
       title: Keyword.get(blue_bird_info(), :title, "API Documentation"),
-      description: Keyword.get(blue_bird_info(), :description, "Enter API description in mix.exs - blue_bird_info"),
-      routes: generate_docs_for_routes(router_module, test_conns)}
+      description: Keyword.get(
+        blue_bird_info(),
+        :description,
+        "Enter API description in mix.exs - blue_bird_info"
+      ),
+      routes: generate_docs_for_routes(router_module, test_conns)
+    }
   end
 
   defp blue_bird_info do

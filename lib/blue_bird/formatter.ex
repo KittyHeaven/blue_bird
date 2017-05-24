@@ -22,20 +22,12 @@ defmodule BlueBird.Formatter do
   def init(_config), do: {:ok, nil}
 
   @doc """
-  Listen to events.
-
-  If the event is `:suite_finished`, trigger the generation of api blueprint file.
-
-  Ignore  all other events.
+  Event listener. Triggers the generation of the api blueprint file on
+  `:suite_finished`. Ignores all other events.
   """
   def handle_event({:suite_finished, _run_us, _load_us}, nil) do
-    generate_blue_print_file()
+    Generator.run() |> BlueprintWriter.run()
     :remove_handler
   end
-
   def handle_event(_event, nil), do: {:ok, nil}
-
-  defp generate_blue_print_file do
-    Generator.run() |> BlueprintWriter.run()
-  end
 end
