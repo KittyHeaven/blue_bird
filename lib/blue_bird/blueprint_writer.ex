@@ -57,6 +57,7 @@ defmodule BlueBird.BlueprintWriter do
       docs
       <> process_doc_header(route)
       <> process_note(route)
+      <> process_warning(route)
       <> process_parameters(route)
       <> process_requests(route)
     end)
@@ -79,6 +80,18 @@ defmodule BlueBird.BlueprintWriter do
 
     ::: note
     #{note}
+    :::
+
+    """
+  end
+
+  defp process_warning(%{warning: warning}) when is_binary(warning), do: print_warning(warning)
+  defp process_warning(_), do: ""
+  defp print_warning(warning) do
+    """
+
+    ::: warning
+    #{warning}
     :::
 
     """

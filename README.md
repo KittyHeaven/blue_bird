@@ -80,6 +80,7 @@ defmodule App.CommentController do
     title "List comments for specific docs"
     description "Optional description that will be displayed in the documentation"
     note "Optional note that will be displayed in the documentation"
+    warn "Optional warn that will be displayed in the documentation"
     parameter :post_id, :integer, :required, "Post ID or slug"
   end
   def index(conn, %{"post_id" => post_id}) do
@@ -105,6 +106,7 @@ end
 * `title`: Title (can use Blueprint format)
 * `description`: Description (optional, can use Blueprint format)
 * `note`: Note (optional, can use Blueprint format)
+* `warn`: Note (optional, can use Blueprint format)
 * `parameter`: `name, type, required/optional, description`
   * required - `parameter :post_id, :integer, :required, "Post ID"`
   * optional - `parameter :post_id, :integer, "Post ID"`

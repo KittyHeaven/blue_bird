@@ -24,6 +24,7 @@ defmodule BlueBird.Controller do
     title         = extract_option(metadata, :title, ["Action"])
     description   = extract_option(metadata, :description)
     note          = extract_option(metadata, :note)
+    warning       = extract_option(metadata, :warning)
     parameters    = extract_parameters(metadata)
 
     quote do
@@ -33,6 +34,7 @@ defmodule BlueBird.Controller do
           title:        unquote(title),
           description:  unquote(description),
           note:         unquote(note),
+          warning:      unquote(warning),
           method:       unquote(route_method),
           path:         unquote(path),
           parameters:   unquote(Macro.escape(parameters))}
