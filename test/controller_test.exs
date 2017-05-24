@@ -96,7 +96,7 @@ defmodule BlueBird.Test.ControllerTest do
       message = "Expected single value for title, got 2"
 
       assert_compile_time_raise ArgumentError, message, fn ->
-        use BlueBird.Controller
+        import BlueBird.Controller
 
         api :POST, "/toomany" do
           title "too", "many"
