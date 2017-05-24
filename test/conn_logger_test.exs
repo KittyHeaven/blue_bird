@@ -8,6 +8,7 @@ defmodule BlueBird.Test.ConnLoggerTest do
     BlueBird.ConnLogger.save(get_test_conn())
 
     assert BlueBird.ConnLogger.conns() == [get_test_conn()]
+    BlueBird.ConnLogger.reset()
   end
 
   test "conns/0" do
@@ -19,6 +20,7 @@ defmodule BlueBird.Test.ConnLoggerTest do
     BlueBird.ConnLogger.save(get_test_conn())
 
     assert BlueBird.ConnLogger.conns() == [get_test_conn(), get_test_conn()]
+    BlueBird.ConnLogger.reset()
   end
 
   defp get_test_conn do
