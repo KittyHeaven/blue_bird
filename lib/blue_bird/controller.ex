@@ -1,6 +1,4 @@
 defmodule BlueBird.Controller do
-  @moduledoc false
-
   defmacro __using__(_) do
     quote do
       import BlueBird.Controller, only: [api: 3]
@@ -8,38 +6,61 @@ defmodule BlueBird.Controller do
   end
 
   @doc """
-  api :GET, "/posts/:id" do
-    group "Posts"
-    title "Show post"
-    description "Show post by id"
-    parameter :id, :integer, :required, "Post ID"
-  end
+  Generates the description of a route.
+
+  - `method`: HTTP method (GET, POST, PUT etc.)
+  - `url`: Route as defined in the Phoenix router
+  - `group`: Resource group. Defaults to resource name guessed from controller
+  name.
+  - `resource`: Title for the resource. Defaults to the url.
+  - `title`: Title for the action
+  - `description`: Description of the route
+  - `note`: Note
+  - `parameter`: `name, type, :required, description`
+
+  ## Example
+
+      api :GET, "user/:id/posts/:pid" do
+        group "Posts"
+        resource "Single Post"
+        title "Show post"
+        description "Show post by ID"
+        parameter :id, :integer, :required, "User ID"
+        parameter :id, :integer, "Post ID"
+        parameter :name, :string
+      end
   """
+  # TODO: If parameter is not required and not set, it will be another route.
+  #       So no need for required/optional here?
   defmacro api(method, path, do: block) do
-    route_method  = extract_route_method(method)
+    method_str    = method_to_string(method)
     metadata      = extract_metadata(block)
-    group         = extract_group(metadata)
-    title         = extract_title(metadata)
-    description   = extract_desctiption(metadata)
-    note          = extract_note(metadata)
+    group         = extract_single_value(metadata, :group)
+    resource      = extract_single_value(metadata, :resource)
+    title         = extract_single_value(metadata, :title)
+    description   = extract_single_value(metadata, :description)
+    note          = extract_single_value(metadata, :note)
     parameters    = extract_parameters(metadata)
 
     quote do
-      def api_doc(unquote(route_method), unquote(path)) do
-        %{group:        unquote(group),
+      def api_doc(unquote(method_str), unquote(path)) do
+        %{
+          group:        unquote(group),
+          resource:     unquote(resource),
           title:        unquote(title),
           description:  unquote(description),
           note:         unquote(note),
-          method:       unquote(route_method),
+          method:       unquote(method_str),
           path:         unquote(path),
-          parameters:   unquote(Macro.escape(parameters))}
+          parameters:   unquote(Macro.escape(parameters))
+        }
       end
     end
   end
 
-  defp extract_route_method(method) do
+  defp method_to_string(method) do
     method
-    |> atom_to_string
+    |> to_string
     |> String.upcase
   end
 
@@ -48,54 +69,57 @@ defmodule BlueBird.Controller do
       {name, params}
     end
   end
+  defp extract_metadata({key, _, data}), do: [{key, data}]
+  defp extract_metadata(nil), do: []
 
-  defp extract_group(metadata) do
-    metadata
-    |> Keyword.get(:group, [])
-    |> List.first
-  end
+  defp extract_single_value(metadata, key) do
+    values = metadata |> Keyword.get(key)
 
-  defp extract_title(metadata) do
-    metadata
-    |> Keyword.get(:title, ["Action"])
-    |> List.first
-  end
-
-  defp extract_desctiption(metadata) do
-    metadata
-    |> Keyword.get(:description, [])
-    |> List.first
-  end
-
-  defp extract_note(metadata) do
-    metadata
-    |> Keyword.get(:note, [])
-    |> List.first
+    cond do
+      is_nil(values) -> nil
+      length(values) == 1 -> List.first(values)
+      true -> raise ArgumentError,
+              "Expected single value for #{key}, got #{length(values)}"
+    end
   end
 
   defp extract_parameters(metadata) do
-    Enum.reduce metadata, [], fn(parameter, list) ->
-      case parameter do
-        {:parameter, [name, type, :required, description]} ->
-          list ++ [%{name: atom_to_string(name), type: atom_to_string(type), required: true, description: description}]
-        {:parameter, [name, type, :required]} ->
-          list ++ [%{name: atom_to_string(name), type: atom_to_string(type), required: true, description: ""}]
-        {:parameter, [name, type, description]} ->
-          list ++ [%{name: atom_to_string(name), type: atom_to_string(type), required: false, description: description}]
-        {:parameter, [name, type]} ->
-          list ++ [%{name: atom_to_string(name), type: atom_to_string(type), required: false, description: ""}]
-        _ ->
-          list
-      end
-    end
+    metadata
+    |> Keyword.get_values(:parameter)
+    |> Enum.reduce([], fn(param, list) -> [param_to_map(param) | list] end)
+    |> Enum.reverse
   end
 
-  defp atom_to_string(atom_or_string) do
-    if is_atom(atom_or_string) do
-      atom_or_string |> Atom.to_string
-    else
-      atom_or_string
-    end
+  defp param_to_map([name, type, :required, description]) do
+    %{
+      name: to_string(name),
+      type: to_string(type),
+      required: true,
+      description: description
+    }
   end
-
+  defp param_to_map([name, type, :required]) do
+    %{
+      name: to_string(name),
+      type: to_string(type),
+      required: true,
+      description: nil
+    }
+  end
+  defp param_to_map([name, type, description]) do
+    %{
+      name: to_string(name),
+      type: to_string(type),
+      required: false,
+      description: description
+    }
+  end
+  defp param_to_map([name, type]) do
+    %{
+      name: to_string(name),
+      type: to_string(type),
+      required: false,
+      description: nil
+    }
+  end
 end
