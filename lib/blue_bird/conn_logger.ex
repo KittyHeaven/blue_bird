@@ -8,6 +8,11 @@ defmodule BlueBird.ConnLogger do
   Starts the GenServer.
 
   Returns `{:ok, pid}` on success. Raises error on failure.
+
+  ## Example
+
+      iex> start_link()
+      {:ok, #PID<0.80.0>}
   """
   def start_link do
     {:ok, _} = GenServer.start_link(__MODULE__, [], name: __MODULE__)
