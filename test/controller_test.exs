@@ -92,8 +92,8 @@ defmodule BlueBird.Test.ControllerTest do
       }]
     end
 
-    test "raises error if single value fields have too many values"
-    test "raises error if path parameters are missing"
-    test "raises error if parameter is not in path"
+    # test "raises error if single value fields have too many values"
+    # test "raises error if path parameters are missing"
+    # test "raises error if parameter is not in path"
   end
 end
