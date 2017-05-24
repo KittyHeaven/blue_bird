@@ -143,11 +143,11 @@ defmodule BlueBird.BlueprintWriter do
   defp process_body({:ok, body}) when body == %{}, do: ""
   defp process_body({:ok, body}) do
     """
-      + Body
+        + Body
 
-          ```
-          #{Poison.encode!(body)}
-          ```
+            ```
+            #{Poison.encode!(body)}
+            ```
 
     """
   end
