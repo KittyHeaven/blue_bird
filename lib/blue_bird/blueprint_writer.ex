@@ -1,5 +1,6 @@
 defmodule BlueBird.BlueprintWriter do
-  @moduledoc false
+  alias Mix.Project
+
   @docs_path Application.get_env(:blue_bird, :docs_path, "docs")
 
   def run(api_docs) do
@@ -11,7 +12,7 @@ defmodule BlueBird.BlueprintWriter do
   end
 
   defp path do
-    Mix.Project.load_paths
+    Project.load_paths
     |> Enum.at(0)
     |> String.split("_build")
     |> Enum.at(0)
@@ -88,7 +89,8 @@ defmodule BlueBird.BlueprintWriter do
     docs = "\n+ Parameters\n"
 
     Enum.reduce parameters, docs, fn(param, docs) ->
-      required_option = if Map.get(param, :required), do: "required", else: "optional"
+      required_option =
+        if Map.get(param, :required), do: "required", else: "optional"
       docs <> "\n    + #{param.name}: `-` (#{param.type}, #{required_option}) - #{param.description}"
     end
   end
@@ -97,7 +99,9 @@ defmodule BlueBird.BlueprintWriter do
   defp process_requests(%{requests: [_|_] = requests}) do
     requests
     |> Enum.sort_by(&(&1.response.status))
-    |> Enum.split_with(fn(%{response: %{status: status}}) -> status >= 200 && status < 300 end)
+    |> Enum.split_with(fn(%{response: %{status: status}}) ->
+         status >= 200 && status < 300
+       end)
     |> Tuple.to_list()
     |> List.flatten()
     |> Enum.reduce("", fn(request, docs) ->
@@ -121,7 +125,6 @@ defmodule BlueBird.BlueprintWriter do
     """
   end
   defp process_headers(_), do: ""
-
 
   defp split_headers(headers), do: split_headers(headers, "")
   defp split_headers([], l), do: l

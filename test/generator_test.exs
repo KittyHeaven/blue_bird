@@ -2,27 +2,28 @@ defmodule BlueBird.Test.GeneratorTest do
   use BlueBird.Test.Support.ConnCase
 
   alias BlueBird.Test.Support.Router
+  alias BlueBird.{ConnLogger, Generator}
 
   doctest BlueBird
 
   @opts Router.init([])
 
   test "get_app_module/0" do
-    app_module = BlueBird.Generator.get_app_module
+    app_module = Generator.get_app_module
     assert app_module == BlueBird
   end
 
   test "BlueBird.Generator.get_router_module/1" do
-    router_module = BlueBird.Generator.get_app_module
-    |> BlueBird.Generator.get_router_module
+    router_module = Generator.get_app_module
+    |> Generator.get_router_module
 
     assert router_module == Router
   end
 
   test "BlueBird.Generator.run/0" do
-    BlueBird.ConnLogger.reset()
+    ConnLogger.reset()
 
-    assert BlueBird.Generator.run == %{
+    assert Generator.run == %{
       description: "Enter API description in mix.exs - blue_bird_info",
       host: "http://localhost",
       title: "API Documentation",
@@ -106,10 +107,11 @@ defmodule BlueBird.Test.GeneratorTest do
 
   @tag :get
   test "BlueBird.Generator.run/0 GET" do
-    BlueBird.ConnLogger.reset()
+    ConnLogger.reset()
 
     # Create a test connection
-    conn = build_conn(:get, "/get")
+    conn = :get
+    |> build_conn("/get")
     |> put_req_header("accept", "application/json")
     |> put_req_header("accept-language", "de-de")
 
@@ -120,9 +122,9 @@ defmodule BlueBird.Test.GeneratorTest do
     assert conn.state == :sent
     assert conn.status == 200
 
-    BlueBird.ConnLogger.save(conn)
+    ConnLogger.save(conn)
 
-    assert BlueBird.Generator.run() ==
+    assert Generator.run() ==
     %{description: "Enter API description in mix.exs - blue_bird_info",
       host: "http://localhost",
       routes: [
@@ -164,10 +166,11 @@ defmodule BlueBird.Test.GeneratorTest do
 
   @tag :get
   test "BlueBird.Generator.run/0 GET (with params)" do
-    BlueBird.ConnLogger.reset()
+    ConnLogger.reset()
 
     # Create a test connection
-    conn = build_conn(:get, "/get/3")
+    conn = :get
+    |> build_conn("/get/3")
     |> put_req_header("accept", "application/json")
     |> put_req_header("accept-language", "de-de")
 
@@ -178,9 +181,9 @@ defmodule BlueBird.Test.GeneratorTest do
     assert conn.state == :sent
     assert conn.status == 200
 
-    BlueBird.ConnLogger.save(conn)
+    ConnLogger.save(conn)
 
-    assert BlueBird.Generator.run() ==
+    assert Generator.run() ==
     %{description: "Enter API description in mix.exs - blue_bird_info",
       host: "http://localhost",
       routes: [
@@ -227,10 +230,11 @@ defmodule BlueBird.Test.GeneratorTest do
 
   @tag :post
   test "BlueBird.Generator.run/0 POST" do
-    BlueBird.ConnLogger.reset()
+    ConnLogger.reset()
 
     # Create a test connection
-    conn = build_conn(:post, "/post", Poison.encode! %{p: 5})
+    conn = :post
+    |> build_conn("/post", Poison.encode! %{p: 5})
     |> put_req_header("content-type", "application/json")
 
     # Invoke the plug
@@ -240,9 +244,9 @@ defmodule BlueBird.Test.GeneratorTest do
     assert conn.state == :sent
     assert conn.status == 201
 
-    BlueBird.ConnLogger.save(conn)
+    ConnLogger.save(conn)
 
-    assert BlueBird.Generator.run() ==
+    assert Generator.run() ==
     %{description: "Enter API description in mix.exs - blue_bird_info",
       host: "http://localhost",
       routes: [
@@ -280,11 +284,12 @@ defmodule BlueBird.Test.GeneratorTest do
   end
 
   @tag :post
-  test "BlueBird.Generator.run/0 POST (with params)" do
-    BlueBird.ConnLogger.reset()
+  test "Generator.run/0 POST (with params)" do
+    ConnLogger.reset()
 
     # Create a test connection
-    conn = build_conn(:post, "/post/5", Poison.encode! %{p: 5})
+    conn = :post
+    |> build_conn("/post/5", Poison.encode! %{p: 5})
     |> put_req_header("content-type", "application/json")
 
     # Invoke the plug
@@ -294,9 +299,9 @@ defmodule BlueBird.Test.GeneratorTest do
     assert conn.state == :sent
     assert conn.status == 201
 
-    BlueBird.ConnLogger.save(conn)
+    ConnLogger.save(conn)
 
-    assert BlueBird.Generator.run() ==
+    assert Generator.run() ==
     %{description: "Enter API description in mix.exs - blue_bird_info",
       host: "http://localhost",
       routes: [
@@ -339,11 +344,12 @@ defmodule BlueBird.Test.GeneratorTest do
   end
 
   @tag :put
-  test "BlueBird.Generator.run/0 PUT" do
-    BlueBird.ConnLogger.reset()
+  test "Generator.run/0 PUT" do
+    ConnLogger.reset()
 
     # Create a test connection
-    conn = build_conn(:put, "/put", Poison.encode! %{p: 5})
+    conn = :put
+    |> build_conn("/put", Poison.encode! %{p: 5})
     |> put_req_header("content-type", "application/json")
 
     # Invoke the plug
@@ -353,9 +359,9 @@ defmodule BlueBird.Test.GeneratorTest do
     assert conn.state == :sent
     assert conn.status == 201
 
-    BlueBird.ConnLogger.save(conn)
+    ConnLogger.save(conn)
 
-    assert BlueBird.Generator.run() ==
+    assert Generator.run() ==
     %{description: "Enter API description in mix.exs - blue_bird_info",
       host: "http://localhost",
       routes: [
@@ -394,10 +400,11 @@ defmodule BlueBird.Test.GeneratorTest do
 
   @tag :patch
   test "BlueBird.Generator.run/0 PATCH" do
-    BlueBird.ConnLogger.reset()
+    ConnLogger.reset()
 
     # Create a test connection
-    conn = build_conn(:patch, "/patch", Poison.encode! %{p: 5})
+    conn = :patch
+    |> build_conn("/patch", Poison.encode! %{p: 5})
     |> put_req_header("content-type", "application/json")
 
     # Invoke the plug
@@ -407,9 +414,9 @@ defmodule BlueBird.Test.GeneratorTest do
     assert conn.state == :sent
     assert conn.status == 201
 
-    BlueBird.ConnLogger.save(conn)
+    ConnLogger.save(conn)
 
-    assert BlueBird.Generator.run() ==
+    assert Generator.run() ==
     %{description: "Enter API description in mix.exs - blue_bird_info",
       host: "http://localhost",
       routes: [
@@ -448,10 +455,11 @@ defmodule BlueBird.Test.GeneratorTest do
 
   @tag :delete
   test "BlueBird.Generator.run/0 DELETE" do
-    BlueBird.ConnLogger.reset()
+    ConnLogger.reset()
 
     # Create a test connection
-    conn = build_conn(:delete, "/delete", Poison.encode! %{p: 5})
+    conn = :delete
+    |> build_conn("/delete", Poison.encode! %{p: 5})
     |> put_req_header("content-type", "application/json")
 
     # Invoke the plug
@@ -461,9 +469,9 @@ defmodule BlueBird.Test.GeneratorTest do
     assert conn.state == :sent
     assert conn.status == 204
 
-    BlueBird.ConnLogger.save(conn)
+    ConnLogger.save(conn)
 
-    assert BlueBird.Generator.run() ==
+    assert Generator.run() ==
     %{description: "Enter API description in mix.exs - blue_bird_info",
       host: "http://localhost",
       routes: [

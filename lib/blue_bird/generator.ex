@@ -1,21 +1,26 @@
 defmodule BlueBird.Generator do
-  @moduledoc """
+  alias BlueBird.ConnLogger
+  alias Mix.Project
+  alias Phoenix.Naming
 
-  """
   def run do
     get_app_module()
     |> get_router_module()
-    |> generate_blueprint_file(BlueBird.ConnLogger.conns())
+    |> generate_blueprint_file(ConnLogger.get_conns())
   end
 
   def get_app_module do
-    Mix.Project.get.application
+    Project.get.application
     |> Keyword.get(:mod)
     |> elem(0)
   end
 
   def get_router_module(app_module) do
-    Application.get_env(:blue_bird, :router, Module.concat([app_module, :Router]))
+    Application.get_env(
+      :blue_bird,
+      :router,
+      Module.concat([app_module, :Router])
+    )
   end
 
   defp generate_blueprint_file(router_module, test_conns) do
@@ -26,9 +31,9 @@ defmodule BlueBird.Generator do
   end
 
   defp blue_bird_info do
-    case function_exported?(Mix.Project.get, :blue_bird_info, 0) do
+    case function_exported?(Project.get, :blue_bird_info, 0) do
       false -> []
-      true  -> Mix.Project.get.blue_bird_info()
+      true  -> Project.get.blue_bird_info()
     end
   end
 
@@ -105,8 +110,8 @@ defmodule BlueBird.Generator do
 
   defp set_default_group(%{group: group} = route_docs, route) when is_nil(group) do
     group = route.plug
-    |> Phoenix.Naming.resource_name("Controller")
-    |> Phoenix.Naming.humanize
+    |> Naming.resource_name("Controller")
+    |> Naming.humanize
 
     route_docs
     |> Map.put(:group, group)

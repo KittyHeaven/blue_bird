@@ -1,8 +1,7 @@
 defmodule BlueBird.Test.ConnLoggerTest do
-  use BlueBird.Test.Support.ConnCase
-  alias BlueBird.ConnLogger
+  use ExUnit.Case
 
-  doctest BlueBird
+  alias BlueBird.ConnLogger
 
   @conn_1 %{mary: "jane"}
   @conn_2 %{jane: "austen"}

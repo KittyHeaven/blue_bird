@@ -1,14 +1,19 @@
 defmodule BlueBird.Formatter do
   @moduledoc """
-  `BlueBird.Formatter` has to be another ExUnit formatter.
+  `BlueBird.Formatter` has to be used as another ExUnit formatter.
 
-  This module will catch the `:suite_finished` event (fired by `ExUnit`). Afterwards it will trigger
-  the generation of the api blueprint file.
+  This module will catch the `:suite_finished` event (fired by `ExUnit`).
+  Afterwards it will trigger the generation of the api blueprint file.
 
-  Usage: In your `test_helper.exs` add `BlueBird.Formatter` as formatter.
-  It shoud look like: `ExUnit.start(formatters: [ExUnit.CLIFormatter, BlueBird.Formatter])`.
+  ## Usage
+
+  Add `BlueBird.Formatter` as a formatter in `test_helper.exs`.
+
+      ExUnit.start(formatters: [ExUnit.CLIFormatter, BlueBird.Formatter])
   """
   use GenEvent
+
+  alias BlueBird.{BlueprintWriter, Generator}
 
   @doc """
   `init` function of this module.
@@ -31,7 +36,6 @@ defmodule BlueBird.Formatter do
   def handle_event(_event, nil), do: {:ok, nil}
 
   defp generate_blue_print_file do
-    BlueBird.Generator.run()
-    |> BlueBird.BlueprintWriter.run()
+    Generator.run() |> BlueprintWriter.run()
   end
 end
