@@ -50,14 +50,14 @@ defmodule BlueBird.Mixfile do
   defp deps do
     [
       # Static code analysis
-      {:credo, "~> 0.7.2", only: [:dev, :test]},
+      {:credo, "~> 0.7.4", only: [:dev, :test]},
       {:dialyxir, "~> 0.5.0", only: [:dev, :test], runtime: false},
 
       # Coverage
-      {:excoveralls, "~> 0.6.3", only: [:dev, :test]},
+      {:excoveralls, "~> 0.6.3", only: [:test]},
 
       # Docs
-      {:ex_doc, ">= 0.15.0", only: :dev},
+      {:ex_doc, ">= 0.16.1", only: :dev},
 
       # Phoenix Framework
       {:phoenix, "~> 1.3.0-rc", optional: true},
@@ -83,7 +83,8 @@ defmodule BlueBird.Mixfile do
 
   defp description do
     """
-    BlueBird generates API documentation from annotations in controllers actions and tests cases.
+    BlueBird generates API documentation from annotations in controllers actions
+    and tests cases.
     """
   end
 
