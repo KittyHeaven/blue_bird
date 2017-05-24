@@ -84,7 +84,6 @@ defmodule BlueBird.BlueprintWriter do
     """
   end
 
-  defp process_parameters(%{parameters: []}), do: ""
   defp process_parameters(%{parameters: [_|_] = parameters}) do
     docs = "\n+ Parameters\n"
 
@@ -93,8 +92,8 @@ defmodule BlueBird.BlueprintWriter do
       docs <> "\n    + #{param.name}: `-` (#{param.type}, #{required_option}) - #{param.description}"
     end
   end
+  defp process_parameters(_), do: ""
 
-  defp process_requests([]), do: ""
   defp process_requests(%{requests: [_|_] = requests}) do
     requests
     |> Enum.sort_by(&(&1.response.status))
@@ -105,8 +104,8 @@ defmodule BlueBird.BlueprintWriter do
       docs <> process_request(request) <> process_response(request)
     end)
   end
+  defp process_requests(_), do: ""
 
-  defp process_headers([]), do: ""
   defp process_headers([_|_] = headers) do
     """
         + Headers
@@ -121,6 +120,7 @@ defmodule BlueBird.BlueprintWriter do
 
     """
   end
+  defp process_headers(_), do: ""
 
 
   defp split_headers(headers), do: split_headers(headers, "")
@@ -128,7 +128,7 @@ defmodule BlueBird.BlueprintWriter do
   defp split_headers([h|t], l), do: split_headers(t, l <> "        #{elem(h, 0)}: #{elem(h, 1)}\n")
 
   defp process_body(body) when body == %{}, do: ""
-  defp process_body(body) do
+  defp process_body(body) when is_map(body) do
     """
       + Body
 
@@ -138,11 +138,12 @@ defmodule BlueBird.BlueprintWriter do
 
     """
   end
+  defp process_body(_), do: ""
 
   defp process_request(request) do
     processed_headers     = process_headers(request.headers)
     processed_body_params = process_body(request.body_params)
-    print_request processed_headers, processed_body_params
+    print_request(processed_headers, processed_body_params)
   end
 
   defp print_request("", ""), do: ""
@@ -154,7 +155,7 @@ defmodule BlueBird.BlueprintWriter do
     {:ok, response}       = Map.fetch(request, :response)
     processed_headers     = process_headers(response.headers)
     processed_body_params = process_body(Poison.decode!response.body)
-    print_response response, processed_headers, processed_body_params
+    print_response(response, processed_headers, processed_body_params)
   end
 
   defp print_response(_, "", ""), do: ""
