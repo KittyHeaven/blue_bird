@@ -18,10 +18,10 @@ defmodule BlueBird.Controller do
   defmacro api(method, path, do: block) do
     route_method  = extract_route_method(method)
     metadata      = extract_metadata(block)
-    group         = extract_group(metadata)
-    title         = extract_title(metadata)
-    description   = extract_desctiption(metadata)
-    note          = extract_note(metadata)
+    group         = extract_option(metadata, :group)
+    title         = extract_option(metadata, :title, ["Action"])
+    description   = extract_option(metadata, :description)
+    note          = extract_option(metadata, :note)
     parameters    = extract_parameters(metadata)
 
     quote do
@@ -49,27 +49,9 @@ defmodule BlueBird.Controller do
     end
   end
 
-  defp extract_group(metadata) do
+  defp extract_option(metadata, key, default \\ []) do
     metadata
-    |> Keyword.get(:group, [])
-    |> List.first
-  end
-
-  defp extract_title(metadata) do
-    metadata
-    |> Keyword.get(:title, ["Action"])
-    |> List.first
-  end
-
-  defp extract_desctiption(metadata) do
-    metadata
-    |> Keyword.get(:description, [])
-    |> List.first
-  end
-
-  defp extract_note(metadata) do
-    metadata
-    |> Keyword.get(:note, [])
+    |> Keyword.get(key, default)
     |> List.first
   end
 
