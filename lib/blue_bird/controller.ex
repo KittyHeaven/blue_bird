@@ -1,4 +1,25 @@
 defmodule BlueBird.Controller do
+  @moduledoc """
+  This module defines the `api/3` macro. Use it in your controller functions
+  to add documentation to your api routes.
+
+  ## Example: Controller Module
+
+      defmodule MyApp.Web.UserController do
+        use BlueBird.Controller
+        alias MyApp.Accounts
+
+        api :GET, "users" do
+          group "Posts"
+          title "List users"
+          description "Lists all active users"
+        end
+        def index(conn, _params) do
+          users = Accounts.list_users()
+          render(conn, "index.html", users: users)
+        end
+      end
+  """
   defmacro __using__(_) do
     quote do
       import BlueBird.Controller, only: [api: 3]
