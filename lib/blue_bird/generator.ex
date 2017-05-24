@@ -91,7 +91,8 @@ defmodule BlueBird.Generator do
     try do
       route_docs = controller
         |> apply(:api_doc, [method, route.path])
-        |> set_default_group(route)
+        |> set_default(route, :group)
+        |> set_default(route, :resource)
         |> Map.put(:requests, route_requests)
 
       {:ok, route_docs}
@@ -103,15 +104,14 @@ defmodule BlueBird.Generator do
     end
   end
 
-  defp set_default_group(%{group: group} = route_docs, route) when is_nil(group) do
-    group = route.plug
+  defp set_default(%{group: group} = route_docs, route, :group) when is_nil(group), do: set_default_to_controller(route_docs, route, :group)
+  defp set_default(%{resource: resource} = route_docs, route, :resource) when is_nil(resource), do: set_default_to_controller(route_docs, route, :resource)
+  defp set_default(route_docs, _, _), do: route_docs
+  defp set_default_to_controller(route_docs, route, key) do
+    value = route.plug
     |> Phoenix.Naming.resource_name("Controller")
     |> Phoenix.Naming.humanize
 
-    route_docs
-    |> Map.put(:group, group)
+    Map.put(route_docs, key, value)
   end
-
-  defp set_default_group(route_docs, _), do: route_docs
-
 end

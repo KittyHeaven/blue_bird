@@ -9,7 +9,8 @@ defmodule BlueBird.Controller do
 
   @doc """
   api :GET, "/posts/:id" do
-    group "Posts"
+    group "Blog Posts"
+    resource "Post"
     title "Show post"
     description "Show post by id"
     parameter :id, :integer, :required, "Post ID"
@@ -19,6 +20,7 @@ defmodule BlueBird.Controller do
     route_method  = extract_route_method(method)
     metadata      = extract_metadata(block)
     group         = extract_option(metadata, :group)
+    resource      = extract_option(metadata, :resource)
     title         = extract_option(metadata, :title, ["Action"])
     description   = extract_option(metadata, :description)
     note          = extract_option(metadata, :note)
@@ -27,6 +29,7 @@ defmodule BlueBird.Controller do
     quote do
       def api_doc(unquote(route_method), unquote(path)) do
         %{group:        unquote(group),
+          resource:     unquote(resource),
           title:        unquote(title),
           description:  unquote(description),
           note:         unquote(note),

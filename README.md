@@ -75,7 +75,8 @@ defmodule App.CommentController do
   use App.Web, :controller
 
   api :GET, "/posts/:post_id/comments" do
-    group "Comment" # If not provided, it will be guessed from the controller name (resource name)
+    group "Post Comments" # If not provided, it will be guessed from the controller name (resource name)
+    resource "Comment"
     title "List comments for specific docs"
     description "Optional description that will be displayed in the documentation"
     note "Optional note that will be displayed in the documentation"
@@ -100,6 +101,7 @@ end
 * `method`: HTTP method - GET, POST, PUT, PATCH, DELETE
 * `url`: URL route from `phoenix router`
 * `group`: Documentation routes are grouped by a group name (defaults to resource name guessed from the controller name)
+* `resource`: Documentation routes are grouped by the resource (defaults to resource name guessed from the controller name)
 * `title`: Title (can use Blueprint format)
 * `description`: Description (optional, can use Blueprint format)
 * `note`: Note (optional, can use Blueprint format)
