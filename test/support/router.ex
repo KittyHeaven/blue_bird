@@ -15,12 +15,10 @@ defmodule BlueBird.Test.Support.Router do
   scope "/", BlueBird.Test.Support do
     pipe_through :api
 
-    get     "/get",             Controller, :get
-    get     "/get/:param",      Controller, :get_param
-    post    "/post",            Controller, :post
-    post    "/post/:param",     Controller, :post_param
-    put     "/put",             Controller, :put
-    patch   "/patch",           Controller, :patch
-    delete  "/delete",          Controller, :delete
+    get     "/waldorf",         TestController, :catchall
+    post    "/waldorf",         TestController, :catchall
+    get     "/statler",         TestController, :catchall
+    post    "/statler/:id",     TestController, :catchall
+    get     "/undocumented",    TestController, :catchall
   end
 end

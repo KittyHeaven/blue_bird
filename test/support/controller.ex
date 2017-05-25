@@ -1,56 +1,41 @@
-defmodule BlueBird.Test.Support.Controller do
+defmodule BlueBird.Test.Support.TestController do
   @moduledoc """
   `BlueBird.Test.Support.Controller` simulates a Phoenix Framework controller.
   """
-  use Phoenix.Controller
   use BlueBird.Controller
+  use Phoenix.Controller
 
-  @ok Poison.encode!(%{status: "ok"})
+  @json_response Poison.encode!(%{status: "ok"})
 
-  api :GET, "/get" do
-    group "Test"
-    title "Test GET"
+  api :GET, "/waldorf" do
+    title "Get Waldorf"
   end
-  def get(conn, _params), do: send_resp(conn, 200, @ok)
 
-  api :GET, "/get/:param" do
-    group "Test"
-    ressource "Camera"
-    title "Test GET with param"
-    parameter :param, :integer, "GET param"
+  api :POST, "/waldorf" do
+    group "Waldorf"
+    title "Post Waldorf"
   end
-  def get_param(conn, _params), do: send_resp(conn, 200, @ok)
 
-  api :POST, "/post" do
-    group "Test"
-    title "Test POST"
-    note "This is a note"
+  api :GET, "/statler" do
+    group "Statler"
+    resource "Statler Collection"
+    title "Get Statler"
+    description "Description"
+    note "Note"
+    warning "Warning"
   end
-  def post(conn, _params), do: send_resp(conn, 201, @ok)
 
-  api :POST, "/post/:param" do
-    group "Test"
-    title "Test POST with param"
-    note "This is a note"
-    parameter :param, :integer, "Post param"
+  api :POST, "/statler/:id" do
+    group "Statler"
+    resource "Single Statler"
+    title "Post Statler"
+    parameter :id, :int, "ID"
   end
-  def post_param(conn, _params), do: send_resp(conn, 201, @ok)
 
-  api :PUT, "/put" do
-    group "Test"
-    title "Test PUT"
-  end
-  def put(conn, _params), do: send_resp(conn, 201, @ok)
+  def catchall(conn, params) do
+    body = Map.get(params, "body", @json_response)
+    status = Map.get(params, "status", 200)
 
-  api :PATCH, "/patch" do
-    group "Test"
-    title "Test PATCH"
+    send_resp(conn, status, body)
   end
-  def patch(conn, _params), do: send_resp(conn, 201, @ok)
-
-  api :DELETE, "/delete" do
-    group "Test"
-    title "Test DELETE"
-  end
-  def delete(conn, _params), do: send_resp(conn, 204, @ok)
 end

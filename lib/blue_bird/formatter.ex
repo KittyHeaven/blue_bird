@@ -13,7 +13,8 @@ defmodule BlueBird.Formatter do
   """
   use GenEvent
 
-  alias BlueBird.{BlueprintWriter, Generator}
+  alias BlueBird.BlueprintWriter
+  alias BlueBird.Generator
 
   @doc """
   `init` function of this module.

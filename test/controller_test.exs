@@ -5,11 +5,11 @@ defmodule BlueBird.Test.ControllerTest do
                    Wrong number of arguments for parameter option.
                    Expected either two or three arguments. Correct usage:
 
-                       parameter "name", :type
+                       parameter :name, :type
 
                        or
 
-                       parameter "name", :type, "description"
+                       parameter :name, :type, "description"
                    """
 
   defmodule Controller do
@@ -129,7 +129,7 @@ defmodule BlueBird.Test.ControllerTest do
       end
     end
 
-    # test "raises error if path parameters are missing"
-    # test "raises error if parameter is not in path"
+    # todo: test "raises error if path parameters are missing"
+    # todo: test "raises error if parameter is not in path"
   end
 end

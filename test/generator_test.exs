@@ -1,12 +1,29 @@
 defmodule BlueBird.Test.GeneratorTest do
+  require Logger
+
   use BlueBird.Test.Support.ConnCase
 
+  import ExUnit.CaptureLog
+
+  alias BlueBird.ConnLogger
+  alias BlueBird.Generator
   alias BlueBird.Test.Support.Router
-  alias BlueBird.{ConnLogger, Generator}
 
   doctest BlueBird
 
   @opts Router.init([])
+
+  setup do
+    ConnLogger.reset()
+  end
+
+  # todo: define router/controller per test for better separation of concerns?
+
+  def find_route(api_docs, method, path) do
+    Enum.find(api_docs.routes, fn(x) ->
+      x.path == path && x.method == method
+    end)
+  end
 
   test "get_app_module/0" do
     app_module = Generator.get_app_module
@@ -18,547 +35,195 @@ defmodule BlueBird.Test.GeneratorTest do
     assert router_module == Router
   end
 
-  test "run/0" do
-    ConnLogger.reset()
+  describe "run/0" do
+    test "includes all defined routes, uses default values" do
+      Logger.disable(self())
 
-    assert Generator.run == %{
-      description: "Enter API description in mix.exs - blue_bird_info",
-      host: "http://localhost",
-      title: "API Documentation",
-      routes: [
-        empty_get_route(),
-        empty_get_with_param_route(),
-        empty_post_route(),
-        empty_post_with_param_route(),
-        empty_put_route(),
-        empty_patch_route(),
-        empty_delete_route()
+      assert Generator.run() == %{
+        description: "Enter API description in mix.exs - blue_bird_info",
+        host: "http://localhost",
+        title: "API Documentation",
+        routes: [
+          empty_route("GET", "/waldorf"),
+          empty_route("POST", "/waldorf"),
+          empty_route("GET", "/statler"),
+          empty_route("POST", "/statler/:id")
+        ]
+      }
+    end
+
+    test "warns if api doc is missing for a route" do
+      assert capture_log(fn ->
+        Generator.run()
+      end) =~ "No api doc defined for GET /undocumented."
+    end
+
+    test "includes headers" do
+      :get
+      |> build_conn("/waldorf")
+      |> put_req_header("accept", "application/json")
+      |> put_req_header("accept-language", "de-de")
+      |> put_req_header("authorization", "Bearer abc")
+      |> Router.call(@opts)
+      |> ConnLogger.save()
+
+      Logger.disable(self())
+      route = Generator.run() |> find_route("GET", "/waldorf")
+      headers = List.first(route.requests).headers
+
+      assert headers == [
+        {"accept", "application/json"},
+        {"accept-language", "de-de"},
+        {"authorization", "Bearer abc"}
       ]
-    }
+    end
+
+    test "uses values from api/3 macro" do
+      Logger.disable(self())
+      route = Generator.run() |> find_route("GET", "/statler")
+
+      assert route.group == "Statler"
+      assert route.resource == "Statler Collection"
+      assert route.title == "Get Statler"
+      assert route.description == "Description"
+      assert route.note == "Note"
+      assert route.warning == "Warning"
+      assert route.parameters == []
+    end
+
+    test "uses default values for group and resource" do
+      Logger.disable(self())
+      route = Generator.run() |> find_route("GET", "/waldorf")
+
+      assert route.group == "Test"
+      assert route.resource == "Test"
+    end
+
+    test "includes params" do
+      :post
+      |> build_conn("/statler/137?s=poodle", Poison.encode!(%{betty: "white"}))
+      |> put_req_header("content-type", "application/json")
+      |> Router.call(@opts)
+      |> ConnLogger.save()
+
+      Logger.disable(self())
+      route = Generator.run() |> find_route("POST", "/statler/:id")
+      request = List.first(route.requests)
+
+      assert request.query_params == %{"s" => "poodle"}
+      assert request.path_params == %{"id" => "137"}
+      assert request.body_params == %{"betty" => "white"}
+    end
+
+    test "includes all requests for a particular route and method" do
+      :get
+      |> build_conn("/waldorf")
+      |> Router.call(@opts)
+      |> ConnLogger.save()
+
+      :get
+      |> build_conn("/waldorf?betty=ford")
+      |> Router.call(@opts)
+      |> ConnLogger.save
+
+      Logger.disable(self())
+      route = Generator.run() |> find_route("GET", "/waldorf")
+
+      assert length(route.requests) == 2
+    end
+
+    test "lists separate routes for the same path, but a different method" do
+      :get
+      |> build_conn("/waldorf")
+      |> Router.call(@opts)
+      |> ConnLogger.save()
+
+      :post
+      |> build_conn("/waldorf")
+      |> Router.call(@opts)
+      |> ConnLogger.save
+
+      Logger.disable(self())
+      api_docs = Generator.run()
+
+      get_route = find_route(api_docs, "GET", "/waldorf")
+      post_route = find_route(api_docs, "POST", "/waldorf")
+
+      assert length(get_route.requests) == 1
+      assert length(post_route.requests) == 1
+    end
+
+    test "includes response status, headers and body" do
+      :get
+      |> build_conn("/waldorf")
+      |> Router.call(@opts)
+      |> ConnLogger.save()
+
+      Logger.disable(self())
+      route = Generator.run() |> find_route("GET", "/waldorf")
+      response = List.first(route.requests).response
+
+      assert response.status == 200
+      assert response.body == "{\"status\":\"ok\"}"
+      assert response.headers == [
+        {"cache-control", "max-age=0, private, must-revalidate"}
+      ]
+    end
   end
 
-  @tag :get
-  test "BlueBird.Generator.run/0 GET" do
-    ConnLogger.reset()
-
-    # Create a test connection
-    conn = :get
-    |> build_conn("/get")
-    |> put_req_header("accept", "application/json")
-    |> put_req_header("accept-language", "de-de")
-
-    # Invoke the plug
-    conn = Router.call(conn, @opts)
-
-    # Assert the response and status
-    assert conn.state == :sent
-    assert conn.status == 200
-
-    ConnLogger.save(conn)
-
-    assert Generator.run() ==
-    %{description: "Enter API description in mix.exs - blue_bird_info",
-      host: "http://localhost",
-      routes: [
-        %{description: nil,
-          group: "Test",
-          resource: "",
-          method: "GET",
-          note: nil,
-          warning: nil,
-          parameters: [],
-          path: "/get",
-          requests: [
-            %{headers: [
-                {"accept", "application/json"},
-                {"accept-language", "de-de"}
-              ],
-              method: "GET",
-              body_params: %{},
-              path: "/get",
-              path_params: %{},
-              query_params: %{},
-              response: %{
-                body: "{\"status\":\"ok\"}",
-                headers: [
-                  {"cache-control", "max-age=0, private, must-revalidate"}
-                ],
-                status: 200
-              }
-            }
-          ],
-          title: "Test GET"
-        },
-        empty_get_with_param_route(),
-        empty_post_route(),
-        empty_post_with_param_route(),
-        empty_put_route(),
-        empty_patch_route(),
-        empty_delete_route()
-      ],
-      title: "API Documentation"
-    }
-  end
-
-  @tag :get
-  test "BlueBird.Generator.run/0 GET (with params)" do
-    ConnLogger.reset()
-
-    # Create a test connection
-    conn = :get
-    |> build_conn("/get/3")
-    |> put_req_header("accept", "application/json")
-    |> put_req_header("accept-language", "de-de")
-
-    # Invoke the plug
-    conn = Router.call(conn, @opts)
-
-    # Assert the response and status
-    assert conn.state == :sent
-    assert conn.status == 200
-
-    ConnLogger.save(conn)
-
-    assert Generator.run() ==
-    %{description: "Enter API description in mix.exs - blue_bird_info",
-      host: "http://localhost",
-      routes: [
-        empty_get_route(),
-        %{description: nil,
-          resource: "",
-          group: "Test",
-          method: "GET",
-          note: nil,
-          warning: nil,
-          parameters: [
-            %{description: "GET param",
-              name: "param",
-              type: "integer"
-          }],
-          path: "/get/:param",
-          requests: [
-            %{headers: [
-                {"accept", "application/json"},
-                {"accept-language", "de-de"}
-              ],
-              method: "GET",
-              body_params: %{},
-              path: "/get/:param",
-              path_params: %{"param" => "3"},
-              query_params: %{},
-              response: %{
-                body: "{\"status\":\"ok\"}",
-                headers: [{"cache-control", "max-age=0, private, must-revalidate"}],
-                status: 200
-              }
-            }
-          ],
-          title: "Test GET with param"
-        },
-        empty_post_route(),
-        empty_post_with_param_route(),
-        empty_put_route(),
-        empty_patch_route(),
-        empty_delete_route()
-      ],
-      title: "API Documentation"
-    }
-  end
-
-  @tag :post
-  test "BlueBird.Generator.run/0 POST" do
-    ConnLogger.reset()
-
-    # Create a test connection
-    conn = :post
-    |> build_conn("/post", Poison.encode! %{p: 5})
-    |> put_req_header("content-type", "application/json")
-
-    # Invoke the plug
-    conn = Router.call(conn, @opts)
-
-    # Assert the response and status
-    assert conn.state == :sent
-    assert conn.status == 201
-
-    ConnLogger.save(conn)
-
-    assert Generator.run() ==
-    %{description: "Enter API description in mix.exs - blue_bird_info",
-      host: "http://localhost",
-      routes: [
-        empty_get_route(),
-        empty_get_with_param_route(),
-        %{description: nil,
-          resource: "",
-          group: "Test",
-          method: "POST",
-          note: "This is a note",
-          warning: nil,
-          parameters: [],
-          path: "/post",
-          requests: [
-            %{headers: [{"content-type", "application/json"}],
-              method: "POST",
-              body_params: %{"p" => 5},
-              path: "/post",
-              path_params: %{},
-              query_params: %{},
-              response: %{
-                body: "{\"status\":\"ok\"}",
-                headers: [
-                  {"cache-control", "max-age=0, private, must-revalidate"}
-                ],
-                status: 201
-              }
-            }
-          ],
-          title: "Test POST"
-        },
-        empty_post_with_param_route(),
-        empty_put_route(),
-        empty_patch_route(),
-        empty_delete_route()
-      ],
-      title: "API Documentation"
-    }
-  end
-
-  @tag :post
-  test "Generator.run/0 POST (with params)" do
-    ConnLogger.reset()
-
-    # Create a test connection
-    conn = :post
-    |> build_conn("/post/5", Poison.encode! %{p: 5})
-    |> put_req_header("content-type", "application/json")
-
-    # Invoke the plug
-    conn = Router.call(conn, @opts)
-
-    # Assert the response and status
-    assert conn.state == :sent
-    assert conn.status == 201
-
-    ConnLogger.save(conn)
-
-    assert Generator.run() ==
-    %{description: "Enter API description in mix.exs - blue_bird_info",
-      host: "http://localhost",
-      routes: [
-        empty_get_route(),
-        empty_get_with_param_route(),
-        empty_post_route(),
-        %{description: nil,
-          group: "Test",
-          resource: "",
-          method: "POST",
-          note: "This is a note",
-          warning: nil,
-          parameters: [
-            %{description: "Post param",
-              name: "param",
-              type: "integer"
-          }],
-          path: "/post/:param",
-          requests: [
-            %{headers: [{"content-type", "application/json"}],
-              method: "POST",
-              body_params: %{"p" => 5},
-              path: "/post/:param",
-              path_params: %{"param" => "5"},
-              query_params: %{},
-              response: %{
-                body: "{\"status\":\"ok\"}",
-                headers: [{"cache-control", "max-age=0, private, must-revalidate"}],
-                status: 201
-              }
-            }
-          ],
-          title: "Test POST with param"
-        },
-        empty_put_route(),
-        empty_patch_route(),
-        empty_delete_route()
-      ],
-      title: "API Documentation"
-    }
-  end
-
-  @tag :put
-  test "Generator.run/0 PUT" do
-    ConnLogger.reset()
-
-    # Create a test connection
-    conn = :put
-    |> build_conn("/put", Poison.encode! %{p: 5})
-    |> put_req_header("content-type", "application/json")
-
-    # Invoke the plug
-    conn = Router.call(conn, @opts)
-
-    # Assert the response and status
-    assert conn.state == :sent
-    assert conn.status == 201
-
-    ConnLogger.save(conn)
-
-    assert Generator.run() ==
-    %{description: "Enter API description in mix.exs - blue_bird_info",
-      host: "http://localhost",
-      routes: [
-        empty_get_route(),
-        empty_get_with_param_route(),
-        empty_post_route(),
-        empty_post_with_param_route(),
-        %{description: nil,
-          group: "Test",
-          resource: "",
-          method: "PUT",
-          note: nil,
-          warning: nil,
-          parameters: [],
-          path: "/put",
-          requests: [
-            %{headers: [{"content-type", "application/json"}],
-              method: "PUT",
-              body_params: %{"p" => 5},
-              path: "/put",
-              path_params: %{},
-              query_params: %{},
-              response: %{
-                body: "{\"status\":\"ok\"}",
-                headers: [{"cache-control", "max-age=0, private, must-revalidate"}],
-                status: 201
-              }
-            }
-          ],
-          title: "Test PUT"
-        },
-        empty_patch_route(),
-        empty_delete_route()
-      ],
-      title: "API Documentation"
-    }
-  end
-
-  @tag :patch
-  test "BlueBird.Generator.run/0 PATCH" do
-    ConnLogger.reset()
-
-    # Create a test connection
-    conn = :patch
-    |> build_conn("/patch", Poison.encode! %{p: 5})
-    |> put_req_header("content-type", "application/json")
-
-    # Invoke the plug
-    conn = Router.call(conn, @opts)
-
-    # Assert the response and status
-    assert conn.state == :sent
-    assert conn.status == 201
-
-    ConnLogger.save(conn)
-
-    assert Generator.run() ==
-    %{description: "Enter API description in mix.exs - blue_bird_info",
-      host: "http://localhost",
-      routes: [
-        empty_get_route(),
-        empty_get_with_param_route(),
-        empty_post_route(),
-        empty_post_with_param_route(),
-        empty_put_route(),
-        %{description: nil,
-          group: "Test",
-          resource: "",
-          method: "PATCH",
-          note: nil,
-          warning: nil,
-          parameters: [],
-          path: "/patch",
-          requests: [
-            %{headers: [{"content-type", "application/json"}],
-              method: "PATCH",
-              body_params: %{"p" => 5},
-              path: "/patch",
-              path_params: %{},
-              query_params: %{},
-              response: %{
-                body: "{\"status\":\"ok\"}",
-                headers: [{"cache-control", "max-age=0, private, must-revalidate"}],
-                status: 201
-              }
-            }
-          ],
-          title: "Test PATCH"
-        },
-        empty_delete_route(),
-      ],
-      title: "API Documentation"
-    }
-  end
-
-  @tag :delete
-  test "BlueBird.Generator.run/0 DELETE" do
-    ConnLogger.reset()
-
-    # Create a test connection
-    conn = :delete
-    |> build_conn("/delete", Poison.encode! %{p: 5})
-    |> put_req_header("content-type", "application/json")
-
-    # Invoke the plug
-    conn = Router.call(conn, @opts)
-
-    # Assert the response and status
-    assert conn.state == :sent
-    assert conn.status == 204
-
-    ConnLogger.save(conn)
-
-    assert Generator.run() ==
-    %{description: "Enter API description in mix.exs - blue_bird_info",
-      host: "http://localhost",
-      routes: [
-        empty_get_route(),
-        empty_get_with_param_route(),
-        empty_post_route(),
-        empty_post_with_param_route(),
-        empty_put_route(),
-        empty_patch_route(),
-        %{description: nil,
-          group: "Test",
-          resource: "",
-          method: "DELETE",
-          note: nil,
-          warning: nil,
-          parameters: [],
-          path: "/delete",
-          requests: [
-            %{headers: [{"content-type", "application/json"}],
-              method: "DELETE",
-              body_params: %{"p" => 5},
-              path: "/delete",
-              path_params: %{},
-              query_params: %{},
-              response: %{
-                body: "{\"status\":\"ok\"}",
-                headers: [{"cache-control", "max-age=0, private, must-revalidate"}],
-                status: 204
-              }
-            }
-          ],
-          title: "Test DELETE"
-        }
-      ],
-      title: "API Documentation"
-    }
-  end
-
-  defp empty_get_route do
+  defp empty_route("GET", "/waldorf") do
     %{description: nil,
       group: "Test",
       method: "GET",
       note: nil,
       warning: nil,
-      resource: "",
+      resource: "Test",
       parameters: [],
-      path: "/get",
+      path: "/waldorf",
       requests: [],
-      title: "Test GET"
+      title: "Get Waldorf"
     }
   end
 
-  defp empty_get_with_param_route do
-    %{description: nil,
-      group: "Test",
-      resource: "",
+  defp empty_route("GET", "/statler") do
+    %{description: "Description",
+      group: "Statler",
       method: "GET",
-      note: nil,
-      warning: nil,
-      parameters: [
-        %{description: "GET param",
-          name: "param",
-          type: "integer"
-      }],
-      path: "/get/:param",
+      note: "Note",
+      warning: "Warning",
+      resource: "Statler Collection",
+      parameters: [],
+      path: "/statler",
       requests: [],
-      title: "Test GET with param"
+      title: "Get Statler"
     }
   end
 
-  defp empty_post_route do
+  defp empty_route("POST", "/waldorf") do
     %{description: nil,
-      group: "Test",
-      resource: "",
+      group: "Waldorf",
       method: "POST",
-      note: "This is a note",
+      note: nil,
       warning: nil,
+      resource: "Test",
       parameters: [],
-      path: "/post",
+      path: "/waldorf",
       requests: [],
-      title: "Test POST"
+      title: "Post Waldorf"
     }
   end
 
-  defp empty_post_with_param_route do
+  defp empty_route("POST", "/statler/:id") do
     %{description: nil,
-      group: "Test",
-      resource: "",
+      group: "Statler",
       method: "POST",
-      note: "This is a note",
-      warning: nil,
-      parameters: [
-        %{description: "Post param",
-          name: "param",
-          type: "integer"
-      }],
-      path: "/post/:param",
-      requests: [],
-      title: "Test POST with param"
-    }
-  end
-
-  defp empty_put_route do
-    %{description: nil,
-      group: "Test",
-      resource: "",
-      method: "PUT",
       note: nil,
       warning: nil,
-      parameters: [],
-      path: "/put",
+      resource: "Single Statler",
+      parameters: [%{description: "ID", name: "id", type: "int"}],
+      path: "/statler/:id",
       requests: [],
-      title: "Test PUT"
-    }
-  end
-
-  defp empty_patch_route do
-    %{description: nil,
-      group: "Test",
-      resource: "",
-      method: "PATCH",
-      note: nil,
-      warning: nil,
-      parameters: [],
-      path: "/patch",
-      requests: [],
-      title: "Test PATCH"
-    }
-  end
-
-  defp empty_delete_route do
-    %{description: nil,
-      group: "Test",
-      resource: "",
-      method: "DELETE",
-      note: nil,
-      warning: nil,
-      parameters: [],
-      path: "/delete",
-      requests: [],
-      title: "Test DELETE"
+      title: "Post Statler"
     }
   end
 end

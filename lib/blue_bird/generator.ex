@@ -1,4 +1,6 @@
 defmodule BlueBird.Generator do
+  require Logger
+
   alias BlueBird.ConnLogger
   alias Mix.Project
   alias Phoenix.Naming
@@ -40,7 +42,7 @@ defmodule BlueBird.Generator do
 
   defp blue_bird_info do
     case function_exported?(Project.get, :blue_bird_info, 0) do
-      true  -> Project.get.blue_bird_info()
+      true  -> Project.get.blue_bird_info() # todo: is this testable?
       false -> []
     end
   end
@@ -60,6 +62,8 @@ defmodule BlueBird.Generator do
   defp requests(test_conns, routes) do
     Enum.reduce(test_conns, [], fn(conn, list) ->
       case find_route(routes, conn.request_path) do
+        # todo: nil impossible? or possible if plug catches
+        # Phoenix.Router.NoRouteError? how to test?
         nil   -> list
         route -> [request_map(route, conn) | list]
       end
@@ -124,8 +128,10 @@ defmodule BlueBird.Generator do
       {:ok, route_docs}
     rescue
       UndefinedFunctionError ->
+        Logger.warn fn -> "No api doc defined for #{method} #{route.path}." end
         :error
       FunctionClauseError ->
+        Logger.warn fn -> "No api doc defined for #{method} #{route.path}." end
         :error
     end
   end
