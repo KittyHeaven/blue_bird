@@ -17,15 +17,17 @@ defmodule BlueBird.Formatter do
   alias BlueBird.Generator
 
   @doc """
-  `init` function of this module.
-  See https://hexdocs.pm/elixir/GenEvent.html#c:init/1.
+  Initializes the handler when it is added to the GenEvent process.
   """
+  @spec init(args :: term) :: {:ok, nil}
   def init(_config), do: {:ok, nil}
 
   @doc """
-  Event listener. Triggers the generation of the api blueprint file on
-  `:suite_finished`. Ignores all other events.
+  Event listener that triggers the generation of the api blueprint file on when
+  receiving a `:suite_finished` message by `ExUnit`.
   """
+  @spec handle_event(event :: term, state :: term) ::
+    {:ok, nil} | :remove_handler
   def handle_event({:suite_finished, _run_us, _load_us}, nil) do
     Generator.run() |> BlueprintWriter.run()
     :remove_handler
