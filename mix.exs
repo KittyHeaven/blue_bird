@@ -50,7 +50,7 @@ defmodule BlueBird.Mixfile do
   defp deps do
     [
       # Static code analysis
-      {:credo, "~> 0.7.4", only: [:dev, :test]},
+      {:credo, "~> 0.8.0-rc7", only: [:dev, :test]},
       {:dialyxir, "~> 0.5.0", only: [:dev, :test], runtime: false},
 
       # Coverage
