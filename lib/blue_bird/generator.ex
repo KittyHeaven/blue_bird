@@ -46,25 +46,18 @@ defmodule BlueBird.Generator do
   end
 
   defp generate_docs_for_routes(router_module) do
-    test_conns = ConnLogger.get_conns()
     routes = filter_api_routes(router_module.__routes__)
-    requests_list = requests(routes, test_conns)
 
-    routes
-    |> Enum.reduce([], fn(route, generate_docs_for_routes) ->
-      case process_route(route, requests_list) do
-        {:ok, route_doc} -> [route_doc | generate_docs_for_routes]
-        _                -> generate_docs_for_routes
-      end
-    end)
-    |> Enum.reverse()
+    ConnLogger.get_conns()
+    |> requests(routes)
+    |> process_routes(routes)
   end
 
   defp filter_api_routes(routes) do
     Enum.filter(routes, &Enum.member?(&1.pipe_through, :api))
   end
 
-  defp requests(routes, test_conns) do
+  defp requests(test_conns, routes) do
     Enum.reduce(test_conns, [], fn(conn, list) ->
       case find_route(routes, conn.request_path) do
         nil   -> list
@@ -100,6 +93,17 @@ defmodule BlueBird.Generator do
         headers: conn.resp_headers
       }
     }
+  end
+
+  defp process_routes(requests_list, routes) do
+    routes
+    |> Enum.reduce([], fn(route, generate_docs_for_routes) ->
+         case process_route(route, requests_list) do
+           {:ok, route_doc} -> [route_doc | generate_docs_for_routes]
+           _                -> generate_docs_for_routes
+         end
+       end)
+    |> Enum.reverse()
   end
 
   defp process_route(route, requests) do
