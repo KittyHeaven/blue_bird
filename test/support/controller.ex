@@ -17,7 +17,7 @@ defmodule BlueBird.Test.Support.Controller do
     group "Test"
     ressource "Camera"
     title "Test GET with param"
-    parameter :param, :integer, "GET param"
+    parameter :param, :integer, "GET param", :required
   end
   def get_param(conn, _params), do: send_resp(conn, 200, @ok)
 
