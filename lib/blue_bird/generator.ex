@@ -68,11 +68,9 @@ defmodule BlueBird.Generator do
   """
   @spec run :: map
   def run do
-    a = get_app_module()
+    get_app_module()
     |> get_router_module()
     |> prepare_docs()
-
-    IO.inspect(a)
   end
 
   @doc false
