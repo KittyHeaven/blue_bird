@@ -53,8 +53,6 @@ defmodule BlueBird.Controller do
         parameter :name, :string
       end
   """
-  # TODO: If parameter is not required and not set, it will be another route.
-  #       So no need for required/optional here?
   defmacro api(method, path, do: block) do
     method_str    = method_to_string(method)
     metadata      = extract_metadata(block)
