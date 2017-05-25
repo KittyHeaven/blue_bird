@@ -24,9 +24,9 @@ defmodule BlueBird.Test.ControllerTest do
     end
 
     api :PATCH, "/users/:id/:pid/:topic" do
-      parameter :id, :integer, :required, "the user ID"
+      parameter :id, :integer, "the user ID"
       parameter :pid, :integer, "the post ID"
-      parameter :topic, :string, :required
+      parameter :topic, :string
     end
   end
 
@@ -67,7 +67,6 @@ defmodule BlueBird.Test.ControllerTest do
       assert Controller.api_doc("PUT", "/users/:id")[:parameters] == [%{
         description: nil,
         name: "id",
-        required: false,
         type: "integer"
       }]
     end
@@ -77,17 +76,14 @@ defmodule BlueBird.Test.ControllerTest do
       assert Controller.api_doc("PATCH", path)[:parameters] == [%{
         description: "the user ID",
         name: "id",
-        required: true,
         type: "integer"
       }, %{
         description: "the post ID",
         name: "pid",
-        required: false,
         type: "integer"
       }, %{
         description: nil,
         name: "topic",
-        required: true,
         type: "string"
       }]
     end

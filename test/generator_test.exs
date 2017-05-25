@@ -133,7 +133,6 @@ defmodule BlueBird.Test.GeneratorTest do
           parameters: [
             %{description: "GET param",
               name: "param",
-              required: true,
               type: "integer"
           }],
           path: "/get/:param",
@@ -259,7 +258,6 @@ defmodule BlueBird.Test.GeneratorTest do
           parameters: [
             %{description: "Post param",
               name: "param",
-              required: true,
               type: "integer"
           }],
           path: "/post/:param",
@@ -482,7 +480,6 @@ defmodule BlueBird.Test.GeneratorTest do
       parameters: [
         %{description: "GET param",
           name: "param",
-          required: true,
           type: "integer"
       }],
       path: "/get/:param",
@@ -515,7 +512,6 @@ defmodule BlueBird.Test.GeneratorTest do
       parameters: [
         %{description: "Post param",
           name: "param",
-          required: true,
           type: "integer"
       }],
       path: "/post/:param",

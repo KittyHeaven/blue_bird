@@ -37,7 +37,8 @@ defmodule BlueBird.Controller do
   - `title`: Title for the action
   - `description`: Description of the route
   - `note`: Note
-  - `parameter`: `name, type, :required, description`
+  - `warning`: Warning
+  - `parameter`: `name, type, description`
 
   ## Example
 
@@ -46,7 +47,8 @@ defmodule BlueBird.Controller do
         resource "Single Post"
         title "Show post"
         description "Show post by ID"
-        parameter :id, :integer, :required, "User ID"
+        note "You should really know this."
+        warning "Please don't ever do this."
         parameter :id, :integer, "Post ID"
         parameter :name, :string
       end
@@ -113,27 +115,10 @@ defmodule BlueBird.Controller do
     |> Enum.reverse
   end
 
-  defp param_to_map([name, type, :required, description]) do
-    %{
-      name: to_string(name),
-      type: to_string(type),
-      required: true,
-      description: description
-    }
-  end
-  defp param_to_map([name, type, :required]) do
-    %{
-      name: to_string(name),
-      type: to_string(type),
-      required: true,
-      description: nil
-    }
-  end
   defp param_to_map([name, type, description]) do
     %{
       name: to_string(name),
       type: to_string(type),
-      required: false,
       description: description
     }
   end
@@ -141,7 +126,6 @@ defmodule BlueBird.Controller do
     %{
       name: to_string(name),
       type: to_string(type),
-      required: false,
       description: nil
     }
   end
