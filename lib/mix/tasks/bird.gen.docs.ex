@@ -1,4 +1,5 @@
 defmodule Mix.Tasks.Bird.Gen.Docs do
+  # todo: type specs
   use Mix.Task
 
   alias Mix.Project

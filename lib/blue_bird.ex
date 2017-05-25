@@ -1,4 +1,5 @@
 defmodule BlueBird do
+  # todo: type specs
   @moduledoc false
   use Application
 

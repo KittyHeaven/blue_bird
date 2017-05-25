@@ -3,6 +3,10 @@ defmodule BlueBird.BlueprintWriter do
 
   @docs_path Application.get_env(:blue_bird, :docs_path, "docs")
 
+  # todo: type specs
+  # todo: refactor module
+  # todo: add documentation
+
   def run(api_docs) do
     File.mkdir_p(path())
 

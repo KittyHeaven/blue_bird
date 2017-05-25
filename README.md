@@ -214,7 +214,7 @@ post build_conn(), "/", "my=data"
 ```
 
 
-## TODO:
+## TODO
 
 - [ ] `raise error` when route that is used in the annotation is not available in the `phoenix router`
 - [ ] Document that routes have to be part of the api pipeline for now

@@ -4,6 +4,8 @@ defmodule BlueBird.ConnLogger do
   """
   use GenServer
 
+  # todo: type specs
+
   @doc """
   Starts the GenServer.
 

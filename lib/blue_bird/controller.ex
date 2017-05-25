@@ -1,4 +1,6 @@
 defmodule BlueBird.Controller do
+  # todo: type specs
+
   @moduledoc """
   This module defines the `api/3` macro. Use it in your controller functions
   to add documentation to your api routes.

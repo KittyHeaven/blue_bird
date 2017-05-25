@@ -9,8 +9,6 @@ defmodule BlueBird.Test.GeneratorTest do
   alias BlueBird.Generator
   alias BlueBird.Test.Support.Router
 
-  doctest BlueBird
-
   @opts Router.init([])
 
   setup do
