@@ -1,11 +1,10 @@
 defmodule BlueBird.Controller do
-  # todo: type specs
-
   @moduledoc """
-  This module defines the `api/3` macro. Use it in your controller functions
-  to add documentation to your api routes.
+  Defines the `api/3` macro used to add documentation to api routes.
 
-  ## Example: Controller Module
+  ## Usage
+
+  Use `api/3` in your controllers.
 
       defmodule MyApp.Web.UserController do
         use BlueBird.Controller
@@ -21,6 +20,18 @@ defmodule BlueBird.Controller do
           render(conn, "index.html", users: users)
         end
       end
+
+  Instead of adding `use BlueBird.Controller` to every controller module, you
+  can also add it to the `web.ex` controller function to make it available
+  in every controller.
+
+    def controller do
+      quote do
+        ...
+        use BlueBird.Controller
+        ...
+      end
+    end
   """
   defmacro __using__(_) do
     quote do

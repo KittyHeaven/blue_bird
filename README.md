@@ -9,11 +9,10 @@
 `BlueBird` is a library written in the `Elixir` programming language for the [Phoenix framework](http://www.phoenixframework.org/).
 It lets you generate API documentation in the [API Blueprint](https://apiblueprint.org/) format from annotations in controllers and automated tests.
 
-
 ## Installation
 
+1. Add BlueBird to your mix.exs dependencies:
 
-1. Add BlueBird to your mix.exs dependencies (directly from Github until released):
 ``` elixir
 defp deps do
   [{:blue_bird, "~> 0.2.0"}]
@@ -21,25 +20,29 @@ end
 ```
 
 2. Run `mix deps.get` to fetch the dependencies:
+
 ```
 $ mix deps.get
 ```
 
-3. In your `test/test_helper.exs` start the BlueBird logger via `BlueBird.start()` and configure the results formatter as follows:
+3. In `test/test_helper.exs`, start the BlueBird logger with `BlueBird.start()` and configure the results formatter as follows:
+
 ``` elixir
 BlueBird.start()
 ExUnit.start(formatters: [ExUnit.CLIFormatter, BlueBird.Formatter])
 ```
 
-4. Configure BlueBird by adding to `config.exs`:
+4. Add the following lines to `config.exs`:
+
 ``` elixir
 config :blue_bird,
   docs_path: "priv/static/docs",
   theme: "triple",
-  router: YourApp.Web.Router
+  router: MyApp.Web.Router
 ```
 
 5. Add `blue_bird_info` to your `mix.exs` to improve the generated docs:
+
 ``` elixir
 def blue_bird_info do
   [
@@ -51,17 +54,20 @@ end
 ```
 
 6. Add `BlueBird.Controller` to your `web.ex` controller function:
+
 ``` elixir
 def controller do
   quote do
     ...
     use BlueBird.Controller
     ...
+  end
 end
 ```
 
 7. Install aglio:
-```bash
+
+``` bash
 $ npm install aglio -g
 ```
 
@@ -69,8 +75,9 @@ $ npm install aglio -g
 
 #### Controller
 
-* Use `api\3` macro to generate the specification for the controller action:
-```elixir
+* Use the `api\3` macro to generate the specification for the controller action:
+
+``` elixir
 defmodule App.CommentController do
   use App.Web, :controller
 
@@ -198,11 +205,11 @@ config :blue_bird,
 
 ## FAQ
 
-##### Route is not generated after adding API annotations to the controller
+### Route is not generated after adding API annotations to the controller
 
 Please make sure that the route you are using in the annotation matches the route from the `phoenix router` (including params) exactly. Run `mix phoenix.routes` (or `mix phx.routes` if Phoenix >= 1.3) and compare the routes.
 
-##### Body Parameter are not rendered
+### Body Parameter are not rendered
 
 BlueBird reads the `body_params` from `%Plug.Conn{}`. These map is only set if `body_params` is a binary.
 
@@ -214,7 +221,7 @@ post build_conn(), "/", "my=data"
 ```
 
 
-## TODO
+## Todo
 
 - [ ] `raise error` when route that is used in the annotation is not available in the `phoenix router`
 - [ ] Document that routes have to be part of the api pipeline for now

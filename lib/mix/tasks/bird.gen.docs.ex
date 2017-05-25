@@ -1,11 +1,11 @@
 defmodule Mix.Tasks.Bird.Gen.Docs do
-  # todo: type specs
+  @moduledoc """
+  Generates HTML API Docs from api.apib using aglio
+  """
+  # todo: documentation
   use Mix.Task
 
   alias Mix.Project
-
-  @shortdoc "Generates HTML API Docs from api.apib using Aglio"
-  @moduledoc @shortdoc
 
   @doc false
   def run(_args) do

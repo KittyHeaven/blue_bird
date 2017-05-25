@@ -1,13 +1,14 @@
 defmodule BlueBird.ConnLogger do
   @moduledoc """
+  Logs connections in test cases.
+
   `BlueBird.ConnLogger` is used to cache `%Plug.Conn` structs. To use it, you
   have to call `start/0` in `test/test_helper.exs`:
 
       BlueBird.start()
       ExUnit.start(formatters: [ExUnit.CLIFormatter, BlueBird.Formatter])
 
-  You can then use `BlueBird.ConnLogger.save(conn)` in your tests to log the
-  connections.
+  You can then use `BlueBird.ConnLogger.save(conn)` in your tests.
 
       defmodule MyApp.Web.UserControllerTest do
         use MyApp.Web.ConnCase

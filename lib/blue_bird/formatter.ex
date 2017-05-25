@@ -1,9 +1,9 @@
 defmodule BlueBird.Formatter do
   @moduledoc """
-  `BlueBird.Formatter` has to be used as another ExUnit formatter.
+  Catches the `:suite_finished` event fired by `ExUnit` and triggers the
+  generation of the api blueprint file.
 
-  This module will catch the `:suite_finished` event (fired by `ExUnit`).
-  Afterwards it will trigger the generation of the api blueprint file.
+  `BlueBird.Formatter` has to be used as an ExUnit formatter.
 
   ## Usage
 
