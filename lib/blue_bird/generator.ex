@@ -9,18 +9,25 @@ defmodule BlueBird.Generator do
   @default_title "API Documentation"
   @default_description "Enter API description in mix.exs - blue_bird_info"
 
+  # todo: documentation
+  # todo: make more functions public for easier testing
+  # todo: define api_doc struct?
+
+  @spec run :: map
   def run do
     get_app_module()
     |> get_router_module()
     |> prepare_docs()
   end
 
+  @spec get_app_module :: atom
   def get_app_module do
     Project.get.application
     |> Keyword.get(:mod)
     |> elem(0)
   end
 
+  @spec get_router_module(atom) :: atom
   def get_router_module(app_module) do
     Application.get_env(
       :blue_bird,
@@ -29,6 +36,7 @@ defmodule BlueBird.Generator do
     )
   end
 
+  @spec prepare_docs(atom) :: map
   defp prepare_docs(router_module) do
     info = blue_bird_info()
 
@@ -40,6 +48,7 @@ defmodule BlueBird.Generator do
     }
   end
 
+  @spec blue_bird_info :: [String.t]
   defp blue_bird_info do
     case function_exported?(Project.get, :blue_bird_info, 0) do
       true  -> Project.get.blue_bird_info() # todo: is this testable?
@@ -47,6 +56,7 @@ defmodule BlueBird.Generator do
     end
   end
 
+  @spec generate_docs_for_routes(atom) :: [map]
   defp generate_docs_for_routes(router_module) do
     routes = filter_api_routes(router_module.__routes__)
 
@@ -55,10 +65,12 @@ defmodule BlueBird.Generator do
     |> process_routes(routes)
   end
 
+  @spec filter_api_routes([map]) :: [map]
   defp filter_api_routes(routes) do
     Enum.filter(routes, &Enum.member?(&1.pipe_through, :api))
   end
 
+  @spec requests([%Plug.Conn{}], [map]) :: [%Plug.Conn{}]
   defp requests(test_conns, routes) do
     Enum.reduce(test_conns, [], fn(conn, list) ->
       case find_route(routes, conn.request_path) do
@@ -70,12 +82,15 @@ defmodule BlueBird.Generator do
     end)
   end
 
+  @spec find_route([%Phoenix.Router.Route{}], String.t) ::
+    %Phoenix.Router.Route{} | nil
   defp find_route(routes, path) do
     routes
     |> Enum.sort_by(fn(route) -> -byte_size(route.path) end)
     |> Enum.find(fn(route) -> route_match?(route.path, path) end)
   end
 
+  @spec route_match?(String.t, String.t) :: boolean
   defp route_match?(route, path) do
     ~r/(:[^\/]+)/
     |> Regex.replace(route, "([^/]+)")
@@ -83,6 +98,7 @@ defmodule BlueBird.Generator do
     |> Regex.match?(path)
   end
 
+  @spec request_map(map, %Plug.Conn{}) :: map
   defp request_map(route, conn) do
     %{
       method: conn.method,
@@ -99,6 +115,7 @@ defmodule BlueBird.Generator do
     }
   end
 
+  @spec process_routes([map], [%Phoenix.Router.Route{}]) :: [map]
   defp process_routes(requests_list, routes) do
     routes
     |> Enum.reduce([], fn(route, generate_docs_for_routes) ->
@@ -110,6 +127,7 @@ defmodule BlueBird.Generator do
     |> Enum.reverse()
   end
 
+  @spec process_route(%Phoenix.Router.Route{}, [map]) :: {:ok, map} | :error
   defp process_route(route, requests) do
     controller = Module.concat([:Elixir | Module.split(route.plug)])
     method     = route.verb |> Atom.to_string |> String.upcase
@@ -136,6 +154,7 @@ defmodule BlueBird.Generator do
     end
   end
 
+  @spec set_default(map, %Phoenix.Router.Route{}, atom) :: map
   defp set_default(%{group: nil} = route_docs, route, :group) do
     set_default_to_controller(route_docs, route, :group)
   end
@@ -144,6 +163,7 @@ defmodule BlueBird.Generator do
   end
   defp set_default(route_docs, _, _), do: route_docs
 
+  @spec set_default_to_controller(map, %Phoenix.Router.Route{}, atom) :: map
   defp set_default_to_controller(route_docs, route, key) do
     value = route.plug
     |> Naming.resource_name("Controller")
