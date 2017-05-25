@@ -13,14 +13,12 @@ defmodule BlueBird.Test.GeneratorTest do
     assert app_module == BlueBird
   end
 
-  test "BlueBird.Generator.get_router_module/1" do
-    router_module = Generator.get_app_module
-    |> Generator.get_router_module
-
+  test "get_router_module/1" do
+    router_module = Generator.get_app_module |> Generator.get_router_module
     assert router_module == Router
   end
 
-  test "BlueBird.Generator.run/0" do
+  test "run/0" do
     ConnLogger.reset()
 
     assert Generator.run == %{
@@ -82,7 +80,9 @@ defmodule BlueBird.Test.GeneratorTest do
               query_params: %{},
               response: %{
                 body: "{\"status\":\"ok\"}",
-                headers: [{"cache-control", "max-age=0, private, must-revalidate"}],
+                headers: [
+                  {"cache-control", "max-age=0, private, must-revalidate"}
+                ],
                 status: 200
               }
             }
@@ -207,7 +207,9 @@ defmodule BlueBird.Test.GeneratorTest do
               query_params: %{},
               response: %{
                 body: "{\"status\":\"ok\"}",
-                headers: [{"cache-control", "max-age=0, private, must-revalidate"}],
+                headers: [
+                  {"cache-control", "max-age=0, private, must-revalidate"}
+                ],
                 status: 201
               }
             }

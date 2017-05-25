@@ -3,10 +3,14 @@ defmodule BlueBird.Generator do
   alias Mix.Project
   alias Phoenix.Naming
 
+  @default_url "http://localhost"
+  @default_title "API Documentation"
+  @default_description "Enter API description in mix.exs - blue_bird_info"
+
   def run do
     get_app_module()
     |> get_router_module()
-    |> prepare_docs(ConnLogger.get_conns())
+    |> prepare_docs()
   end
 
   def get_app_module do
@@ -23,16 +27,14 @@ defmodule BlueBird.Generator do
     )
   end
 
-  defp prepare_docs(router_module, test_conns) do
+  defp prepare_docs(router_module) do
+    info = blue_bird_info()
+
     %{
-      host: Keyword.get(blue_bird_info(), :host, "http://localhost"),
-      title: Keyword.get(blue_bird_info(), :title, "API Documentation"),
-      description: Keyword.get(
-        blue_bird_info(),
-        :description,
-        "Enter API description in mix.exs - blue_bird_info"
-      ),
-      routes: generate_docs_for_routes(router_module, test_conns)
+      host: Keyword.get(info, :host, @default_url),
+      title: Keyword.get(info, :title, @default_title),
+      description: Keyword.get(info, :description, @default_description),
+      routes: generate_docs_for_routes(router_module)
     }
   end
 
@@ -43,39 +45,32 @@ defmodule BlueBird.Generator do
     end
   end
 
-  defp generate_docs_for_routes(router_module, test_conns) do
-    requests_list = requests(router_module.__routes__, test_conns)
+  defp generate_docs_for_routes(router_module) do
+    test_conns = ConnLogger.get_conns()
+    routes = filter_api_routes(router_module.__routes__)
+    requests_list = requests(routes, test_conns)
 
-    router_module.__routes__
-    |> Enum.filter(fn(route) -> Enum.member?(route.pipe_through, :api) end)
+    routes
     |> Enum.reduce([], fn(route, generate_docs_for_routes) ->
       case process_route(route, requests_list) do
-        {:ok, route_doc} -> generate_docs_for_routes ++ [route_doc]
+        {:ok, route_doc} -> [route_doc | generate_docs_for_routes]
         _                -> generate_docs_for_routes
       end
     end)
+    |> Enum.reverse()
+  end
+
+  defp filter_api_routes(routes) do
+    Enum.filter(routes, &Enum.member?(&1.pipe_through, :api))
   end
 
   defp requests(routes, test_conns) do
-    Enum.reduce test_conns, [], fn(conn, list) ->
+    Enum.reduce(test_conns, [], fn(conn, list) ->
       case find_route(routes, conn.request_path) do
         nil   -> list
-        route -> list ++ [request_map(route, conn)]
+        route -> [request_map(route, conn) | list]
       end
-    end
-  end
-
-  defp request_map(route, conn) do
-    %{method: conn.method,
-      path: route.path,
-      headers: conn.req_headers,
-      path_params: conn.path_params,
-      body_params: conn.body_params,
-      query_params: conn.query_params,
-      response: %{
-        status: conn.status,
-        body: conn.resp_body,
-        headers: conn.resp_headers}}
+    end)
   end
 
   defp find_route(routes, path) do
@@ -89,6 +84,22 @@ defmodule BlueBird.Generator do
     |> Regex.replace(route, "([^/]+)")
     |> Regex.compile!()
     |> Regex.match?(path)
+  end
+
+  defp request_map(route, conn) do
+    %{
+      method: conn.method,
+      path: route.path,
+      headers: conn.req_headers,
+      path_params: conn.path_params,
+      body_params: conn.body_params,
+      query_params: conn.query_params,
+      response: %{
+        status: conn.status,
+        body: conn.resp_body,
+        headers: conn.resp_headers
+      }
+    }
   end
 
   defp process_route(route, requests) do
@@ -115,16 +126,12 @@ defmodule BlueBird.Generator do
     end
   end
 
-  defp set_default(%{group: group} = route_docs, route, :group)
-  when is_nil(group) do
+  defp set_default(%{group: nil} = route_docs, route, :group) do
     set_default_to_controller(route_docs, route, :group)
   end
-
-  defp set_default(%{resource: resource} = route_docs, route, :resource)
-  when is_nil(resource) do
+  defp set_default(%{resource: nil} = route_docs, route, :resource) do
     set_default_to_controller(route_docs, route, :resource)
   end
-
   defp set_default(route_docs, _, _), do: route_docs
 
   defp set_default_to_controller(route_docs, route, key) do
