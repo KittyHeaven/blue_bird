@@ -38,7 +38,7 @@ defmodule BlueBird.Controller do
   - `description`: Description of the route
   - `note`: Note
   - `warning`: Warning
-  - `parameter`: `name, type, description`
+  - `parameter`: `name, type, description (optional)`
 
   ## Example
 
@@ -128,5 +128,18 @@ defmodule BlueBird.Controller do
       type: to_string(type),
       description: nil
     }
+  end
+  defp param_to_map(_) do
+    raise ArgumentError,
+          """
+          Wrong number of arguments for parameter option.
+          Expected either two or three arguments. Correct usage:
+
+              parameter "name", :type
+
+              or
+
+              parameter "name", :type, "description"
+          """
   end
 end

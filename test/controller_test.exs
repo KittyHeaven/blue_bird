@@ -1,6 +1,17 @@
 defmodule BlueBird.Test.ControllerTest do
   use BlueBird.Test.Support.ConnCase
 
+  @parameter_error """
+                   Wrong number of arguments for parameter option.
+                   Expected either two or three arguments. Correct usage:
+
+                       parameter "name", :type
+
+                       or
+
+                       parameter "name", :type, "description"
+                   """
+
   defmodule Controller do
     use BlueBird.Controller
 
@@ -96,6 +107,24 @@ defmodule BlueBird.Test.ControllerTest do
 
         api :POST, "/toomany" do
           title "too", "many"
+        end
+      end
+    end
+
+    test "raises error if parameter has invalid number of arguments" do
+      assert_compile_time_raise ArgumentError, @parameter_error, fn ->
+        import BlueBird.Controller
+
+        api :POST, "/toofew" do
+          parameter "bla"
+        end
+      end
+
+      assert_compile_time_raise ArgumentError, @parameter_error, fn ->
+        import BlueBird.Controller
+
+        api :POST, "/toomany" do
+          parameter "spam", :int, "eggs", "foo"
         end
       end
     end
