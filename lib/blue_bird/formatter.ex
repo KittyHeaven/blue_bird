@@ -7,8 +7,10 @@ defmodule BlueBird.Formatter do
 
   ## Usage
 
-  Add `BlueBird.Formatter` as a formatter in `test_helper.exs`.
+  Add `BlueBird.Formatter` as a formatter in `test_helper.exs`. Don't forget
+  to add `BlueBird.start/0` as well.
 
+      BlueBird.start()
       ExUnit.start(formatters: [ExUnit.CLIFormatter, BlueBird.Formatter])
   """
   use GenEvent
