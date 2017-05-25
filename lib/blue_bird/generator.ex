@@ -4,6 +4,7 @@ defmodule BlueBird.Generator do
   alias BlueBird.ConnLogger
   alias Mix.Project
   alias Phoenix.Naming
+  alias Phoenix.Router.Route
 
   @default_url "http://localhost"
   @default_title "API Documentation"
@@ -82,8 +83,8 @@ defmodule BlueBird.Generator do
     end)
   end
 
-  @spec find_route([%Phoenix.Router.Route{}], String.t) ::
-    %Phoenix.Router.Route{} | nil
+  @spec find_route([%Route{}], String.t) ::
+    %Route{} | nil
   defp find_route(routes, path) do
     routes
     |> Enum.sort_by(fn(route) -> -byte_size(route.path) end)
@@ -115,7 +116,7 @@ defmodule BlueBird.Generator do
     }
   end
 
-  @spec process_routes([map], [%Phoenix.Router.Route{}]) :: [map]
+  @spec process_routes([map], [%Route{}]) :: [map]
   defp process_routes(requests_list, routes) do
     routes
     |> Enum.reduce([], fn(route, generate_docs_for_routes) ->
@@ -127,7 +128,7 @@ defmodule BlueBird.Generator do
     |> Enum.reverse()
   end
 
-  @spec process_route(%Phoenix.Router.Route{}, [map]) :: {:ok, map} | :error
+  @spec process_route(%Route{}, [map]) :: {:ok, map} | :error
   defp process_route(route, requests) do
     controller = Module.concat([:Elixir | Module.split(route.plug)])
     method     = route.verb |> Atom.to_string |> String.upcase
@@ -154,7 +155,7 @@ defmodule BlueBird.Generator do
     end
   end
 
-  @spec set_default(map, %Phoenix.Router.Route{}, atom) :: map
+  @spec set_default(map, %Route{}, atom) :: map
   defp set_default(%{group: nil} = route_docs, route, :group) do
     set_default_to_controller(route_docs, route, :group)
   end
@@ -163,7 +164,7 @@ defmodule BlueBird.Generator do
   end
   defp set_default(route_docs, _, _), do: route_docs
 
-  @spec set_default_to_controller(map, %Phoenix.Router.Route{}, atom) :: map
+  @spec set_default_to_controller(map, %Route{}, atom) :: map
   defp set_default_to_controller(route_docs, route, key) do
     value = route.plug
     |> Naming.resource_name("Controller")
