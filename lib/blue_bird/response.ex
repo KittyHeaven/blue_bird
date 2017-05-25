@@ -6,10 +6,6 @@ defmodule BlueBird.Response do
 
   @typedoc """
   Type that represents the Response struct.
-
-    * status: integer
-    * headers: [{String.t, String.t}]
-    * body: String.t
   """
   @type t :: %BlueBird.Response{
     status: integer,
