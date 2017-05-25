@@ -1,4 +1,5 @@
 defmodule BlueBird.Controller do
+  # todo type specs
   @moduledoc """
   Defines the `api/3` macro used to add documentation to api routes.
 
@@ -33,6 +34,8 @@ defmodule BlueBird.Controller do
       end
     end
   """
+  alias BlueBird.{Parameter, Route}
+
   defmacro __using__(_) do
     quote do
       import BlueBird.Controller, only: [api: 3]
@@ -78,8 +81,9 @@ defmodule BlueBird.Controller do
     parameters    = extract_parameters(metadata)
 
     quote do
+      @spec api_doc(String.t, String.t) :: Route.t
       def api_doc(unquote(method_str), unquote(path)) do
-        %{
+        %Route{
           group:        unquote(group),
           resource:     unquote(resource),
           title:        unquote(title),
@@ -94,16 +98,18 @@ defmodule BlueBird.Controller do
     end
   end
 
-  defp method_to_string(method) do
+  @spec method_to_string(String.t | atom) :: String.t
+  defp method_to_string(method) when is_binary(method) or is_atom(method) do
     method
     |> to_string
     |> String.upcase
   end
 
+  #@spec extract_metadata({:__block__, [any], [any]} | nil) :: [{atom, any}]
   defp extract_metadata({:__block__, _, data}) do
-    Enum.map data, fn({name, _line, params}) ->
+    Enum.map(data, fn({name, _line, params}) ->
       {name, params}
-    end
+    end)
   end
   defp extract_metadata({key, _, data}), do: [{key, data}]
   defp extract_metadata(nil), do: []
@@ -126,15 +132,16 @@ defmodule BlueBird.Controller do
     |> Enum.reverse
   end
 
+  @spec param_to_map([String.t | atom | nil]) :: Parameter.t
   defp param_to_map([name, type, description]) do
-    %{
+    %Parameter{
       name: to_string(name),
       type: to_string(type),
       description: description
     }
   end
   defp param_to_map([name, type]) do
-    %{
+    %Parameter{
       name: to_string(name),
       type: to_string(type),
       description: nil

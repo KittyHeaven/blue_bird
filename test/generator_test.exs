@@ -7,6 +7,7 @@ defmodule BlueBird.Test.GeneratorTest do
 
   alias BlueBird.ConnLogger
   alias BlueBird.Generator
+  alias BlueBird.Parameter
   alias BlueBird.Test.Support.Router
 
   @opts Router.init([])
@@ -37,7 +38,7 @@ defmodule BlueBird.Test.GeneratorTest do
     test "includes all defined routes, uses default values" do
       Logger.disable(self())
 
-      assert Generator.run() == %{
+      assert Generator.run() == %BlueBird.ApiDoc{
         description: "Enter API description in mix.exs - blue_bird_info",
         host: "http://localhost",
         title: "API Documentation",
@@ -170,7 +171,7 @@ defmodule BlueBird.Test.GeneratorTest do
   end
 
   defp empty_route("GET", "/waldorf") do
-    %{description: nil,
+    %BlueBird.Route{description: nil,
       group: "Test",
       method: "GET",
       note: nil,
@@ -184,7 +185,7 @@ defmodule BlueBird.Test.GeneratorTest do
   end
 
   defp empty_route("GET", "/statler") do
-    %{description: "Description",
+    %BlueBird.Route{description: "Description",
       group: "Statler",
       method: "GET",
       note: "Note",
@@ -198,7 +199,7 @@ defmodule BlueBird.Test.GeneratorTest do
   end
 
   defp empty_route("POST", "/waldorf") do
-    %{description: nil,
+    %BlueBird.Route{description: nil,
       group: "Waldorf",
       method: "POST",
       note: nil,
@@ -212,13 +213,13 @@ defmodule BlueBird.Test.GeneratorTest do
   end
 
   defp empty_route("POST", "/statler/:id") do
-    %{description: nil,
+    %BlueBird.Route{description: nil,
       group: "Statler",
       method: "POST",
       note: nil,
       warning: nil,
       resource: "Single Statler",
-      parameters: [%{description: "ID", name: "id", type: "int"}],
+      parameters: [%Parameter{description: "ID", name: "id", type: "int"}],
       path: "/statler/:id",
       requests: [],
       title: "Post Statler"

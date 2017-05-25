@@ -12,10 +12,10 @@ defmodule BlueBird.Generator do
   """
   require Logger
 
-  alias BlueBird.ConnLogger
+  alias BlueBird.{ApiDoc, ConnLogger, Request, Response, Route}
   alias Mix.Project
   alias Phoenix.Naming
-  alias Phoenix.Router.Route
+  alias Phoenix.Router.Route, as: PhxRoute
 
   @default_url "http://localhost"
   @default_title "API Documentation"
@@ -29,17 +29,17 @@ defmodule BlueBird.Generator do
 
   ## Example response
 
-      %{
+      %BlueBird.ApiDoc{
         description: "Enter API description in mix.exs - blue_bird_info",
         host: "http://localhost",
         routes: [
-          %{
+          %BlueBird.Route{
             description: "Gets a single user.",
             group: "Users",
             method: "GET",
             note: nil,
             parameters: [
-              %{
+              %BlueBird.Parameter{
                 description: "ID",
                 name: "id",
                 type: "int"
@@ -50,14 +50,14 @@ defmodule BlueBird.Generator do
             title: "Get single user",
             warning: nil,
             requests: [
-              %{
+              %BlueBird.Request{
                 body_params: %{},
                 headers: [{"accept", "application/json"}],
                 method: "GET",
                 path: "/user/:id",
                 path_params: %{"id" => 1},
                 query_params: %{},
-                response: %{
+                response: %BlueBird.Response{
                   body: "{\"status\":\"ok\"}",
                   headers: [{"content-type", "application/json"}],
                   status: 200
@@ -68,7 +68,7 @@ defmodule BlueBird.Generator do
         ]
       }
   """
-  @spec run :: map
+  @spec run :: ApiDoc.t
   def run do
     get_app_module()
     |> get_router_module()
@@ -93,11 +93,11 @@ defmodule BlueBird.Generator do
     )
   end
 
-  @spec prepare_docs(atom) :: map
+  @spec prepare_docs(atom) :: ApiDoc.t
   defp prepare_docs(router_module) do
     info = blue_bird_info()
 
-    %{
+    %ApiDoc{
       host: Keyword.get(info, :host, @default_url),
       title: Keyword.get(info, :title, @default_title),
       description: Keyword.get(info, :description, @default_description),
@@ -113,7 +113,7 @@ defmodule BlueBird.Generator do
     end
   end
 
-  @spec generate_docs_for_routes(atom) :: [map]
+  @spec generate_docs_for_routes(atom) :: [Request.t]
   defp generate_docs_for_routes(router_module) do
     routes = filter_api_routes(router_module.__routes__)
 
@@ -122,12 +122,12 @@ defmodule BlueBird.Generator do
     |> process_routes(routes)
   end
 
-  @spec filter_api_routes([map]) :: [map]
+  @spec filter_api_routes([%PhxRoute{}]) :: [%PhxRoute{}]
   defp filter_api_routes(routes) do
     Enum.filter(routes, &Enum.member?(&1.pipe_through, :api))
   end
 
-  @spec requests([%Plug.Conn{}], [map]) :: [%Plug.Conn{}]
+  @spec requests([%Plug.Conn{}], [%PhxRoute{}]) :: [%Plug.Conn{}]
   defp requests(test_conns, routes) do
     Enum.reduce(test_conns, [], fn(conn, list) ->
       case find_route(routes, conn.request_path) do
@@ -139,8 +139,7 @@ defmodule BlueBird.Generator do
     end)
   end
 
-  @spec find_route([%Route{}], String.t) ::
-    %Route{} | nil
+  @spec find_route([%PhxRoute{}], String.t) :: %PhxRoute{} | nil
   defp find_route(routes, path) do
     routes
     |> Enum.sort_by(fn(route) -> -byte_size(route.path) end)
@@ -155,16 +154,16 @@ defmodule BlueBird.Generator do
     |> Regex.match?(path)
   end
 
-  @spec request_map(map, %Plug.Conn{}) :: map
+  @spec request_map(%PhxRoute{}, %Plug.Conn{}) :: Request.t
   defp request_map(route, conn) do
-    %{
+    %Request{
       method: conn.method,
       path: route.path,
       headers: conn.req_headers,
       path_params: conn.path_params,
       body_params: conn.body_params,
       query_params: conn.query_params,
-      response: %{
+      response: %Response{
         status: conn.status,
         body: conn.resp_body,
         headers: conn.resp_headers
@@ -172,7 +171,7 @@ defmodule BlueBird.Generator do
     }
   end
 
-  @spec process_routes([map], [%Route{}]) :: [map]
+  @spec process_routes([Request.t], [%PhxRoute{}]) :: [Request.t]
   defp process_routes(requests_list, routes) do
     routes
     |> Enum.reduce([], fn(route, generate_docs_for_routes) ->
@@ -184,7 +183,7 @@ defmodule BlueBird.Generator do
     |> Enum.reverse()
   end
 
-  @spec process_route(%Route{}, [map]) :: {:ok, map} | :error
+  @spec process_route(%PhxRoute{}, [Request.t]) :: {:ok, Route.t} | :error
   defp process_route(route, requests) do
     controller = Module.concat([:Elixir | Module.split(route.plug)])
     method     = route.verb |> Atom.to_string |> String.upcase
@@ -211,7 +210,7 @@ defmodule BlueBird.Generator do
     end
   end
 
-  @spec set_default(map, %Route{}, atom) :: map
+  @spec set_default(Route.t, %PhxRoute{}, atom) :: Route.t
   defp set_default(%{group: nil} = route_docs, route, :group) do
     set_default_to_controller(route_docs, route, :group)
   end
@@ -220,7 +219,8 @@ defmodule BlueBird.Generator do
   end
   defp set_default(route_docs, _, _), do: route_docs
 
-  @spec set_default_to_controller(map, %Route{}, atom) :: map
+  # todo: fix this (Route.t)
+  @spec set_default_to_controller(Route.t, %PhxRoute{}, atom) :: Route.t
   defp set_default_to_controller(route_docs, route, key) do
     value = route.plug
     |> Naming.resource_name("Controller")

@@ -1,6 +1,8 @@
 defmodule BlueBird.Test.ControllerTest do
   use BlueBird.Test.Support.ConnCase
 
+  alias BlueBird.Parameter
+
   @parameter_error """
                    Wrong number of arguments for parameter option.
                    Expected either two or three arguments. Correct usage:
@@ -43,7 +45,7 @@ defmodule BlueBird.Test.ControllerTest do
 
   describe "api/3" do
     test "expands to function returning a map" do
-      assert Controller.api_doc("GET", "/users") == %{
+      assert Controller.api_doc("GET", "/users") == %BlueBird.Route{
         group: "Users",
         resource: "User Collection",
         title: "List all users",
@@ -61,7 +63,7 @@ defmodule BlueBird.Test.ControllerTest do
     end
 
     test "uses the right default values" do
-      assert Controller.api_doc("DELETE", "/users/:id") == %{
+      assert Controller.api_doc("DELETE", "/users/:id") == %BlueBird.Route{
         group: nil,
         resource: nil,
         title: nil,
@@ -75,28 +77,34 @@ defmodule BlueBird.Test.ControllerTest do
     end
 
     test "extracts a single parameter" do
-      assert Controller.api_doc("PUT", "/users/:id")[:parameters] == [%{
-        description: nil,
-        name: "id",
-        type: "integer"
-      }]
+      assert Controller.api_doc("PUT", "/users/:id").parameters == [
+        %Parameter{
+          description: nil,
+          name: "id",
+          type: "integer"
+        }
+      ]
     end
     test "extracts all parameters" do
       path = "/users/:id/:pid/:topic"
 
-      assert Controller.api_doc("PATCH", path)[:parameters] == [%{
-        description: "the user ID",
-        name: "id",
-        type: "integer"
-      }, %{
-        description: "the post ID",
-        name: "pid",
-        type: "integer"
-      }, %{
-        description: nil,
-        name: "topic",
-        type: "string"
-      }]
+      assert Controller.api_doc("PATCH", path).parameters == [
+        %Parameter{
+          description: "the user ID",
+          name: "id",
+          type: "integer"
+        },
+        %Parameter{
+          description: "the post ID",
+          name: "pid",
+          type: "integer"
+        },
+        %Parameter{
+          description: nil,
+          name: "topic",
+          type: "string"
+        }
+    ]
     end
 
     test "raises error if single value fields have too many values" do
