@@ -1,6 +1,29 @@
 defmodule BlueBird.ConnLogger do
   @moduledoc """
-  `BlueBird.ConnLogger` caches `conn` sessions.
+  `BlueBird.ConnLogger` is used to cache `%Plug.Conn` structs. To use it, you
+  have to call `start/0` in `test/test_helper.exs`:
+
+      BlueBird.start()
+      ExUnit.start(formatters: [ExUnit.CLIFormatter, BlueBird.Formatter])
+
+  You can then use `BlueBird.ConnLogger.save(conn)` in your tests to log the
+  connections.
+
+      defmodule MyApp.Web.UserControllerTest do
+        use MyApp.Web.ConnCase
+
+        alias BlueBird.ConnLogger
+
+        test "returns a single user", %{conn: conn} do
+          user = user_fixture()
+
+          conn = conn
+          |> get(conn, user_path(conn, :index, user.id))
+          |> ConnLogger.save()
+
+          assert json_response(conn, 200)["data"] == %{name: user.name}
+        end
+      end
   """
   use GenServer
 
