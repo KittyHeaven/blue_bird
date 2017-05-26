@@ -2,7 +2,12 @@ defmodule BlueBird.ApiDoc do
   @moduledoc """
   Defines the `ApiDoc` struct.
   """
-  defstruct [:title, :description, :host, :routes]
+  defstruct [
+    title: "",
+    description: "",
+    host: "",
+    routes: []
+  ]
 
   @typedoc """
   Type that represents the ApiDoc struct.
