@@ -1,0 +1,86 @@
+defmodule BlueBird.Test.Support.Examples.Simple do
+  @moduledoc false
+
+  alias BlueBird.{ApiDoc, Request, Response, Route}
+
+  def api_doc do
+    %ApiDoc{
+      title: "Heavenly API",
+      description: "This is the API description.\n\nIt may be helpful. Or not.",
+      host: "https://youarguelikeaninformer.socrates",
+      routes: [
+        %Route{
+          method: "GET",
+          path: "/route-without-info-or-response"
+        },
+        %Route{
+          method: "GET",
+          path: "/route-with-simple-response",
+          requests: [%Request{
+            method: "GET",
+            path: "/route-with-simple-response",
+            response: %Response{
+              status: 200,
+              headers: [{"content-type", "text/plain"}],
+              body: "Simple response."
+            }
+          }]
+        },
+        %Route{
+          method: "GET",
+          path: "/route-with-204-response",
+          requests: [%Request{
+            method: "GET",
+            path: "/route-with-204-response",
+            response: %Response{
+              status: 204,
+              headers: [],
+              body: ""
+            }
+          }]
+        },
+      ]
+    }
+  end
+
+  def output do
+    """
+    FORMAT: 1A
+    HOST: https://youarguelikeaninformer.socrates
+
+    # Heavenly API
+    This is the API description.
+
+    It may be helpful. Or not.
+
+
+    ## Resource /route-with-204-response
+
+    ### GET
+
+        + Request
+
+        + Response 204
+
+    ## Resource /route-with-simple-response
+
+    ### GET
+
+        + Request
+
+        + Response 200
+
+            + Headers
+
+                content-type: text/plain
+
+            + Body
+
+                Simple response.
+
+    ## Resource /route-without-info-or-response
+
+    ### GET
+    """
+  end
+end
