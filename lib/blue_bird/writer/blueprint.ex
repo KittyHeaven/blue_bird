@@ -69,7 +69,7 @@ defmodule BlueBird.Writer.Blueprint do
     routes
     |> group_routes_by_key(:group)
     |> Enum.map(fn({group, routes}) ->
-         {group, group_routes_by_resource(routes)}
+         {group, group_routes_by_key(routes, :path)}
        end)
   end
 
@@ -80,20 +80,6 @@ defmodule BlueBird.Writer.Blueprint do
     |> Enum.sort_by(fn(route) -> Map.get(route, key) end)
     |> Enum.group_by(fn(route) -> Map.get(route, key) end)
     |> Enum.to_list()
-  end
-
-  @spec group_routes_by_resource([Route.t]) :: [{String.t, String.t, [Route.t]}]
-  defp group_routes_by_resource(routes) do
-    routes
-    |> group_routes_by_key(:path)
-    |> Enum.map(fn({path, routes}) ->
-      resource_name =
-        case List.first(routes) do
-          nil -> nil
-          route -> route.resource
-        end
-      {path, resource_name, routes}
-    end)
   end
 
   ## Groups
@@ -120,14 +106,9 @@ defmodule BlueBird.Writer.Blueprint do
     Enum.map_join(resources, "\n", &process_resource(&1))
   end
 
-  @spec process_resource({String.t, String.t, [Resource.t]}) :: String.t
-  defp process_resource({path, nil, requests}) do
-    "## Resource #{path}\n\n"
-    <> process_routes(requests)
-  end
-  defp process_resource({path, name, requests}) do
-    "## Resource #{name} [#{path}]\n\n"
-    <> process_routes(requests)
+  @spec process_resource({String.t, [Resource.t]}) :: String.t
+  defp process_resource({path, requests}) do
+    "## #{path}\n\n" <> process_routes(requests)
   end
 
   ## Routes

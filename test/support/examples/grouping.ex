@@ -51,11 +51,11 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
 
     # Group Pets
 
-    ## Resource /cats
+    ## /cats
 
     ### GET
 
-    ## Resource /dogs
+    ## /dogs
 
     ### GET
 
@@ -63,11 +63,11 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
 
     # Group Vehicles
 
-    ## Resource /airplanes
+    ## /airplanes
 
     ### GET
 
-    ## Resource /carriages
+    ## /carriages
 
     ### POST
     """

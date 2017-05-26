@@ -224,30 +224,30 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
   end
 
   describe "group_routes/1 " do
-    test "groups routes by group and resource" do
-      route_a = %Route{group: "Group A", resource: "Res 1", path: "/one"}
-      route_b1 = %Route{group: "Group B", resource: "Res 2", path: "/two"}
-      route_b2 = %Route{group: "Group B", resource: "Res 1", path: "/one"}
-      route_b3 = %Route{group: "Group B", resource: "Res 2", path: "/two"}
-      route_c = %Route{group: "Group C", resource: "Res 1", path: "/one"}
+    test "groups routes by group and path" do
+      route_a = %Route{group: "Group A", path: "/one"}
+      route_b1 = %Route{group: "Group B", path: "/two"}
+      route_b2 = %Route{group: "Group B", path: "/one"}
+      route_b3 = %Route{group: "Group B", path: "/two"}
+      route_c = %Route{group: "Group C", path: "/one"}
 
       routes = [route_b1, route_a, route_b3, route_c, route_b2]
 
       expected = [
           {
             "Group A", [
-              {"/one", "Res 1", [route_a]}
+              {"/one", [route_a]}
             ]
           },
           {
             "Group B", [
-              {"/one", "Res 1", [route_b2]},
-              {"/two", "Res 2", [route_b1, route_b3]}
+              {"/one", [route_b2]},
+              {"/two", [route_b1, route_b3]}
             ]
           },
           {
             "Group C", [
-              {"/one", "Res 1", [route_c]}
+              {"/one", [route_c]}
             ]
           }
         ]
@@ -258,7 +258,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
   describe "Example" do
     alias BlueBird.Test.Support.Examples.Grouping
-    alias BlueBird.Test.Support.Examples.NamedResourceAndAction
+    alias BlueBird.Test.Support.Examples.NamedAction
     alias BlueBird.Test.Support.Examples.Requests
     alias BlueBird.Test.Support.Examples.Responses
     alias BlueBird.Test.Support.Examples.Simple
@@ -267,9 +267,8 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       assert generate_output(Simple.api_doc) == Simple.output
     end
 
-    test "NamedResourceAndAction is rendered correctly" do
-      assert generate_output(NamedResourceAndAction.api_doc) ==
-        NamedResourceAndAction.output
+    test "NamedAction is rendered correctly" do
+      assert generate_output(NamedAction.api_doc) == NamedAction.output
     end
 
     test "Grouping is rendered correctly" do

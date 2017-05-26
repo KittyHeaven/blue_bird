@@ -12,13 +12,10 @@ defmodule BlueBird.Test.Support.TestController do
   end
 
   api :POST, "/waldorf" do
-    group "Waldorf"
     title "Post Waldorf"
   end
 
   api :GET, "/statler" do
-    group "Statler"
-    resource "Statler Collection"
     title "Get Statler"
     description "Description"
     note "Note"
@@ -26,8 +23,6 @@ defmodule BlueBird.Test.Support.TestController do
   end
 
   api :POST, "/statler/:id" do
-    group "Statler"
-    resource "Single Statler"
     title "Post Statler"
     parameter :id, :int, "ID"
   end

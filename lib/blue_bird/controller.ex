@@ -11,7 +11,6 @@ defmodule BlueBird.Controller do
         alias MyApp.Accounts
 
         api :GET, "users" do
-          group "Posts"
           title "List users"
           description "Lists all active users"
         end
@@ -42,13 +41,10 @@ defmodule BlueBird.Controller do
   end
 
   @doc """
-  Generates the description of a route.
+  Describes a route.
 
   - `method`: HTTP method (GET, POST, PUT etc.)
   - `url`: Route as defined in the Phoenix router
-  - `group`: Resource group. Defaults to resource name guessed from controller
-  name.
-  - `resource`: Title for the resource. Defaults to the url.
   - `title`: Title for the action
   - `description`: Description of the route
   - `note`: Note
@@ -58,8 +54,6 @@ defmodule BlueBird.Controller do
   ## Example
 
       api :GET, "user/:id/posts/:pid" do
-        group "Posts"
-        resource "Single Post"
         title "Show post"
         description "Show post by ID"
         note "You should really know this."
@@ -71,8 +65,6 @@ defmodule BlueBird.Controller do
   defmacro api(method, path, do: block) do
     method_str    = method_to_string(method)
     metadata      = extract_metadata(block)
-    group         = extract_option(metadata, :group)
-    resource      = extract_option(metadata, :resource)
     title         = extract_option(metadata, :title)
     description   = extract_option(metadata, :description)
     note          = extract_option(metadata, :note)
@@ -83,8 +75,6 @@ defmodule BlueBird.Controller do
       @spec api_doc(String.t, String.t) :: Route.t
       def api_doc(unquote(method_str), unquote(path)) do
         %Route{
-          group:        unquote(group),
-          resource:     unquote(resource),
           title:        unquote(title),
           description:  unquote(description),
           note:         unquote(note),

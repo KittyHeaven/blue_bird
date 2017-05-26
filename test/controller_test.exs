@@ -19,7 +19,6 @@ defmodule BlueBird.Test.ControllerTest do
 
     api :GET, "/users" do
       group "Users"
-      resource "User Collection"
       title "List all users"
       description "This route returns a list of all users."
       note "Please don't use this route if you are a customer."
@@ -46,8 +45,6 @@ defmodule BlueBird.Test.ControllerTest do
   describe "api/3" do
     test "expands to function returning a map" do
       assert Controller.api_doc("GET", "/users") == %BlueBird.Route{
-        group: "Users",
-        resource: "User Collection",
         title: "List all users",
         description: "This route returns a list of all users.",
         note: "Please don't use this route if you are a customer.",
@@ -59,13 +56,12 @@ defmodule BlueBird.Test.ControllerTest do
     end
 
     test "expands with only one attribute" do
-      assert %{group: "Users"} = Controller.api_doc("POST", "/users")
+      assert %{path: "/users"} = Controller.api_doc("POST", "/users")
     end
 
     test "uses the right default values" do
       assert Controller.api_doc("DELETE", "/users/:id") == %BlueBird.Route{
         group: nil,
-        resource: nil,
         title: nil,
         description: nil,
         note: nil,

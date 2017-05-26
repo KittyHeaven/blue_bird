@@ -65,7 +65,7 @@ defmodule BlueBird.Test.Support.Examples.Responses do
     # Heavenly API
 
 
-    ## Resource /multiple-headers
+    ## /multiple-headers
 
     ### GET
 
@@ -82,7 +82,7 @@ defmodule BlueBird.Test.Support.Examples.Responses do
 
                 Multiple headers.
 
-    ## Resource /plain-response
+    ## /plain-response
 
     ### GET
 
@@ -98,7 +98,7 @@ defmodule BlueBird.Test.Support.Examples.Responses do
 
                 Plain response.
 
-    ## Resource /plain-with-line-breaks
+    ## /plain-with-line-breaks
 
     ### GET
 

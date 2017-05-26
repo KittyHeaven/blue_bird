@@ -79,8 +79,6 @@ defmodule BlueBird.Test.GeneratorTest do
       Logger.disable(self())
       route = Generator.run() |> find_route("GET", "/statler")
 
-      assert route.group == "Statler"
-      assert route.resource == "Statler Collection"
       assert route.title == "Get Statler"
       assert route.description == "Description"
       assert route.note == "Note"
@@ -88,12 +86,11 @@ defmodule BlueBird.Test.GeneratorTest do
       assert route.parameters == []
     end
 
-    test "uses default values for group and resource" do
+    test "uses controller name as default value for group" do
       Logger.disable(self())
       route = Generator.run() |> find_route("GET", "/waldorf")
 
       assert route.group == "Test"
-      assert route.resource == "Test"
     end
 
     test "includes params" do
@@ -174,7 +171,6 @@ defmodule BlueBird.Test.GeneratorTest do
       method: "GET",
       note: nil,
       warning: nil,
-      resource: "Test",
       parameters: [],
       path: "/waldorf",
       requests: [],
@@ -184,11 +180,10 @@ defmodule BlueBird.Test.GeneratorTest do
 
   defp empty_route("GET", "/statler") do
     %BlueBird.Route{description: "Description",
-      group: "Statler",
+      group: "Test",
       method: "GET",
       note: "Note",
       warning: "Warning",
-      resource: "Statler Collection",
       parameters: [],
       path: "/statler",
       requests: [],
@@ -198,11 +193,10 @@ defmodule BlueBird.Test.GeneratorTest do
 
   defp empty_route("POST", "/waldorf") do
     %BlueBird.Route{description: nil,
-      group: "Waldorf",
+      group: "Test",
       method: "POST",
       note: nil,
       warning: nil,
-      resource: "Test",
       parameters: [],
       path: "/waldorf",
       requests: [],
@@ -212,11 +206,10 @@ defmodule BlueBird.Test.GeneratorTest do
 
   defp empty_route("POST", "/statler/:id") do
     %BlueBird.Route{description: nil,
-      group: "Statler",
+      group: "Test",
       method: "POST",
       note: nil,
       warning: nil,
-      resource: "Single Statler",
       parameters: [%Parameter{description: "ID", name: "id", type: "int"}],
       path: "/statler/:id",
       requests: [],

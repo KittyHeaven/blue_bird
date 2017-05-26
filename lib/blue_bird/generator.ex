@@ -43,7 +43,6 @@ defmodule BlueBird.Generator do
               }
             ],
             path: "/users/:id",
-            resource: "User",
             title: "Get single user",
             warning: nil,
             requests: [
@@ -191,10 +190,9 @@ defmodule BlueBird.Generator do
 
     try do
       route_docs = controller
-        |> apply(:api_doc, [method, route.path])
-        |> set_default(route, :group)
-        |> set_default(route, :resource)
-        |> Map.put(:requests, route_requests)
+      |> apply(:api_doc, [method, route.path])
+      |> set_group(route)
+      |> Map.put(:requests, route_requests)
 
       {:ok, route_docs}
     rescue
@@ -207,21 +205,13 @@ defmodule BlueBird.Generator do
     end
   end
 
-  @spec set_default(Route.t, %PhxRoute{}, atom) :: Route.t
-  defp set_default(%{group: nil} = route_docs, route, :group) do
-    set_default_to_controller(route_docs, route, :group)
-  end
-  defp set_default(%{resource: nil} = route_docs, route, :resource) do
-    set_default_to_controller(route_docs, route, :resource)
-  end
-  defp set_default(route_docs, _, _), do: route_docs
-
-  @spec set_default_to_controller(Route.t, %PhxRoute{}, atom) :: Route.t
-  defp set_default_to_controller(route_docs, route, key) do
+  @spec set_group(Route.t, %PhxRoute{}) :: Route.t
+  defp set_group(%{group: nil} = route_docs, route) do
     value = route.plug
     |> Naming.resource_name("Controller")
     |> Naming.humanize
 
-    Map.put(route_docs, key, value)
+    Map.put(route_docs, :group, value)
   end
+  defp set_group(route_docs, _), do: route_docs
 end

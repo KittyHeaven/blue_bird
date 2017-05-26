@@ -1,4 +1,4 @@
-defmodule BlueBird.Test.Support.Examples.NamedResourceAndAction do
+defmodule BlueBird.Test.Support.Examples.NamedAction do
   @moduledoc false
 
   alias BlueBird.{ApiDoc, Request, Response, Route}
@@ -11,8 +11,7 @@ defmodule BlueBird.Test.Support.Examples.NamedResourceAndAction do
         %Route{
           method: "GET",
           title: "Ride",
-          resource: "Pony",
-          path: "/route-with-resource-and-action-name",
+          path: "/route-with-action-name",
           requests: [%Request{
             response: %Response{
               status: 204,
@@ -33,7 +32,7 @@ defmodule BlueBird.Test.Support.Examples.NamedResourceAndAction do
     # Heavenly API
 
 
-    ## Resource Pony [/route-with-resource-and-action-name]
+    ## /route-with-action-name
 
     ### Ride [GET]
 
