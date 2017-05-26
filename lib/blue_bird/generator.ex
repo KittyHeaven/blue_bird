@@ -21,9 +21,6 @@ defmodule BlueBird.Generator do
   @default_title "API Documentation"
   @default_description "Enter API description in mix.exs - blue_bird_info"
 
-  # todo: make more functions public for easier testing
-  # todo: define api_doc struct?
-
   @doc """
   Generates a map from logged connections and the `api/3` macros.
 
@@ -219,7 +216,6 @@ defmodule BlueBird.Generator do
   end
   defp set_default(route_docs, _, _), do: route_docs
 
-  # todo: fix this (Route.t)
   @spec set_default_to_controller(Route.t, %PhxRoute{}, atom) :: Route.t
   defp set_default_to_controller(route_docs, route, key) do
     value = route.plug
