@@ -1,5 +1,4 @@
 defmodule BlueBird.Controller do
-  # todo type specs
   @moduledoc """
   Defines the `api/3` macro used to add documentation to api routes.
 
@@ -105,7 +104,9 @@ defmodule BlueBird.Controller do
     |> String.upcase
   end
 
-  #@spec extract_metadata({:__block__, [any], [any]} | nil) :: [{atom, any}]
+  @spec extract_metadata(
+    {:__block__, any, {String.t, any, [any]}} | {String.t, any, [any]} | nil) ::
+    [{atom, any}]
   defp extract_metadata({:__block__, _, data}) do
     Enum.map(data, fn({name, _line, params}) ->
       {name, params}
@@ -114,6 +115,7 @@ defmodule BlueBird.Controller do
   defp extract_metadata({key, _, data}), do: [{key, data}]
   defp extract_metadata(nil), do: []
 
+  @spec extract_option([{atom, any}], atom) :: nil | any
   defp extract_option(metadata, key) do
     values = metadata |> Keyword.get(key)
 
@@ -125,6 +127,7 @@ defmodule BlueBird.Controller do
     end
   end
 
+  @spec extract_parameters([{atom, any}]) :: [Parameter.t]
   defp extract_parameters(metadata) do
     metadata
     |> Keyword.get_values(:parameter)
