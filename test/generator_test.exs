@@ -16,8 +16,6 @@ defmodule BlueBird.Test.GeneratorTest do
     ConnLogger.reset()
   end
 
-  # todo: define router/controller per test for better separation of concerns?
-
   def find_route(api_docs, method, path) do
     Enum.find(api_docs.routes, fn(x) ->
       x.path == path && x.method == method
