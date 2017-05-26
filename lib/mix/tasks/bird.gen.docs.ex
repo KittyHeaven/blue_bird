@@ -1,8 +1,10 @@
 defmodule Mix.Tasks.Bird.Gen.Docs do
   @moduledoc """
-  Generates HTML API Docs from api.apib using aglio
+  Generates HTML API Docs from api.apib using aglio.
+
+  This task uses [Aglio](https://github.com/danielgtaylor/aglio) to render the
+  file. To install, run `npm install aglio -g`.
   """
-  # todo: documentation
   use Mix.Task
 
   alias Mix.Project
