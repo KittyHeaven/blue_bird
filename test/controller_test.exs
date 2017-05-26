@@ -136,8 +136,5 @@ defmodule BlueBird.Test.ControllerTest do
         end
       end
     end
-
-    # todo: test "raises error if path parameters are missing"
-    # todo: test "raises error if parameter is not in path"
   end
 end
