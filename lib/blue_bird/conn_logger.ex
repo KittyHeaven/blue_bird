@@ -28,8 +28,6 @@ defmodule BlueBird.ConnLogger do
   """
   use GenServer
 
-  # todo: type specs
-
   @doc """
   Starts the GenServer.
 
@@ -40,6 +38,7 @@ defmodule BlueBird.ConnLogger do
       iex> start_link()
       {:ok, #PID<0.80.0>}
   """
+  @spec start_link :: {:ok, pid}
   def start_link do
     {:ok, _} = GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
@@ -54,6 +53,7 @@ defmodule BlueBird.ConnLogger do
       iex> get_conns()
       [%Plug.Conn{}, ...]
   """
+  @spec get_conns :: [%Plug.Conn{}]
   def get_conns, do: GenServer.call(__MODULE__, :get_conns)
 
   @doc """
@@ -64,6 +64,7 @@ defmodule BlueBird.ConnLogger do
       iex> reset()
       :ok
   """
+  @spec reset :: :ok
   def reset, do: GenServer.call(__MODULE__, :reset)
 
   @doc """
@@ -74,11 +75,17 @@ defmodule BlueBird.ConnLogger do
       iex> save(conn)
       :ok
   """
+  @spec save(%Plug.Conn{}) :: :ok
   def save(conn), do: GenServer.cast(__MODULE__, {:save, conn})
 
   ## Callbacks
 
+  @doc false
   def handle_call(:get_conns, _from, conns), do: {:reply, conns, conns}
+
+  @doc false
   def handle_call(:reset, _from, _conns), do: {:reply, [], []}
+
+  @doc false
   def handle_cast({:save, conn}, conns), do: {:noreply, conns ++ [conn]}
 end
