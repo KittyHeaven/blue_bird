@@ -5,14 +5,19 @@ defmodule BlueBird.Test.ControllerTest do
 
   @parameter_error """
                    Wrong number of arguments for parameter option.
-                   Expected either two or three arguments. Correct usage:
+                   Expected either two or three arguments: The name, the type
+                   and an optional keyword list. Correct usage:
 
                        parameter :name, :type
 
                        or
 
-                       parameter :name, :type, "description"
+                       parameter :name, :type, [description: "description",
+                                                required: true]
                    """
+
+  @parameter_type_error "The parameter macro expects a keyword list as " <>
+                        "third argument."
 
   defmodule Controller do
     use BlueBird.Controller
@@ -32,12 +37,12 @@ defmodule BlueBird.Test.ControllerTest do
     api :DELETE, "/users/:id" do end
 
     api :PUT, "/users/:id" do
-      parameter :id, :integer
+      parameter :id, :integer, [default: "brownie", required: true]
     end
 
     api :PATCH, "/users/:id/:pid/:topic" do
-      parameter :id, :integer, "the user ID"
-      parameter :pid, :integer, "the post ID"
+      parameter :id, :integer, [description: "the user ID"]
+      parameter :pid, :integer, [description: "the post ID"]
       parameter :topic, :string
     end
   end
@@ -77,7 +82,9 @@ defmodule BlueBird.Test.ControllerTest do
         %Parameter{
           description: nil,
           name: "id",
-          type: "integer"
+          type: "integer",
+          default: "brownie",
+          required: true
         }
       ]
     end
@@ -129,6 +136,16 @@ defmodule BlueBird.Test.ControllerTest do
 
         api :POST, "/toomany" do
           parameter "spam", :int, "eggs", "foo"
+        end
+      end
+    end
+
+    test "raises error if third parameter argument has wrong type" do
+      assert_compile_time_raise ArgumentError, @parameter_type_error, fn ->
+        import BlueBird.Controller
+
+        api :POST, "/wrongtype" do
+          parameter "this", "is", "wrong"
         end
       end
     end

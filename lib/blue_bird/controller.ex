@@ -128,32 +128,39 @@ defmodule BlueBird.Controller do
     |> Enum.reverse
   end
 
-  @spec param_to_map([String.t | atom | nil]) :: Parameter.t
-  defp param_to_map([name, type, description]) do
-    %Parameter{
-      name: to_string(name),
-      type: to_string(type),
-      description: description
-    }
+  @spec param_to_map(String.t) :: Parameter.t
+  defp param_to_map([name, type, options]) when is_list(options) do
+    Map.merge(
+      %Parameter{
+        name: to_string(name),
+        type: to_string(type)
+      },
+      Enum.into(options, %{})
+    )
   end
   defp param_to_map([name, type]) do
     %Parameter{
       name: to_string(name),
-      type: to_string(type),
-      description: nil
+      type: to_string(type)
     }
+  end
+  defp param_to_map([_, _, _]) do
+    raise ArgumentError, "The parameter macro expects a keyword list as " <>
+                         "third argument."
   end
   defp param_to_map(_) do
     raise ArgumentError,
           """
           Wrong number of arguments for parameter option.
-          Expected either two or three arguments. Correct usage:
+          Expected either two or three arguments: The name, the type
+          and an optional keyword list. Correct usage:
 
               parameter :name, :type
 
               or
 
-              parameter :name, :type, "description"
+              parameter :name, :type, [description: "description",
+                                       required: true]
           """
   end
 end

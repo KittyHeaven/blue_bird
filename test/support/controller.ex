@@ -24,7 +24,7 @@ defmodule BlueBird.Test.Support.TestController do
 
   api :POST, "/statler/:id" do
     title "Post Statler"
-    parameter :id, :int, "ID"
+    parameter :id, :int, [description: "ID"]
   end
 
   def catchall(conn, params) do
