@@ -141,7 +141,6 @@ defmodule BlueBird.Writer.Blueprint do
     requests
     |> Enum.sort_by(&(&1.response.status))
     |> Enum.map_join("\n", &process_request(&1))
-    #|> indent(4)
   end
   defp process_requests(_), do: ""
 
