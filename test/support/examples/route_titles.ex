@@ -1,4 +1,4 @@
-defmodule BlueBird.Test.Support.Examples.NamedAction do
+defmodule BlueBird.Test.Support.Examples.RouteTitles do
   @moduledoc false
 
   alias BlueBird.{ApiDoc, Request, Response, Route}
@@ -11,7 +11,20 @@ defmodule BlueBird.Test.Support.Examples.NamedAction do
         %Route{
           method: "GET",
           title: "Ride",
-          path: "/route-with-action-name",
+          path: "/route-with-title",
+          group: "Pony",
+          requests: [%Request{
+            response: %Response{
+              status: 204,
+              headers: [],
+              body: ""
+            }
+          }]
+        },
+        %Route{
+          method: "GET",
+          path: "/route-without-title",
+          group: "Pony",
           requests: [%Request{
             response: %Response{
               status: 204,
@@ -32,9 +45,15 @@ defmodule BlueBird.Test.Support.Examples.NamedAction do
     # Heavenly API
 
 
-    ## /route-with-action-name
+    # Group Pony
 
-    ### Ride [GET]
+    ## Ride [GET /route-with-title]
+
+    + Request
+
+    + Response 204
+
+    ## GET /route-without-title
 
     + Request
 

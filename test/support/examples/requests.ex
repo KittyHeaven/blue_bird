@@ -37,9 +37,7 @@ defmodule BlueBird.Test.Support.Examples.Requests do
     # Heavenly API
 
 
-    ## /request-headers
-
-    ### GET
+    ## GET /request-headers
 
     + Request
 

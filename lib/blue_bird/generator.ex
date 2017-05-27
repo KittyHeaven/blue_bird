@@ -206,12 +206,11 @@ defmodule BlueBird.Generator do
   end
 
   @spec set_group(Route.t, %PhxRoute{}) :: Route.t
-  defp set_group(%{group: nil} = route_docs, route) do
+  defp set_group(route_docs, route) do
     value = route.plug
     |> Naming.resource_name("Controller")
     |> Naming.humanize
 
     Map.put(route_docs, :group, value)
   end
-  defp set_group(route_docs, _), do: route_docs
 end

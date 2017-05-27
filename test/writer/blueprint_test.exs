@@ -50,32 +50,36 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
   end
 
   describe "process_route/1" do
-    test "prints header with method, title, and description" do
+    test "prints header with method, title, path, and description" do
       result = process_route(%Route{
         method: "POST",
+        path: "/path",
         title: "Get all",
         description: "This route gets all things.\n\nReally."
       })
 
       assert result == """
-                       ### Get all [POST]
+                       ## Get all [POST /path]
                        This route gets all things.
 
                        Really.
                        """
     end
 
-    test "prints header with method, without title and description" do
-      assert process_route(%Route{method: "POST"}) == "### POST\n"
+    test "prints header with method and path, without title and description" do
+      result = process_route(%Route{method: "POST", path: "/path"})
+
+      assert result == "## POST /path\n"
     end
 
     test "prints note" do
       result = process_route(%Route{
         method: "POST",
+        path: "/path",
         note: "This is important.\n\nVery."
       })
       assert result == """
-                      ### POST
+                      ## POST /path
 
                       ::: note
                       This is important.
@@ -88,10 +92,11 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
     test "prints warning" do
       result = process_route(%Route{
         method: "POST",
+        path: "/path",
         warning: "This is important.\n\nEven more."
       })
       assert result == """
-                      ### POST
+                      ## POST /path
 
                       ::: warning
                       This is important.
@@ -104,6 +109,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
     test "prints parameters" do
       result = process_route(%Route{
         method: "POST",
+        path: "/path",
         parameters: [
           %Parameter{
             name: "one",
@@ -119,7 +125,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       })
 
       assert result == """
-                       ### POST
+                       ## POST /path
 
                            + Parameters
 
@@ -132,6 +138,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
     test "prints requests" do
       result = process_route(%Route{
         method: "POST",
+        path: "/path",
         requests: [
           %Request{
             method: POST,
@@ -166,7 +173,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       })
 
       assert result == """
-                       ### POST
+                       ## POST /path
 
                        + Request (application/json)
 
@@ -195,8 +202,8 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
     end
   end
 
-  describe "group_routes_by_key/2" do
-    test "groups routes by group" do
+  describe "group_routes/2" do
+    test "groups routes" do
       route_a = %Route{group: "a"}
       route_b1 = %Route{group: "b"}
       route_b2 = %Route{group: "b"}
@@ -210,68 +217,39 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
         {"c", [route_c]}
       ]
 
-      assert group_routes_by_key(routes, :group) == expected
+      assert group_routes(routes, :group) == expected
     end
   end
 
-  describe "group_routes/1 " do
-    test "groups routes by group and path" do
-      route_a = %Route{group: "Group A", path: "/one"}
-      route_b1 = %Route{group: "Group B", path: "/two"}
-      route_b2 = %Route{group: "Group B", path: "/one"}
-      route_b3 = %Route{group: "Group B", path: "/two"}
-      route_c = %Route{group: "Group C", path: "/one"}
+  describe "examples: " do
+    alias BlueBird.Test.Support.Examples
 
-      routes = [route_b1, route_a, route_b3, route_c, route_b2]
-
-      expected = [
-          {
-            "Group A", [
-              {"/one", [route_a]}
-            ]
-          },
-          {
-            "Group B", [
-              {"/one", [route_b2]},
-              {"/two", [route_b1, route_b3]}
-            ]
-          },
-          {
-            "Group C", [
-              {"/one", [route_c]}
-            ]
-          }
-        ]
-
-        assert group_routes(routes) == expected
-    end
-  end
-
-  describe "Example" do
-    alias BlueBird.Test.Support.Examples.Grouping
-    alias BlueBird.Test.Support.Examples.NamedAction
-    alias BlueBird.Test.Support.Examples.Requests
-    alias BlueBird.Test.Support.Examples.Responses
-    alias BlueBird.Test.Support.Examples.Simple
-
-    test "Simple is rendered correctly" do
-      assert generate_output(Simple.api_doc) == Simple.output
+    def test_example(module) do
+      assert generate_output(module.api_doc) == module.output
     end
 
-    test "NamedAction is rendered correctly" do
-      assert generate_output(NamedAction.api_doc) == NamedAction.output
+    test "'Grouping' is rendered correctly" do
+      test_example(Examples.Grouping)
     end
 
-    test "Grouping is rendered correctly" do
-      assert generate_output(Grouping.api_doc) == Grouping.output
+    test "'NotesWarnings' is rendered correctly" do
+      test_example(Examples.NotesWarnings)
     end
 
-    test "Responses is rendered correctly" do
-      assert generate_output(Responses.api_doc) == Responses.output
+    test "'RouteTitles' is rendered correctly" do
+      test_example(Examples.RouteTitles)
     end
 
-    test "Requests is rendered correctly" do
-      assert generate_output(Requests.api_doc) == Requests.output
+    test "'Requests' is rendered correctly" do
+      test_example(Examples.Requests)
+    end
+
+    test "'Responses' is rendered correctly" do
+      test_example(Examples.Responses)
+    end
+
+    test "'Simple' is rendered correctly" do
+      test_example(Examples.Simple)
     end
   end
 end

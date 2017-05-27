@@ -11,28 +11,53 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
       routes: [
         %Route{
           method: "GET",
-          path: "/dogs",
-          group: "Pets"
+          path: "/cats/:id",
+          group: "Cats"
+        },
+        %Route{
+          method: "POST",
+          path: "/cats",
+          group: "Cats"
+        },
+        %Route{
+          method: "GET",
+          path: "/airplanes/:id",
+          group: "Airplanes"
+        },
+        %Route{
+          method: "DELETE",
+          path: "/cats/:id",
+          group: "Cats"
+        },
+        %Route{
+          method: "DELETE",
+          path: "/airplanes/:id",
+          group: "Airplanes"
         },
         %Route{
           method: "GET",
           path: "/cats",
-          group: "Pets"
+          group: "Cats"
         },
         %Route{
           method: "GET",
           path: "/airplanes",
-          group: "Vehicles"
+          group: "Airplanes"
         },
         %Route{
           method: "POST",
-          path: "/dogs",
-          group: "Pets"
+          path: "/airplanes",
+          group: "Airplanes"
         },
         %Route{
-          method: "POST",
-          path: "/carriages",
-          group: "Vehicles"
+          method: "PUT",
+          path: "/cats/:id",
+          group: "Cats"
+        },
+        %Route{
+          method: "PUT",
+          path: "/airplanes/:id",
+          group: "Airplanes"
         }
       ]
     }
@@ -49,27 +74,29 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
     It may be helpful. Or not.
 
 
-    # Group Pets
+    # Group Airplanes
 
-    ## /cats
+    ## GET /airplanes
 
-    ### GET
+    ## POST /airplanes
 
-    ## /dogs
+    ## DELETE /airplanes/:id
 
-    ### GET
+    ## GET /airplanes/:id
 
-    ### POST
+    ## PUT /airplanes/:id
 
-    # Group Vehicles
+    # Group Cats
 
-    ## /airplanes
+    ## GET /cats
 
-    ### GET
+    ## POST /cats
 
-    ## /carriages
+    ## DELETE /cats/:id
 
-    ### POST
+    ## GET /cats/:id
+
+    ## PUT /cats/:id
     """
   end
 end

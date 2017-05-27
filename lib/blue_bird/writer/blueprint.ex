@@ -52,7 +52,7 @@ defmodule BlueBird.Writer.Blueprint do
   @spec generate_output(ApiDoc.t) :: String.t
   def generate_output(api_docs) do
     doc_routes = api_docs.routes
-    |> group_routes
+    |> group_routes(:group)
     |> process_groups
 
     print_metadata(api_docs.host) <> "\n"
@@ -63,21 +63,9 @@ defmodule BlueBird.Writer.Blueprint do
   ## Grouping
 
   @doc false
-  @spec group_routes([Route.t]) ::
-    [{String.t, [{String.t, String.t, [Route.t]}]}]
-  def group_routes(routes) do
+  @spec group_routes([Route.t], atom) :: [{String.t, [Route.t]}]
+  def group_routes(routes, key) do
     routes
-    |> group_routes_by_key(:group)
-    |> Enum.map(fn({group, routes}) ->
-         {group, group_routes_by_key(routes, :path)}
-       end)
-  end
-
-  @doc false
-  @spec group_routes_by_key([Route.t], atom) :: [{String.t, [Route.t]}]
-  def group_routes_by_key(routes, key) do
-    routes
-    |> Enum.sort_by(fn(route) -> Map.get(route, key) end)
     |> Enum.group_by(fn(route) -> Map.get(route, key) end)
     |> Enum.to_list()
   end
@@ -90,25 +78,11 @@ defmodule BlueBird.Writer.Blueprint do
     Enum.map_join(groups, "\n", &process_group(&1))
   end
 
-  @spec process_group({String.t | nil, [Resource.t]}) :: String.t
-  defp process_group({nil, resources}) do
-    process_resources(resources)
-  end
-  defp process_group({group_name, resources}) do
+  @spec process_group({String.t | nil, [Route.t]}) :: String.t
+  defp process_group({nil, routes}), do: process_routes(routes)
+  defp process_group({group_name, routes}) do
     "# Group #{group_name}\n\n"
-    <> process_resources(resources)
-  end
-
-  ## Resources
-
-  @spec process_resources([Resource.t]) :: String.t
-  defp process_resources(resources) do
-    Enum.map_join(resources, "\n", &process_resource(&1))
-  end
-
-  @spec process_resource({String.t, [Resource.t]}) :: String.t
-  defp process_resource({path, requests}) do
-    "## #{path}\n\n" <> process_routes(requests)
+    <> process_routes(routes)
   end
 
   ## Routes
@@ -117,7 +91,7 @@ defmodule BlueBird.Writer.Blueprint do
   @spec process_routes([Route.t]) :: String.t
   def process_routes(routes) do
     routes
-    |> Enum.sort_by(&(&1.method))
+    |> Enum.sort_by(&({&1.path, &1.method}))
     |> Enum.map_join("\n", fn(route) ->
       process_route(route)
     end)
@@ -211,13 +185,15 @@ defmodule BlueBird.Writer.Blueprint do
 
   @spec print_route_definition(Route.t) :: String.t
   defp print_route_definition(route) do
-    print_route_header(route.method, route.title)
+    print_route_header(route.method, route.path, route.title)
     <> print_route_description(route.description)
   end
 
-  @spec print_route_header(String.t, String.t | nil) :: String.t
-  defp print_route_header(method, nil), do: "### #{method}\n"
-  defp print_route_header(method, title), do: "### #{title} [#{method}]\n"
+  @spec print_route_header(String.t, String.t, String.t | nil) :: String.t
+  defp print_route_header(method, path, nil), do: "## #{method} #{path}\n"
+  defp print_route_header(method, path, title) do
+    "## #{title} [#{method} #{path}]\n"
+  end
 
   @spec print_route_description(String.t | nil) :: String.t
   defp print_route_description(nil), do: ""
