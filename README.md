@@ -174,7 +174,8 @@ The configuration options can be setup in `config.exs`:
 config :blue_bird,
   docs_path: "priv/static/docs",
   theme: "triple",
-  router: YourApp.Web.Router
+  router: YourApp.Web.Router,
+  ignore_headers: ["not-wanted"]
 ```
 
 **Options**:
@@ -186,6 +187,9 @@ config :blue_bird,
   [Aglio renderer](https://github.com/danielgtaylor/aglio).
 * `router`: Router of your application, in Phoenix 1.3 it will be
   YourAppName.Web.Router.
+* `ignore_headers`: If you want certain headers to be hidden from the
+  documentation, you can add a list of header keys here. This can be helpful
+  if you serve your application behind a proxy.
 
 ### `blue_bird_info()`:
 
@@ -204,6 +208,9 @@ route from the `phoenix router` (including params) exactly. Run
 `mix phoenix.routes` (or `mix phx.routes` if Phoenix >= 1.3) and compare the
 routes.
 
+Also note that only routes that use the api pipeline will be added to the
+documentation.
+
 ### Body Parameter are not rendered
 
 BlueBird reads the `body_params` from `%Plug.Conn{}`. These map is only set if
@@ -220,8 +227,8 @@ post build_conn(), "/", "my=data"
 
 - [ ] `raise error` when route that is used in the annotation is not available
       in the `phoenix router`
-- [ ] Document that routes have to be part of the api pipeline for now
 - [ ] Make the pipelines configurable
-- [ ] Document `BlueBird.Controller`
-- [ ] Document `BlueBird.BlueprintWriter`
-- [x] Document `Mix.Tasks.Bird.Gen.Docs`
+- [ ] Warn if path parameters or query parameters are missing
+- [ ] Warn if parameter is not among path or query parameters
+- [ ] Define `ApiGroup` macro (`ApiGroup` "name" "description")
+
