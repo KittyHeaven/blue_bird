@@ -1,4 +1,4 @@
-# Blue Bird
+# BlueBird
 
 [![Build Status](https://travis-ci.org/rhazdon/blue_bird.svg?branch=master)](https://travis-ci.org/rhazdon/blue_bird)
 [![Hex.pm](https://img.shields.io/hexpm/v/blue_bird.svg)](https://hex.pm/packages/blue_bird)
@@ -25,7 +25,8 @@ end
 $ mix deps.get
 ```
 
-3. In `test/test_helper.exs`, start the BlueBird logger with `BlueBird.start()` and configure the results formatter as follows:
+3. In `test/test_helper.exs`, start the BlueBird logger with `BlueBird.start()`
+and configure the results formatter as follows:
 
 ``` elixir
 BlueBird.start()
@@ -48,7 +49,10 @@ def blue_bird_info do
   [
     host: "https://api.acme.com",
     title: "ACME API",
-    description: "API requires authorization. All requests must have valid `auth_token`"
+    description: """
+                 API requires authorization. All requests must have valid
+                 `auth_token`.
+                 """
   ]
 end
 ```
@@ -73,7 +77,7 @@ $ npm install aglio -g
 
 ## Usage
 
-#### Controller
+### Controller
 
 * Use the `api\3` macro to generate the specification for the controller action:
 
@@ -82,13 +86,11 @@ defmodule App.CommentController do
   use App.Web, :controller
 
   api :GET, "/posts/:post_id/comments" do
-    group "Post Comments" # If not provided, it will be guessed from the controller name (resource name)
-    resource "Comment"
-    title "List comments for specific docs"
-    description "Optional description that will be displayed in the documentation"
-    note "Optional note that will be displayed in the documentation"
-    warn "Optional warn that will be displayed in the documentation"
-    parameter :post_id, :integer, "Post ID or slug"
+    title "List comments"
+    description "Optional description"
+    note "Optional note"
+    warn "Optional warning"
+    parameter :post_id, :integer, [description: "Post ID or slug"]
   end
   def index(conn, %{"post_id" => post_id}) do
     ...
@@ -96,21 +98,7 @@ defmodule App.CommentController do
 end
 ```
 
-**API specification options**:
-
-* `method`: HTTP method - GET, POST, PUT, PATCH, DELETE
-* `url`: URL route from `phoenix router`
-* `group`: Documentation routes are grouped by a group name (defaults to resource name guessed from the controller name)
-* `resource`: Documentation routes are grouped by the resource (defaults to resource name guessed from the controller name)
-* `title`: Title (can use Blueprint format)
-* `description`: Description (optional, can use Blueprint format)
-* `note`: Note (optional, can use Blueprint format)
-* `warn`: Note (optional, can use Blueprint format)
-* `parameter`: `name, type, description`
-  * with description - `parameter :post_id, :integer, "Post ID"`
-  * without description - `parameter :post_id, :integer`
-
-#### Router
+### Router
 
 Currently, BlueBird expects that the routes are piped through `:api`.
 
@@ -145,34 +133,36 @@ defmodule TestRouter do
 end
 ```
 
-#### Tests
+### Tests
 
-* In your tests select which requests and responses you want to include in the documentation by saving `conn` to `BlueBird.ConnLogger`:
+In your tests, select which requests and responses you want to include in the
+documentation by saving `conn` to `BlueBird.ConnLogger`:
 
 ``` elixir
-  test "list comments for post", %{conn: conn} do
-    insert_posts_with_comments()
+test "list comments for post", %{conn: conn} do
+  insert_posts_with_comments()
 
-    conn = conn
-    |> get(comments_path(conn, :index)
-    |> BlueBird.ConnLogger.save()
+  conn = conn
+  |> get(comments_path(conn, :index)
+  |> BlueBird.ConnLogger.save()
 
-    assert json_response(conn, 200)
-  end
+  assert json_response(conn, 200)
+end
 ```
 
-After you run your tests, documentation in the API Blueprint format will be saved to `api.apib`
+After you run your tests, documentation will be written to `api.apib` in the
+[API Blueprint](https://apiblueprint.org) format.
 
 ```
 $ mix test
 ```
 
-To generate the documentation in a HTML format use the convenience wrapper tothe [Aglio renderer](https://github.com/danielgtaylor/aglio)
+To generate an HTML documentation, use the convenience wrapper to the
+[Aglio renderer](https://github.com/danielgtaylor/aglio).
 
 ```
 $ mix bird.gen.docs
 ```
-
 
 ## Configuration
 
@@ -189,10 +179,13 @@ config :blue_bird,
 
 **Options**:
 
-* `docs_path`: Specify the path where the documentation will be generated. If you want to serve the documentation directly from the `phoenix` you can specify `priv/static/docs`.
-* `theme`: HTML theme is generated using the [Aglio renderer](https://github.com/danielgtaylor/aglio).
-* `router`: Router of your application, in Phoenix 1.3 it will be YourAppName.Web.Router
-
+* `docs_path`: Specify the path where the documentation will be generated. If
+  you want to serve the documentation directly from the `phoenix`, you can
+  specify `priv/static/docs`.
+* `theme`: HTML theme is generated using the
+  [Aglio renderer](https://github.com/danielgtaylor/aglio).
+* `router`: Router of your application, in Phoenix 1.3 it will be
+  YourAppName.Web.Router.
 
 ### `blue_bird_info()`:
 
@@ -202,28 +195,31 @@ config :blue_bird,
 * `title`: Documentation title (can use Blueprint format).
 * `description`: Documentation description (can use Blueprint format).
 
-
 ## FAQ
 
 ### Route is not generated after adding API annotations to the controller
 
-Please make sure that the route you are using in the annotation matches the route from the `phoenix router` (including params) exactly. Run `mix phoenix.routes` (or `mix phx.routes` if Phoenix >= 1.3) and compare the routes.
+Please make sure that the route you are using in the annotation matches the
+route from the `phoenix router` (including params) exactly. Run
+`mix phoenix.routes` (or `mix phx.routes` if Phoenix >= 1.3) and compare the
+routes.
 
 ### Body Parameter are not rendered
 
-BlueBird reads the `body_params` from `%Plug.Conn{}`. These map is only set if `body_params` is a binary.
+BlueBird reads the `body_params` from `%Plug.Conn{}`. These map is only set if
+`body_params` is a binary.
 
-Example:
+#### Example
 
 ``` elixir
 post build_conn(), "/", Poison.encode! %{my: data}  # recommended
 post build_conn(), "/", "my=data"
 ```
 
-
 ## Todo
 
-- [ ] `raise error` when route that is used in the annotation is not available in the `phoenix router`
+- [ ] `raise error` when route that is used in the annotation is not available
+      in the `phoenix router`
 - [ ] Document that routes have to be part of the api pipeline for now
 - [ ] Make the pipelines configurable
 - [ ] Document `BlueBird.Controller`

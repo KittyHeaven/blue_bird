@@ -43,27 +43,33 @@ defmodule BlueBird.Controller do
   @doc """
   Describes a route.
 
+  ```
+  api <method> <url> do ... end
+  ```
+
   - `method`: HTTP method (GET, POST, PUT etc.)
   - `url`: Route as defined in the Phoenix router
   - `title` (optional): Title for the action
   - `description` (optional): Description of the route
   - `note` (optional): Note
   - `warning` (optional): Warning
-  - `parameter`: used for path and query parameters
-      - `name`
-      - `type`
-      - `description`
+  - `parameter` (optional): Used for path and query parameters. It takes the
+    name as defined in the route and the type. The third parameter is an
+    optional keyword list with additional options. See `BlueBird.Parameter`
+    for descriptions of the available options.
 
   ## Example
 
-      api :GET, "user/:id/posts/:pid" do
+      api :GET, "user/:id/posts/:slug" do
         title "Show post"
-        description "Show post by ID"
+        description "Show post by user ID and post slug"
         note "You should really know this."
         warning "Please don't ever do this."
-        parameter :id, :integer, "Post ID"
-        parameter :name, :string
-      end
+        parameter :id, :integer
+        parameter :slug, :string, [
+          description: "This is the post slug.",
+          example: "whatever"
+        ]
   """
   defmacro api(method, path, do: block) do
     method_str    = method_to_string(method)

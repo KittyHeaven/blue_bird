@@ -22,7 +22,7 @@ defmodule BlueBird.Parameter do
       set it to `"enum[<type>]"` (replace `<type>` with the actual type).
     - `members` (optional): List of possible values for the enum type.
     - `description` (optional): A description of the parameter.
-    - `additional_description` (optional): Even more room for descriptions.
+    - `additional_desc` (optional): Even more room for descriptions.
     - `default` (optional): The default value for this parameter.
     - `example` (optional): An example value for the parameter.
     - `optional` (optional): Set to true to mark the parameter as optional.

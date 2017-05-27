@@ -54,7 +54,7 @@ defmodule BlueBird.Generator do
                 path_params: %{"id" => 1},
                 query_params: %{},
                 response: %BlueBird.Response{
-                  body: "{\"status\":\"ok\"}",
+                  body: "{\\"status\\":\\"ok\\"}",
                   headers: [{"content-type", "application/json"}],
                   status: 200
                 }
