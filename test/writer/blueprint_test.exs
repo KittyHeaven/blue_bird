@@ -3,6 +3,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
   import BlueBird.Writer.Blueprint
 
+  alias BlueBird.Test.Support.Examples
   alias BlueBird.{Parameter, Request, Response, Route}
 
   test "print_metadata/1 prints metadata" do
@@ -222,8 +223,6 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
   end
 
   describe "examples: " do
-    alias BlueBird.Test.Support.Examples
-
     def test_example(module) do
       assert generate_output(module.api_doc) == module.output
     end
@@ -250,6 +249,17 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
     test "'Simple' is rendered correctly" do
       test_example(Examples.Simple)
+    end
+  end
+
+  describe "run/1" do
+    test "writes api doc to file" do
+      run(Examples.Grouping.api_doc)
+
+      path = Path.join(["priv", "static", "docs", "api.apib"])
+
+      assert {:ok, file} = File.read(path)
+      assert file == Examples.Grouping.output
     end
   end
 end
