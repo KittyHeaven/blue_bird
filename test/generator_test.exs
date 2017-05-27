@@ -37,9 +37,13 @@ defmodule BlueBird.Test.GeneratorTest do
       Logger.disable(self())
 
       assert Generator.run() == %BlueBird.ApiDoc{
-        description: "Enter API description in mix.exs - blue_bird_info",
-        host: "http://localhost",
-        title: "API Documentation",
+        description:
+          """
+          And the pilot likewise, in the strict sense of the term, is a
+          ruler of sailors and not a mere sailor.
+          """,
+        host: "https://justiceisusefulwhenmoneyisuseless.fake",
+        title: "Fancy API",
         routes: [
           empty_route("GET", "/waldorf"),
           empty_route("POST", "/waldorf"),

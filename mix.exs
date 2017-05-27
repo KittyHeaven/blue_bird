@@ -96,4 +96,15 @@ defmodule BlueBird.Mixfile do
       files: ~w(lib) ++ ~w(mix.exs README.md LICENSE)
     ]
   end
+
+  def blue_bird_info do
+    [
+      host: "https://justiceisusefulwhenmoneyisuseless.fake",
+      title: "Fancy API",
+      description: """
+                   And the pilot likewise, in the strict sense of the term, is a
+                   ruler of sailors and not a mere sailor.
+                   """
+    ]
+  end
 end

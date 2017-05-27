@@ -104,7 +104,7 @@ defmodule BlueBird.Generator do
   @spec blue_bird_info :: [String.t]
   defp blue_bird_info do
     case function_exported?(Project.get, :blue_bird_info, 0) do
-      true  -> Project.get.blue_bird_info() # todo: is this testable?
+      true  -> Project.get.blue_bird_info()
       false -> []
     end
   end
