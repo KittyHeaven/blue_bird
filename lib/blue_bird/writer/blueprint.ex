@@ -149,6 +149,7 @@ defmodule BlueBird.Writer.Blueprint do
     [
       "+ Request#{get_content_type(request.headers)}\n",
       request.headers |> filter_content_type() |> print_headers() |> indent(4),
+      request.body_params |> print_body_params |> indent(4),
       request.response |> process_response()
     ] |> Enum.reject(&(&1 == "")) |> Enum.join("\n")
   end
@@ -282,6 +283,10 @@ defmodule BlueBird.Writer.Blueprint do
   defp print_body(body) do
     "+ Body\n\n" <> (body |> indent(4)) <> "\n"
   end
+
+  @spec print_body_params(map) :: String.t
+  defp print_body_params(body) when body == %{}, do: ""
+  defp print_body_params(body), do: body |> Poison.encode!() |> print_body()
 
   @spec indent(String.t, integer) :: String.t
   defp indent(str, count) do

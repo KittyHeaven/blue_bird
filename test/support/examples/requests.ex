@@ -14,6 +14,7 @@ defmodule BlueBird.Test.Support.Examples.Requests do
           requests: [%Request{
             method: "GET",
             path: "/plain-with-line-breaks",
+            body_params: %{"peter" => "paul", "mary" => "peter"},
             headers: [
               {"accept", "application/json"},
               {"authorization", "I'm a star"}
@@ -45,6 +46,10 @@ defmodule BlueBird.Test.Support.Examples.Requests do
 
             accept: application/json
             authorization: I'm a star
+
+        + Body
+
+            {"peter":"paul","mary":"peter"}
 
     + Response 204
     """

@@ -139,7 +139,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
     test "prints requests" do
       result = process_route(%Route{
         method: "POST",
-        path: "/path",
+        path: "/users/:id/pets",
         requests: [
           %Request{
             method: POST,
@@ -159,7 +159,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
           },
           %Request{
             method: POST,
-            path: "/pets",
+            path: "/users/:id/pets",
             headers: [{"accept", "application/json"}],
             path_params: %{},
             body_params: %{},
@@ -174,13 +174,17 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       })
 
       assert result == """
-                       ## POST /path{?q}
+                       ## POST /users/{id}/pets{?q}
 
                        + Request (application/json)
 
                            + Headers
 
                                accept: application/json
+
+                           + Body
+
+                               {"name":"George","kind":"dog"}
 
                        + Response 201 (application/json)
 
