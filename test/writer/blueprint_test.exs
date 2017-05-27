@@ -128,11 +128,11 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       assert result == """
                        ## POST /path
 
-                           + Parameters
+                       + Parameters
 
-                               + one: (int, required) - The first parameter.
+                           + one (int, required) - The first parameter.
 
-                               + two: (string, required) - The second parameter.
+                           + two (string, required) - The second parameter.
                        """
     end
 
@@ -174,7 +174,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       })
 
       assert result == """
-                       ## POST /path
+                       ## POST /path{?q}
 
                        + Request (application/json)
 
@@ -233,6 +233,10 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
     test "'NotesWarnings' is rendered correctly" do
       test_example(Examples.NotesWarnings)
+    end
+
+    test "'Parameters' is rendered correctly" do
+      test_example(Examples.Parameters)
     end
 
     test "'RouteTitles' is rendered correctly" do

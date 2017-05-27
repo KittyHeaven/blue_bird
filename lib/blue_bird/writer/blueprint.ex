@@ -104,7 +104,7 @@ defmodule BlueBird.Writer.Blueprint do
       print_route_definition(route),
       print_note(route.note),
       print_warning(route.warning),
-      route.parameters |> process_parameters() |> indent(4),
+      route.parameters |> process_parameters(),
       route.requests |> process_requests()
     ] |> Enum.reject(&(&1 == "")) |> Enum.join("\n")
   end
@@ -126,8 +126,12 @@ defmodule BlueBird.Writer.Blueprint do
 
   @spec process_parameter(Parameter.t) :: String.t
   defp process_parameter(param) do
-    "+ #{param.name}: (#{param.type}, required) "
-    <> "- #{param.description}\n"
+    [
+      print_param_main(param),
+      param.additional_desc |> print_param_additional_desc() |> indent(4),
+      param.default |> print_param_default() |> indent(4),
+      param.members |> print_param_members() |> indent(4)
+    ] |> Enum.reject(&(&1 == "")) |> Enum.join("\n")
   end
 
   ## Requests
@@ -185,7 +189,9 @@ defmodule BlueBird.Writer.Blueprint do
 
   @spec print_route_definition(Route.t) :: String.t
   defp print_route_definition(route) do
-    print_route_header(route.method, route.path, route.title)
+    path = display_path(route)
+
+    print_route_header(route.method, path, route.title)
     <> print_route_description(route.description)
   end
 
@@ -198,6 +204,42 @@ defmodule BlueBird.Writer.Blueprint do
   @spec print_route_description(String.t | nil) :: String.t
   defp print_route_description(nil), do: ""
   defp print_route_description(description), do: "#{description}\n"
+
+  ## Parameters
+
+  @spec print_param_main(Param.t) :: String.t
+  defp print_param_main(param) do
+    "+ #{param.name}#{example_to_string(param.example)} " <>
+    "(#{param.type}, #{optional_to_str(param.optional)})"
+    <> description_to_str(param.description) <> "\n"
+  end
+
+  @spec example_to_string(String.t | nil) :: String.t
+  defp example_to_string(nil), do: ""
+  defp example_to_string(example), do: ": #{example}"
+
+  @spec optional_to_str(boolean) :: String.t
+  defp optional_to_str(true), do: "optional"
+  defp optional_to_str(false), do: "required"
+
+  @spec description_to_str(String.t | nil) :: String.t
+  defp description_to_str(nil), do: ""
+  defp description_to_str(description), do: " - #{description}"
+
+  @spec print_param_additional_desc(String.t | nil) :: String.t
+  defp print_param_additional_desc(nil), do: ""
+  defp print_param_additional_desc(desc), do: "#{desc}\n"
+
+  @spec print_param_default(String.t | nil) :: String.t
+  defp print_param_default(nil), do: ""
+  defp print_param_default(default), do: "+ Default: #{default}\n"
+
+  @spec print_param_members([String.t] | nil) :: String.t
+  defp print_param_members([_|_] = members) do
+    "+ Members\n" <>
+    (members |> Enum.map_join(&("+ #{&1}\n")) |> indent(4))
+  end
+  defp print_param_members(_), do: ""
 
   ## Notes and Warnings
 
@@ -253,5 +295,39 @@ defmodule BlueBird.Writer.Blueprint do
           end
        end)
     |> Enum.join("\n")
+  end
+
+  @spec display_path(Route.t) :: String.t
+  defp display_path(route) do
+    route.path
+    |> replace_path_params()
+    |> add_query_params(route.requests)
+  end
+
+  @spec replace_path_params(String.t) :: String.t
+  defp replace_path_params(path) do
+    ~r/:([\w]+)(\/|\z)/
+    |> Regex.replace(path, "{\\1}/")
+    |> String.trim_trailing("/")
+  end
+
+  @spec add_query_params(String.t, [Request.t]) :: String.t
+  defp add_query_params(path, []), do: path
+  defp add_query_params(path, requests) do
+    case get_query_param_str(requests) do
+      "" -> path
+      params -> "#{path}{?#{params}}"
+    end
+  end
+
+  @spec get_query_param_str([Request.t]) :: String.t
+  defp get_query_param_str(requests) do
+    requests
+    |> Enum.reduce(%{}, fn(request, params) ->
+         Map.merge(params, request.query_params)
+       end)
+    |> Map.keys
+    |> Enum.map(&(to_string(&1)))
+    |> Enum.join(",")
   end
 end
