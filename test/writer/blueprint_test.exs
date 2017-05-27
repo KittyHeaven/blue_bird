@@ -254,12 +254,14 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
   describe "run/1" do
     test "writes api doc to file" do
-      run(Examples.Grouping.api_doc)
+      alias BlueBird.Test.Support.Examples.Grouping
+
+      run(Grouping.api_doc)
 
       path = Path.join(["priv", "static", "docs", "api.apib"])
 
       assert {:ok, file} = File.read(path)
-      assert file == Examples.Grouping.output
+      assert file == Grouping.output
     end
   end
 end
