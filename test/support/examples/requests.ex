@@ -5,7 +5,7 @@ defmodule BlueBird.Test.Support.Examples.Requests do
 
   def api_doc do
     %ApiDoc{
-      title: "Heavenly API",
+      title: "Trendy API",
       host: "https://youarguelikeaninformer.socrates",
       routes: [
         %Route{
@@ -34,7 +34,7 @@ defmodule BlueBird.Test.Support.Examples.Requests do
     FORMAT: 1A
     HOST: https://youarguelikeaninformer.socrates
 
-    # Heavenly API
+    # Trendy API
 
 
     ## GET /request-headers

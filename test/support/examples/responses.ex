@@ -5,7 +5,7 @@ defmodule BlueBird.Test.Support.Examples.Responses do
 
   def api_doc do
     %ApiDoc{
-      title: "Heavenly API",
+      title: "Lavish API",
       host: "https://youarguelikeaninformer.socrates",
       routes: [
         %Route{
@@ -63,7 +63,7 @@ defmodule BlueBird.Test.Support.Examples.Responses do
     FORMAT: 1A
     HOST: https://youarguelikeaninformer.socrates
 
-    # Heavenly API
+    # Lavish API
 
 
     ## GET /multiple-headers

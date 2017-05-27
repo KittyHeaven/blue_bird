@@ -13,7 +13,7 @@ defmodule BlueBird.Test.ControllerTest do
                        or
 
                        parameter :name, :type, [description: "description",
-                                                required: true]
+                                                optional: true]
                    """
 
   @parameter_type_error "The parameter macro expects a keyword list as " <>
@@ -37,7 +37,7 @@ defmodule BlueBird.Test.ControllerTest do
     api :DELETE, "/users/:id" do end
 
     api :PUT, "/users/:id" do
-      parameter :id, :integer, [default: "brownie", required: true]
+      parameter :id, :integer, [default: "brownie", optional: true]
     end
 
     api :PATCH, "/users/:id/:pid/:topic" do
@@ -84,7 +84,7 @@ defmodule BlueBird.Test.ControllerTest do
           name: "id",
           type: "integer",
           default: "brownie",
-          required: true
+          optional: true
         }
       ]
     end

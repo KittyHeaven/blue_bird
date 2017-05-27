@@ -80,11 +80,11 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
 
     ## POST /airplanes
 
-    ## DELETE /airplanes/:id
+    ## DELETE /airplanes/{id}
 
-    ## GET /airplanes/:id
+    ## GET /airplanes/{id}
 
-    ## PUT /airplanes/:id
+    ## PUT /airplanes/{id}
 
     # Group Cats
 
@@ -92,11 +92,11 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
 
     ## POST /cats
 
-    ## DELETE /cats/:id
+    ## DELETE /cats/{id}
 
-    ## GET /cats/:id
+    ## GET /cats/{id}
 
-    ## PUT /cats/:id
+    ## PUT /cats/{id}
     """
   end
 end
