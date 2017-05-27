@@ -230,5 +230,5 @@ post build_conn(), "/", "my=data"
 - [ ] Make the pipelines configurable
 - [ ] Warn if path parameters or query parameters are missing
 - [ ] Warn if parameter is not among path or query parameters
-- [ ] Define `ApiGroup` macro (`ApiGroup` "name" "description")
+- [ ] Render API group description
 
