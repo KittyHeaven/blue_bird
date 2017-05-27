@@ -79,7 +79,7 @@ $ npm install aglio -g
 
 ### Controller
 
-* Use the `api\3` macro to generate the specification for the controller action:
+Use the `api\3` macro to generate the specification for the controller action.
 
 ``` elixir
 defmodule App.CommentController do
@@ -95,6 +95,18 @@ defmodule App.CommentController do
   def index(conn, %{"post_id" => post_id}) do
     ...
   end
+end
+```
+
+Optionally use the `apigroup` macro to set the resource group name and
+description.
+
+``` elixir
+defmodule App.CommentController do
+  use App.Web, :controller
+
+  apigroup "Blog Comments", "some description"
+  ...
 end
 ```
 
