@@ -22,6 +22,8 @@ defmodule BlueBird.Test.ControllerTest do
   defmodule Controller do
     use BlueBird.Controller
 
+    apigroup "Bobtails", "The Bobtail Resource"
+
     api :GET, "/users" do
       group "Users"
       title "List all users"

@@ -189,7 +189,7 @@ defmodule BlueBird.Generator do
     try do
       route_docs = controller
       |> apply(:api_doc, [method, route.path])
-      |> set_group(route)
+      |> set_group(controller, route)
       |> Map.put(:requests, route_requests)
 
       {:ok, route_docs}
@@ -203,12 +203,19 @@ defmodule BlueBird.Generator do
     end
   end
 
-  @spec set_group(Route.t, %PhxRoute{}) :: Route.t
-  defp set_group(route_docs, route) do
-    value = route.plug
-    |> Naming.resource_name("Controller")
-    |> Naming.humanize
+  @spec set_group(Route.t, module, PhxRoute.t) :: Route.t
+  defp set_group(route_docs, controller, route) do
+    group_name = get_group_name(controller, route)
+    Map.put(route_docs, :group, group_name)
+  end
 
-    Map.put(route_docs, :group, value)
+  @spec get_group_name(module, PhxRoute.t) :: String.t
+  defp get_group_name(controller, route) do
+    apply(controller, :api_group, []).name
+  rescue
+    UndefinedFunctionError ->
+      route.plug
+      |> Naming.resource_name("Controller")
+      |> Naming.humanize
   end
 end

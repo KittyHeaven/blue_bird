@@ -1,14 +1,17 @@
 defmodule BlueBird.Controller do
   @moduledoc """
-  Defines the `api/3` macro used to add documentation to api routes.
+  Defines macros used to add documentation to api routes.
 
   ## Usage
 
-  Use `api/3` in your controllers.
+  Use `api/3` in your controllers. Optionally add the `apigroup/1` or
+  `apigroup/2` macro to your controllers.
 
       defmodule MyApp.Web.UserController do
         use BlueBird.Controller
         alias MyApp.Accounts
+
+        apigroup "Customers", "These are the routes that we'll talk about."
 
         api :GET, "users" do
           title "List users"
@@ -24,19 +27,19 @@ defmodule BlueBird.Controller do
   can also add it to the `web.ex` controller function to make it available
   in every controller.
 
-    def controller do
-      quote do
-        ...
-        use BlueBird.Controller
-        ...
+      def controller do
+        quote do
+          ...
+          use BlueBird.Controller
+          ...
+        end
       end
-    end
   """
   alias BlueBird.{Parameter, Route}
 
   defmacro __using__(_) do
     quote do
-      import BlueBird.Controller, only: [api: 3]
+      import BlueBird.Controller, only: [api: 3, apigroup: 1, apigroup: 2]
     end
   end
 
@@ -91,6 +94,37 @@ defmodule BlueBird.Controller do
           warning:      unquote(warning),
           path:         unquote(path),
           parameters:   unquote(Macro.escape(parameters))
+        }
+      end
+    end
+  end
+
+  @doc """
+  Defines the name and an optional description for a resource group.
+
+  BlueBird defines groups by the controller. By default, the group name
+  is taken from the controller name. If you want to specify a different name,
+  you can use this macro. You can also add a group description as a second
+  parameter.
+
+  ## Example
+
+      apigroup "resource group name"
+
+  or
+
+      apigroup "resource group name", "description"
+  """
+  defmacro apigroup(name, description \\ "") do
+    name = to_string(name)
+    description = to_string(description)
+
+    quote do
+      @spec api_group :: %{name: String.t, description: String.t}
+      def api_group do
+        %{
+          name: unquote(name),
+          description: unquote(description)
         }
       end
     end
