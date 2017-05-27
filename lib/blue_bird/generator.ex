@@ -127,8 +127,6 @@ defmodule BlueBird.Generator do
   defp requests(test_conns, routes) do
     Enum.reduce(test_conns, [], fn(conn, list) ->
       case find_route(routes, conn.request_path) do
-        # todo: nil impossible? or possible if plug catches
-        # Phoenix.Router.NoRouteError? how to test?
         nil   -> list
         route -> [request_map(route, conn) | list]
       end
