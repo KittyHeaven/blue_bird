@@ -128,7 +128,7 @@ defmodule BlueBird.Controller do
     |> Enum.reverse
   end
 
-  @spec param_to_map(String.t) :: Parameter.t
+  @spec param_to_map([any]) :: Parameter.t
   defp param_to_map([name, type, options]) when is_list(options) do
     Map.merge(
       %Parameter{
@@ -160,7 +160,7 @@ defmodule BlueBird.Controller do
               or
 
               parameter :name, :type, [description: "description",
-                                       required: true]
+                                       optional: true]
           """
   end
 end
