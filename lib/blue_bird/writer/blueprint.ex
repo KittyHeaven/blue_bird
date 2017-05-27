@@ -277,8 +277,8 @@ defmodule BlueBird.Writer.Blueprint do
 
   ## Body
 
-  @spec print_body(String.t) :: String.t
-  defp print_body(""), do: ""
+  @spec print_body(String.t | nil) :: String.t
+  defp print_body(body) when is_nil(body) or body == "", do: ""
   defp print_body(body) do
     "+ Body\n\n" <> (body |> indent(4)) <> "\n"
   end

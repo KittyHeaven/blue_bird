@@ -5,7 +5,7 @@ defmodule BlueBird.Response do
   defstruct [
     status: 0,
     headers: [],
-    body: ""
+    body: nil
   ]
 
   @typedoc """
@@ -14,6 +14,6 @@ defmodule BlueBird.Response do
   @type t :: %BlueBird.Response{
     status: integer,
     headers: [{String.t, String.t}],
-    body: String.t
+    body: String.t | nil
   }
 end
