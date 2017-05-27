@@ -131,7 +131,7 @@ defmodule BlueBird.Writer.Blueprint do
       print_note(route.note),
       print_warning(route.warning),
       route.parameters |> process_parameters() |> indent(4),
-      route.requests |> process_requests() |> indent(4)
+      route.requests |> process_requests()
     ] |> Enum.reject(&(&1 == "")) |> Enum.join("\n")
   end
 
@@ -167,27 +167,34 @@ defmodule BlueBird.Writer.Blueprint do
   end
   defp process_requests(_), do: ""
 
-  # todo: add media (content) type, remove from headers
   @spec process_request(Request.t) :: String.t
   defp process_request(request) do
     [
-      "+ Request\n",
-      request.headers |> print_headers() |> indent(4),
+      "+ Request#{get_content_type(request.headers)}\n",
+      request.headers |> filter_content_type() |> print_headers() |> indent(4),
       request.response |> process_response()
     ] |> Enum.reject(&(&1 == "")) |> Enum.join("\n")
   end
 
   ## Responses
 
-  # todo: add media (content) type, remove from headers
   @spec process_response(Response.t) :: String.t
   defp process_response(response) do
     [
-      "+ Response #{response.status}\n",
-      response.headers |> print_headers() |> indent(4),
+      "+ Response #{response.status}#{get_content_type(response.headers)}\n",
+      response.headers |> filter_content_type() |> print_headers() |> indent(4),
       response.body |> print_body() |> indent(4)
     ] |> Enum.reject(&(&1 == "")) |> Enum.join("\n")
   end
+
+  @spec get_content_type([{String.t, String.t}]) :: String.t
+  defp get_content_type([_|_] = headers) do
+    case Enum.find(headers, fn({key, _}) -> key == "content-type" end) do
+      {_, value} -> " (#{value})"
+      _ -> ""
+    end
+  end
+  defp get_content_type(_), do: ""
 
   ## Frontmatter
 
@@ -244,6 +251,12 @@ defmodule BlueBird.Writer.Blueprint do
   defp print_header({key, value}) do
     "#{key}: #{value}\n"
   end
+
+  @spec filter_content_type([{String.t, String.t}]) :: [String.t]
+  defp filter_content_type([_|_] = headers) do
+    Enum.reject(headers, fn({key, _}) -> key == "content-type" end)
+  end
+  defp filter_content_type(_), do: []
 
   ## Body
 

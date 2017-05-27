@@ -47,7 +47,8 @@ defmodule BlueBird.Test.Support.Examples.Responses do
               status: 200,
               headers: [
                 {"content-type", "text/plain"},
-                {"favorite-color", "greenish"}
+                {"favorite-color", "greenish"},
+                {"age-in-dog-years", "8"}
               ],
               body: "Multiple headers."
             }
@@ -69,54 +70,46 @@ defmodule BlueBird.Test.Support.Examples.Responses do
 
     ### GET
 
-        + Request
+    + Request
 
-        + Response 200
+    + Response 200 (text/plain)
 
-            + Headers
+        + Headers
 
-                content-type: text/plain
-                favorite-color: greenish
+            favorite-color: greenish
+            age-in-dog-years: 8
 
-            + Body
+        + Body
 
-                Multiple headers.
+            Multiple headers.
 
     ## /plain-response
 
     ### GET
 
-        + Request
+    + Request
 
-        + Response 200
+    + Response 200 (text/plain)
 
-            + Headers
+        + Body
 
-                content-type: text/plain
-
-            + Body
-
-                Plain response.
+            Plain response.
 
     ## /plain-with-line-breaks
 
     ### GET
 
-        + Request
+    + Request
 
-        + Response 200
+    + Response 200 (text/plain)
 
-            + Headers
+        + Body
 
-                content-type: text/plain
+            I think that I shall never see
+            A poem lovely as a tree
 
-            + Body
-
-                I think that I shall never see
-                A poem lovely as a tree
-
-                A tree whose hungry mouth is prest
-                Against the earth's sweet flowing breast
+            A tree whose hungry mouth is prest
+            Against the earth's sweet flowing breast
     """
   end
 end

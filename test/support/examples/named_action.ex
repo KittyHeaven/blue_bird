@@ -36,9 +36,9 @@ defmodule BlueBird.Test.Support.Examples.NamedAction do
 
     ### Ride [GET]
 
-        + Request
+    + Request
 
-        + Response 204
+    + Response 204
     """
   end
 end

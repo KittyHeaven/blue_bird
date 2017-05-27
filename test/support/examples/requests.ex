@@ -41,14 +41,14 @@ defmodule BlueBird.Test.Support.Examples.Requests do
 
     ### GET
 
-        + Request
+    + Request
 
-            + Headers
+        + Headers
 
-                accept: application/json
-                authorization: I'm a star
+            accept: application/json
+            authorization: I'm a star
 
-        + Response 204
+    + Response 204
     """
   end
 end

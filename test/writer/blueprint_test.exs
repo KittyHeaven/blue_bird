@@ -25,25 +25,25 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
     end
 
     test "prints single header" do
-      headers = [{"content-type", "application/json"}]
+      headers = [{"accept", "application/json"}]
       assert print_headers(headers) ==
         """
         + Headers
 
-            content-type: application/json
+            accept: application/json
         """
     end
 
     test "prints multiple headers" do
       headers = [
-        {"content-type", "application/json"},
+        {"accept", "application/json"},
         {"authorization", "I'm a bear"}
       ]
       assert print_headers(headers) ==
         """
         + Headers
 
-            content-type: application/json
+            accept: application/json
             authorization: I'm a bear
         """
     end
@@ -168,38 +168,29 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       assert result == """
                        ### POST
 
-                           + Request
+                       + Request (application/json)
 
-                               + Headers
+                           + Headers
 
-                                   accept: application/json
-                                   content-type: application/json
+                               accept: application/json
 
-                           + Response 201
+                       + Response 201 (application/json)
 
-                               + Headers
+                           + Body
 
-                                   content-type: application/json
+                               {"name":"George","kind":"dog"}
 
-                               + Body
+                       + Request
 
-                                   {"name":"George","kind":"dog"}
+                           + Headers
 
-                           + Request
+                               accept: application/json
 
-                               + Headers
+                       + Response 200 (application/json)
 
-                                   accept: application/json
+                           + Body
 
-                           + Response 200
-
-                               + Headers
-
-                                   content-type: application/json
-
-                               + Body
-
-                                   [{"name":"George","kind":"dog"}]
+                               [{"name":"George","kind":"dog"}]
                        """
     end
   end

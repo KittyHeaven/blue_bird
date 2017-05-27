@@ -58,25 +58,21 @@ defmodule BlueBird.Test.Support.Examples.Simple do
 
     ### GET
 
-        + Request
+    + Request
 
-        + Response 204
+    + Response 204
 
     ## /route-with-simple-response
 
     ### GET
 
-        + Request
+    + Request
 
-        + Response 200
+    + Response 200 (text/plain)
 
-            + Headers
+        + Body
 
-                content-type: text/plain
-
-            + Body
-
-                Simple response.
+            Simple response.
 
     ## /route-without-info-or-response
 
