@@ -1,7 +1,7 @@
 defmodule BlueBird.Mixfile do
   use Mix.Project
 
-  @version "0.2.0"
+  @version "0.3.0"
   @url "https://github.com/rhazdon/blue_bird"
   @maintainers [
     "Djordje Atlialp",
