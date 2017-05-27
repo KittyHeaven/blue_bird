@@ -4,7 +4,8 @@ defmodule BlueBird.Mixfile do
   @version "0.2.0"
   @url "https://github.com/rhazdon/blue_bird"
   @maintainers [
-    "Djordje Atlialp"
+    "Djordje Atlialp",
+    "Mathias Polligkeit"
   ]
 
   def project do
