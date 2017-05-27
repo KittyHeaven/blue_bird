@@ -45,11 +45,14 @@ defmodule BlueBird.Controller do
 
   - `method`: HTTP method (GET, POST, PUT etc.)
   - `url`: Route as defined in the Phoenix router
-  - `title`: Title for the action
-  - `description`: Description of the route
-  - `note`: Note
-  - `warning`: Warning
-  - `parameter`: `name, type, description (optional)`
+  - `title` (optional): Title for the action
+  - `description` (optional): Description of the route
+  - `note` (optional): Note
+  - `warning` (optional): Warning
+  - `parameter`: used for path and query parameters
+      - `name`
+      - `type`
+      - `description`
 
   ## Example
 
