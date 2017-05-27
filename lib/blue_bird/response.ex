@@ -2,7 +2,11 @@ defmodule BlueBird.Response do
   @moduledoc """
   Defines the `Response` struct.
   """
-  defstruct [:status, :headers, :body]
+  defstruct [
+    status: 0,
+    headers: [],
+    body: ""
+  ]
 
   @typedoc """
   Type that represents the Response struct.

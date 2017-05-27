@@ -5,11 +5,11 @@ defmodule BlueBird.Request do
   defstruct [
     :method,
     :path,
-    :headers,
-    :path_params,
-    :body_params,
-    :query_params,
-    :response
+    :response,
+    path_params: %{},
+    body_params: %{},
+    headers: [],
+    query_params: %{}
   ]
 
   @typedoc """

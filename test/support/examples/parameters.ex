@@ -1,7 +1,7 @@
 defmodule BlueBird.Test.Support.Examples.Parameters do
   @moduledoc false
 
-  alias BlueBird.{ApiDoc, Parameter, Route}
+  alias BlueBird.{ApiDoc, Parameter, Request, Response, Route}
 
   def api_doc do
     %ApiDoc{
@@ -11,7 +11,35 @@ defmodule BlueBird.Test.Support.Examples.Parameters do
         %Route{
           method: "GET",
           path: "/pastry/:id/:type",
-          requests: [],
+          requests: [
+            %Request{
+              method: "GET",
+              path: "/pastry/:id/:type",
+              headers: [],
+              query_params: %{
+                query: "walnuts"
+              },
+              response: %Response{
+                status: 204,
+                headers: [],
+                body: ""
+              }
+            },
+            %Request{
+              method: "GET",
+              path: "/pastry/:id/:type",
+              headers: [],
+              query_params: %{
+                query: "raspberries",
+                page: "2"
+              },
+              response: %Response{
+                status: 204,
+                headers: [],
+                body: ""
+              }
+            }
+          ],
           parameters: [
             %Parameter{
               name: "id",
@@ -28,8 +56,7 @@ defmodule BlueBird.Test.Support.Examples.Parameters do
               optional: true,
               example: "flaky",
               description: "The type of the pastry.",
-              additional_description:
-                "All the common pastry types are supported.",
+              additional_desc: "All the common pastry types are supported.",
               default: "puff",
               members: [
                 "flaky",
@@ -55,7 +82,7 @@ defmodule BlueBird.Test.Support.Examples.Parameters do
     # Pastry API
 
 
-    ## GET /pastry/{id}/{type}
+    ## GET /pastry/{id}/{type}{?page,query}
 
     + Parameters
 
@@ -77,6 +104,14 @@ defmodule BlueBird.Test.Support.Examples.Parameters do
                 + puff
                 + phyllo
                 + hot water crust
+
+    + Request
+
+    + Response 204
+
+    + Request
+
+    + Response 204
     """
   end
 end

@@ -3,14 +3,14 @@ defmodule BlueBird.Parameter do
   Defines the `Parameter` struct.
   """
   defstruct [
-    :name,
-    :type,
-    :description,
-    :additional_description,
-    :default,
-    :example,
-    :required,
-    :members
+    name: "",
+    type: "",
+    description: nil,
+    additional_desc: nil,
+    default: nil,
+    example: nil,
+    optional: false,
+    members: []
   ]
 
   @typedoc """
@@ -25,17 +25,17 @@ defmodule BlueBird.Parameter do
     - `additional_description` (optional): Even more room for descriptions.
     - `default` (optional): The default value for this parameter.
     - `example` (optional): An example value for the parameter.
-    - `required` (optional): Can be `true` or `false`. Will display `required`
+    - `optional` (optional): Set to true to mark the parameter as optional.
       or `optional`. Will not display anything if not set.
   """
   @type t :: %BlueBird.Parameter{
     name: String.t,
     type: String.t,
-    members: [String.t] | nil,
+    members: [String.t],
     description: String.t | nil,
-    additional_description: String.t | nil,
+    additional_desc: String.t | nil,
     default: String.t | nil,
     example: String.t | nil,
-    required: boolean | nil,
+    optional: boolean,
   }
 end

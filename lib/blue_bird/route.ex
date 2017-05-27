@@ -7,24 +7,24 @@ defmodule BlueBird.Route do
     :title,
     :description,
     :note,
-    :method,
     :warning,
-    :path,
-    :parameters,
-    :requests
+    method: "",
+    path: "",
+    parameters: [],
+    requests: []
   ]
 
   @typedoc """
   Type that represents the Route struct.
   """
   @type t :: %BlueBird.Route{
+    method: String.t,
+    path: String.t,
     group: String.t | nil,
     title: String.t | nil,
     description: String.t | nil,
     note: String.t | nil,
-    method: String.t,
     warning: String.t | nil,
-    path: String.t,
     parameters: [BlueBird.Parameter.t],
     requests: [BlueBird.Request.t]
   }
