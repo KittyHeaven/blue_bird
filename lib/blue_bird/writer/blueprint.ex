@@ -7,6 +7,7 @@ defmodule BlueBird.Writer.Blueprint do
   alias Mix.Project
 
   @docs_path Application.get_env(:blue_bird, :docs_path, "docs")
+  @ignore_headers Application.get_env(:blue_bird, :ignore_headers, [])
 
   @doc """
   Writes a `BlueBird.ApiDoc{}` struct to file.
@@ -148,7 +149,7 @@ defmodule BlueBird.Writer.Blueprint do
   defp process_request(request) do
     [
       "+ Request#{get_content_type(request.headers)}\n",
-      request.headers |> filter_content_type() |> print_headers() |> indent(4),
+      request.headers |> filter_headers() |> print_headers() |> indent(4),
       request.body_params |> print_body_params |> indent(4),
       request.response |> process_response()
     ] |> Enum.reject(&(&1 == "")) |> Enum.join("\n")
@@ -160,7 +161,7 @@ defmodule BlueBird.Writer.Blueprint do
   defp process_response(response) do
     [
       "+ Response #{response.status}#{get_content_type(response.headers)}\n",
-      response.headers |> filter_content_type() |> print_headers() |> indent(4),
+      response.headers |> filter_headers() |> print_headers() |> indent(4),
       response.body |> print_body() |> indent(4)
     ] |> Enum.reject(&(&1 == "")) |> Enum.join("\n")
   end
@@ -270,11 +271,13 @@ defmodule BlueBird.Writer.Blueprint do
     "#{key}: #{value}\n"
   end
 
-  @spec filter_content_type([{String.t, String.t}]) :: [String.t]
-  defp filter_content_type([_|_] = headers) do
-    Enum.reject(headers, fn({key, _}) -> key == "content-type" end)
+  @spec filter_headers([{String.t, String.t}]) :: [String.t]
+  defp filter_headers([_|_] = headers) do
+    Enum.reject(headers, fn({key, _}) ->
+      key == "content-type" || Enum.member?(@ignore_headers, key)
+    end)
   end
-  defp filter_content_type(_), do: []
+  defp filter_headers(_), do: []
 
   ## Body
 

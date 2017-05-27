@@ -17,7 +17,8 @@ defmodule BlueBird.Test.Support.Examples.Requests do
             body_params: %{"peter" => "paul", "mary" => "peter"},
             headers: [
               {"accept", "application/json"},
-              {"authorization", "I'm a star"}
+              {"authorization", "I'm a star"},
+              {"ignore-me", "nothing to see here"}
             ],
             response: %Response{
               status: 204,
