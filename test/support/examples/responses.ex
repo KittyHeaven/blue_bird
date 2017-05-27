@@ -53,7 +53,7 @@ defmodule BlueBird.Test.Support.Examples.Responses do
               body: "Multiple headers."
             }
           }]
-        },
+        }
       ]
     }
   end
