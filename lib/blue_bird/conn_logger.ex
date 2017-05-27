@@ -53,7 +53,7 @@ defmodule BlueBird.ConnLogger do
       iex> get_conns()
       [%Plug.Conn{}, ...]
   """
-  @spec get_conns :: [%Plug.Conn{}]
+  @spec get_conns :: [Plug.Conn.t]
   def get_conns, do: GenServer.call(__MODULE__, :get_conns)
 
   @doc """
@@ -75,7 +75,7 @@ defmodule BlueBird.ConnLogger do
       iex> save(conn)
       :ok
   """
-  @spec save(%Plug.Conn{}) :: :ok
+  @spec save(Plug.Conn.t) :: :ok
   def save(conn), do: GenServer.cast(__MODULE__, {:save, conn})
 
   ## Callbacks

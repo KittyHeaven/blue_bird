@@ -123,7 +123,7 @@ defmodule BlueBird.Generator do
     Enum.filter(routes, &Enum.member?(&1.pipe_through, :api))
   end
 
-  @spec requests([%Plug.Conn{}], [%PhxRoute{}]) :: [%Plug.Conn{}]
+  @spec requests([Plug.Conn.t], [%PhxRoute{}]) :: [Plug.Conn.t]
   defp requests(test_conns, routes) do
     Enum.reduce(test_conns, [], fn(conn, list) ->
       case find_route(routes, conn.request_path) do
