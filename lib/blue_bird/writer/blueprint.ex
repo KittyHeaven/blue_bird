@@ -141,18 +141,27 @@ defmodule BlueBird.Writer.Blueprint do
   defp process_requests([_|_] = requests) do
     requests
     |> Enum.sort_by(&(&1.response.status))
-    |> Enum.map_join("\n", &process_request(&1))
+    |> Enum.map_join("\n", &process_conn(&1))
   end
   defp process_requests(_), do: ""
 
-  @spec process_request(Request.t) :: String.t
+  @spec process_conn(Request.t) :: String.t
+  defp process_conn(request) do
+    process_request(request) <> (request.response |> process_response())
+  end
+
   defp process_request(request) do
-    [
-      "+ Request#{get_content_type(request.headers)}\n",
+    content_type = get_content_type(request.headers)
+    req_str = [
       request.headers |> filter_headers() |> print_headers() |> indent(4),
       request.body_params |> print_body_params |> indent(4),
-      request.response |> process_response()
     ] |> Enum.reject(&(&1 == "")) |> Enum.join("\n")
+
+    if req_str == "" && content_type == "" do
+      ""
+    else
+      "+ Request#{content_type}\n\n" <> req_str <> "\n"
+    end
   end
 
   ## Responses

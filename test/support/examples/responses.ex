@@ -81,8 +81,6 @@ defmodule BlueBird.Test.Support.Examples.Responses do
 
     ## GET /plain-response
 
-    + Request
-
     + Response 200 (text/plain)
 
         + Body
@@ -90,8 +88,6 @@ defmodule BlueBird.Test.Support.Examples.Responses do
                 Plain response.
 
     ## GET /plain-with-line-breaks
-
-    + Request
 
     + Response 200 (text/plain)
 

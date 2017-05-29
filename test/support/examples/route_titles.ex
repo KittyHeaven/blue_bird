@@ -49,13 +49,9 @@ defmodule BlueBird.Test.Support.Examples.RouteTitles do
 
     ## Ride [GET /route-with-title]
 
-    + Request
-
     + Response 204
 
     ## GET /route-without-title
-
-    + Request
 
     + Response 204
     """

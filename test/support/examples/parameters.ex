@@ -105,11 +105,7 @@ defmodule BlueBird.Test.Support.Examples.Parameters do
                 + phyllo
                 + hot water crust
 
-    + Request
-
     + Response 204
-
-    + Request
 
     + Response 204
     """
