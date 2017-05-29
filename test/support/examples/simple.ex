@@ -68,7 +68,7 @@ defmodule BlueBird.Test.Support.Examples.Simple do
 
         + Body
 
-            Simple response.
+                Simple response.
 
     ## GET /route-without-info-or-response
     """

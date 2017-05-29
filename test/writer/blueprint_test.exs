@@ -31,7 +31,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
         """
         + Headers
 
-            accept: application/json
+                accept: application/json
         """
     end
 
@@ -44,8 +44,8 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
         """
         + Headers
 
-            accept: application/json
-            authorization: I'm a bear
+                accept: application/json
+                authorization: I'm a bear
         """
     end
   end
@@ -180,29 +180,29 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
                            + Headers
 
-                               accept: application/json
+                                   accept: application/json
 
                            + Body
 
-                               {"name":"George","kind":"dog"}
+                                   {"name":"George","kind":"dog"}
 
                        + Response 201 (application/json)
 
                            + Body
 
-                               {"name":"George","kind":"dog"}
+                                   {"name":"George","kind":"dog"}
 
                        + Request
 
                            + Headers
 
-                               accept: application/json
+                                   accept: application/json
 
                        + Response 200 (application/json)
 
                            + Body
 
-                               [{"name":"George","kind":"dog"}]
+                                   [{"name":"George","kind":"dog"}]
                        """
     end
   end

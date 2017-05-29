@@ -68,18 +68,16 @@ defmodule BlueBird.Test.Support.Examples.Responses do
 
     ## GET /multiple-headers
 
-    + Request
-
     + Response 200 (text/plain)
 
         + Headers
 
-            favorite-color: greenish
-            age-in-dog-years: 8
+                favorite-color: greenish
+                age-in-dog-years: 8
 
         + Body
 
-            Multiple headers.
+                Multiple headers.
 
     ## GET /plain-response
 
@@ -89,7 +87,7 @@ defmodule BlueBird.Test.Support.Examples.Responses do
 
         + Body
 
-            Plain response.
+                Plain response.
 
     ## GET /plain-with-line-breaks
 
@@ -99,11 +97,11 @@ defmodule BlueBird.Test.Support.Examples.Responses do
 
         + Body
 
-            I think that I shall never see
-            A poem lovely as a tree
+                I think that I shall never see
+                A poem lovely as a tree
 
-            A tree whose hungry mouth is prest
-            Against the earth's sweet flowing breast
+                A tree whose hungry mouth is prest
+                Against the earth's sweet flowing breast
     """
   end
 end

@@ -45,12 +45,12 @@ defmodule BlueBird.Test.Support.Examples.Requests do
 
         + Headers
 
-            accept: application/json
-            authorization: I'm a star
+                accept: application/json
+                authorization: I'm a star
 
         + Body
 
-            {"peter":"paul","mary":"peter"}
+                {"peter":"paul","mary":"peter"}
 
     + Response 204
     """

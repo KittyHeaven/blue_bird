@@ -262,7 +262,7 @@ defmodule BlueBird.Writer.Blueprint do
   @spec print_headers([{String.t, String.t}]) :: String.t
   def print_headers([_|_] = headers) do
     "+ Headers\n\n"
-    <> (headers |> Enum.map_join(&(print_header(&1))) |> indent(4))
+    <> (headers |> Enum.map_join(&(print_header(&1))) |> indent(8))
   end
   def print_headers(_), do: ""
 
@@ -284,7 +284,7 @@ defmodule BlueBird.Writer.Blueprint do
   @spec print_body(String.t | nil) :: String.t
   defp print_body(body) when is_nil(body) or body == "", do: ""
   defp print_body(body) do
-    "+ Body\n\n" <> (body |> indent(4)) <> "\n"
+    "+ Body\n\n" <> (body |> indent(8)) <> "\n"
   end
 
   @spec print_body_params(map) :: String.t
