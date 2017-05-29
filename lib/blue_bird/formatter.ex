@@ -1,37 +1,38 @@
 defmodule BlueBird.Formatter do
   @moduledoc """
-  `BlueBird.Formatter` has to be another ExUnit formatter.
+  Catches the `:suite_finished` event fired by `ExUnit` and triggers the
+  generation of the api blueprint file.
 
-  This module will catch the `:suite_finished` event (fired by `ExUnit`). Afterwards it will trigger
-  the generation of the api blueprint file.
+  `BlueBird.Formatter` has to be used as an ExUnit formatter.
 
-  Usage: In your `test_helper.exs` add `BlueBird.Formatter` as formatter.
-  It shoud look like: `ExUnit.start(formatters: [ExUnit.CLIFormatter, BlueBird.Formatter])`.
+  ## Usage
+
+  Add `BlueBird.Formatter` as a formatter in `test_helper.exs`. Don't forget
+  to add `BlueBird.start/0` as well.
+
+      BlueBird.start()
+      ExUnit.start(formatters: [ExUnit.CLIFormatter, BlueBird.Formatter])
   """
   use GenEvent
 
+  alias BlueBird.Writer.Blueprint
+  alias BlueBird.Generator
+
   @doc """
-  `init` function of this module.
-  See https://hexdocs.pm/elixir/GenEvent.html#c:init/1.
+  Initializes the handler when it is added to the GenEvent process.
   """
+  @spec init(args :: term) :: {:ok, nil}
   def init(_config), do: {:ok, nil}
 
   @doc """
-  Listen to events.
-
-  If the event is `:suite_finished`, trigger the generation of api blueprint file.
-
-  Ignore  all other events.
+  Event listener that triggers the generation of the api blueprint file on when
+  receiving a `:suite_finished` message by `ExUnit`.
   """
+  @spec handle_event(event :: term, state :: term) ::
+    {:ok, nil} | :remove_handler
   def handle_event({:suite_finished, _run_us, _load_us}, nil) do
-    generate_blue_print_file()
+    Generator.run() |> Blueprint.run()
     :remove_handler
   end
-
   def handle_event(_event, nil), do: {:ok, nil}
-
-  defp generate_blue_print_file do
-    BlueBird.Generator.run()
-    |> BlueBird.BlueprintWriter.run()
-  end
 end

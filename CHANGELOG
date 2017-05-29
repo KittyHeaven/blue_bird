@@ -1,5 +1,36 @@
 # Changelog BlueBird
 
+## v0.3.0
+
+This release is a complete rewrite of the library.
+
+### Breaking Changes
+
+- The parameter field of the `api/3` macro now requires a keyword list as the
+  third parameter.
+- The `group` and `resource` fields of the `api/3` macro have been removed.
+- The group now depends on the controller.
+
+### Non-breaking changes
+
+- No more subsections under groups. Only two levels of headers (group and
+  action).
+
+### New features
+
+- Added `apigroup` macro to define the group name and description per controller
+  (the description isn't rendered yet).
+- Added configuration option to ignore certain headers.
+- Query parameters are now being collected from the requests and added to the
+  documentation. Note that they will only be rendered by aglio if they are
+  present in the `api/3` definition.
+
+### Improvements
+
+- better code quality
+- better test coverage (from 41% to 94%)
+- better documentation
+- numerous fixes
 
 ## v0.2.0
 

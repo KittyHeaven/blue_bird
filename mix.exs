@@ -1,10 +1,11 @@
 defmodule BlueBird.Mixfile do
   use Mix.Project
 
-  @version "0.2.0"
+  @version "0.3.0"
   @url "https://github.com/rhazdon/blue_bird"
   @maintainers [
-    "Djordje Atlialp"
+    "Djordje Atlialp",
+    "Mathias Polligkeit"
   ]
 
   def project do
@@ -17,6 +18,11 @@ defmodule BlueBird.Mixfile do
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
       test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        "coveralls": :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test],
       description: description(),
       package: package(),
       deps: deps(),
@@ -45,14 +51,14 @@ defmodule BlueBird.Mixfile do
   defp deps do
     [
       # Static code analysis
-      {:credo, "~> 0.7.2", only: [:dev, :test]},
+      {:credo, "~> 0.8.0-rc7", only: [:dev, :test]},
       {:dialyxir, "~> 0.5.0", only: [:dev, :test], runtime: false},
 
       # Coverage
-      {:excoveralls, "~> 0.6.3", only: [:dev, :test]},
+      {:excoveralls, "~> 0.6.3", only: [:test]},
 
       # Docs
-      {:ex_doc, ">= 0.15.0", only: :dev},
+      {:ex_doc, ">= 0.16.1", only: :dev},
 
       # Phoenix Framework
       {:phoenix, "~> 1.3.0-rc", optional: true},
@@ -78,7 +84,8 @@ defmodule BlueBird.Mixfile do
 
   defp description do
     """
-    BlueBird generates API documentation from annotations in controllers actions and tests cases.
+    BlueBird generates API documentation from annotations in controllers actions
+    and tests cases.
     """
   end
 
@@ -88,6 +95,17 @@ defmodule BlueBird.Mixfile do
       licenses: ["MIT"],
       links: %{"Github" => @url},
       files: ~w(lib) ++ ~w(mix.exs README.md LICENSE)
+    ]
+  end
+
+  def blue_bird_info do
+    [
+      host: "https://justiceisusefulwhenmoneyisuseless.fake",
+      title: "Fancy API",
+      description: """
+                   And the pilot likewise, in the strict sense of the term, is a
+                   ruler of sailors and not a mere sailor.
+                   """
     ]
   end
 end
