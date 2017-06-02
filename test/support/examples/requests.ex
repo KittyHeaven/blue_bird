@@ -13,7 +13,7 @@ defmodule BlueBird.Test.Support.Examples.Requests do
           path: "/request-headers",
           requests: [%Request{
             method: "GET",
-            path: "/plain-with-line-breaks",
+            path: "/request-headers",
             body_params: %{"peter" => "paul", "mary" => "peter"},
             headers: [
               {"accept", "application/json"},
@@ -39,7 +39,9 @@ defmodule BlueBird.Test.Support.Examples.Requests do
     # Trendy API
 
 
-    ## GET /request-headers
+    ## /request-headers
+
+    ### GET
 
     + Request
 

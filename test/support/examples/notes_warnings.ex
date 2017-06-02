@@ -32,14 +32,18 @@ defmodule BlueBird.Test.Support.Examples.NotesWarnings do
     # Heavenly API
 
 
-    ## GET /route-with-description-and-note
+    ## /route-with-description-and-note
+
+    ### GET
     This is my route. My route is not my enemy.
 
     ::: note
     This is my route.
     :::
 
-    ## GET /route-with-note-and-warning
+    ## /route-with-note-and-warning
+
+    ### GET
 
     ::: note
     This is my route.

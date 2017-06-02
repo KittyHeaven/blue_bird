@@ -66,7 +66,9 @@ defmodule BlueBird.Test.Support.Examples.Responses do
     # Lavish API
 
 
-    ## GET /multiple-headers
+    ## /multiple-headers
+
+    ### GET
 
     + Response 200 (text/plain)
 
@@ -79,7 +81,9 @@ defmodule BlueBird.Test.Support.Examples.Responses do
 
                 Multiple headers.
 
-    ## GET /plain-response
+    ## /plain-response
+
+    ### GET
 
     + Response 200 (text/plain)
 
@@ -87,7 +91,9 @@ defmodule BlueBird.Test.Support.Examples.Responses do
 
                 Plain response.
 
-    ## GET /plain-with-line-breaks
+    ## /plain-with-line-breaks
+
+    ### GET
 
     + Response 200 (text/plain)
 

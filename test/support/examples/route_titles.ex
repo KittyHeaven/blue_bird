@@ -47,11 +47,15 @@ defmodule BlueBird.Test.Support.Examples.RouteTitles do
 
     # Group Pony
 
-    ## Ride [GET /route-with-title]
+    ## /route-with-title
+
+    ### Ride [GET]
 
     + Response 204
 
-    ## GET /route-without-title
+    ## /route-without-title
+
+    ### GET
 
     + Response 204
     """
