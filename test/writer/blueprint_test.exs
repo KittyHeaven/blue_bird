@@ -51,7 +51,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
   end
 
   describe "process_route/1" do
-    test "prints header with method, title, path, and description" do
+    test "prints header with method, title, and description" do
       result = process_route(%Route{
         method: "POST",
         path: "/path",
@@ -60,17 +60,17 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       })
 
       assert result == """
-                       ## Get all [POST /path]
+                       ### Get all [POST]
                        This route gets all things.
 
                        Really.
                        """
     end
 
-    test "prints header with method and path, without title and description" do
+    test "prints header with method, without title and description" do
       result = process_route(%Route{method: "POST", path: "/path"})
 
-      assert result == "## POST /path\n"
+      assert result == "### POST\n"
     end
 
     test "prints note" do
@@ -80,7 +80,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
         note: "This is important.\n\nVery."
       })
       assert result == """
-                      ## POST /path
+                      ### POST
 
                       ::: note
                       This is important.
@@ -97,7 +97,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
         warning: "This is important.\n\nEven more."
       })
       assert result == """
-                      ## POST /path
+                      ### POST
 
                       ::: warning
                       This is important.
@@ -126,7 +126,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       })
 
       assert result == """
-                       ## POST /path
+                       ### POST
 
                        + Parameters
 
@@ -174,7 +174,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       })
 
       assert result == """
-                       ## POST /users/{id}/pets{?q}
+                       ### POST
 
                        + Request (application/json)
 

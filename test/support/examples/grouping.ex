@@ -76,27 +76,35 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
 
     # Group Airplanes
 
-    ## GET /airplanes
+    ## /airplanes
 
-    ## POST /airplanes
+    ### GET
 
-    ## DELETE /airplanes/{id}
+    ### POST
 
-    ## GET /airplanes/{id}
+    ## /airplanes/{id}
 
-    ## PUT /airplanes/{id}
+    ### DELETE
+
+    ### GET
+
+    ### PUT
 
     # Group Cats
 
-    ## GET /cats
+    ## /cats
 
-    ## POST /cats
+    ### GET
 
-    ## DELETE /cats/{id}
+    ### POST
 
-    ## GET /cats/{id}
+    ## /cats/{id}
 
-    ## PUT /cats/{id}
+    ### DELETE
+
+    ### GET
+
+    ### PUT
     """
   end
 end

@@ -54,11 +54,15 @@ defmodule BlueBird.Test.Support.Examples.Simple do
     It may be helpful. Or not.
 
 
-    ## GET /route-with-204-response
+    ## /route-with-204-response
+
+    ### GET
 
     + Response 204
 
-    ## GET /route-with-simple-response
+    ## /route-with-simple-response
+
+    ### GET
 
     + Response 200 (text/plain)
 
@@ -66,7 +70,9 @@ defmodule BlueBird.Test.Support.Examples.Simple do
 
                 Simple response.
 
-    ## GET /route-without-info-or-response
+    ## /route-without-info-or-response
+
+    ### GET
     """
   end
 end

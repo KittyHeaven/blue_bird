@@ -82,7 +82,9 @@ defmodule BlueBird.Test.Support.Examples.Parameters do
     # Pastry API
 
 
-    ## GET /pastry/{id}/{type}{?page,query}
+    ## /pastry/{id}/{type}{?page,query}
+
+    ### GET
 
     + Parameters
 
