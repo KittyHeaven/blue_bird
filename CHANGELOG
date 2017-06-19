@@ -3,6 +3,7 @@
 ## v0.3.2
 
 - add pipeline configuration
+- return `conn` from `ConnLogger.save/1` to allow piping in tests
 
 ## v0.3.1
 
