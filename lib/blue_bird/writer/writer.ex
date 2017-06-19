@@ -1,7 +1,6 @@
 defmodule BlueBird.Writer do
   @moduledoc """
-  Defines functions to generate an API BluePrint representation of the
-  `BlueBird.ApiDoc` struct.
+  Writes api documentations in apib and swagger format to files.
   """
   alias BlueBird.{ApiDoc, Parameter, Request, Route}
   alias BlueBird.Writer.Blueprint
