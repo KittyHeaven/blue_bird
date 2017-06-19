@@ -3,7 +3,6 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
   import BlueBird.Writer.Blueprint
 
-  alias BlueBird.Test.Support.Examples
   alias BlueBird.{Parameter, Request, Response, Route}
 
   test "print_metadata/1 prints metadata" do
@@ -223,29 +222,6 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       ]
 
       assert group_routes(routes, :group) == expected
-    end
-  end
-
-  describe "example" do
-    example_test Examples.Grouping
-    example_test Examples.NotesWarnings
-    example_test Examples.Parameters
-    example_test Examples.Requests
-    example_test Examples.Responses
-    example_test Examples.RouteTitles
-    example_test Examples.Simple
-  end
-
-  describe "run/1" do
-    test "writes api doc to file" do
-      alias BlueBird.Test.Support.Examples.Grouping
-
-      run(Grouping.api_doc)
-
-      path = Path.join(["priv", "static", "docs", "api.apib"])
-
-      assert {:ok, file} = File.read(path)
-      assert file == Grouping.apib
     end
   end
 end
