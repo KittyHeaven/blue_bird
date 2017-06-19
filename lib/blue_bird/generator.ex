@@ -120,7 +120,21 @@ defmodule BlueBird.Generator do
 
   @spec filter_api_routes([%PhxRoute{}]) :: [%PhxRoute{}]
   defp filter_api_routes(routes) do
-    Enum.filter(routes, &Enum.member?(&1.pipe_through, :api))
+    pipelines = Application.get_env(
+      :blue_bird,
+      :pipelines,
+      [:api]
+    )
+
+    Enum.filter(
+      routes,
+      fn route ->
+        Enum.any?(
+          pipelines,
+          &Enum.member?(route.pipe_through, &1)
+        )
+      end
+    )
   end
 
   @spec requests([Plug.Conn.t], [%PhxRoute{}]) :: [Plug.Conn.t]

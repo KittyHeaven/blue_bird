@@ -15,7 +15,7 @@ It lets you generate API documentation in the [API Blueprint](https://apibluepri
 
 ``` elixir
 defp deps do
-  [{:blue_bird, "~> 0.3.0"}]
+  [{:blue_bird, "~> 0.3.2"}]
 end
 ```
 
@@ -187,10 +187,11 @@ config :blue_bird,
   docs_path: "priv/static/docs",
   theme: "triple",
   router: YourApp.Web.Router,
+  pipelines: [:api],
   ignore_headers: ["not-wanted"]
 ```
 
-**Options**:
+#### Options
 
 * `docs_path`: Specify the path where the documentation will be generated. If
   you want to serve the documentation directly from the `phoenix`, you can
@@ -199,9 +200,11 @@ config :blue_bird,
   [Aglio renderer](https://github.com/danielgtaylor/aglio).
 * `router`: Router of your application, in Phoenix 1.3 it will be
   YourAppName.Web.Router.
-* `ignore_headers`: If you want certain headers to be hidden from the
+* `ignore_headers` (optional): If you want certain headers to be hidden from the
   documentation, you can add a list of header keys here. This can be helpful
   if you serve your application behind a proxy.
+* `pipelines` (optional): Only routes that use the specified router pipelines
+  will be included in the documentation. Defaults to `[:api]` if not set.
 
 ### `blue_bird_info()`:
 
@@ -234,13 +237,3 @@ BlueBird reads the `body_params` from `%Plug.Conn{}`. These map is only set if
 post build_conn(), "/", Poison.encode! %{my: data}  # recommended
 post build_conn(), "/", "my=data"
 ```
-
-## Todo
-
-- [ ] `raise error` when route that is used in the annotation is not available
-      in the `phoenix router`
-- [ ] Make the pipelines configurable
-- [ ] Warn if path parameters or query parameters are missing
-- [ ] Warn if parameter is not among path or query parameters
-- [ ] Render API group description
-

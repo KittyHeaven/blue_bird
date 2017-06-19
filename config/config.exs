@@ -26,6 +26,7 @@ config :blue_bird,
   docs_path: "priv/static/docs",
   theme: "triple",
   router: BlueBird.Test.Support.Router,
-  ignore_headers: ["ignore-me"]
+  ignore_headers: ["ignore-me"],
+  pipelines: [:api, :another_api]
 
 import_config "#{Mix.env}.exs"
