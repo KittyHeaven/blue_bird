@@ -15,7 +15,7 @@ defmodule BlueBird.Formatter do
   """
   use GenEvent
 
-  alias BlueBird.Writer.Blueprint
+  alias BlueBird.Writer
   alias BlueBird.Generator
 
   @doc """
@@ -31,7 +31,7 @@ defmodule BlueBird.Formatter do
   @spec handle_event(event :: term, state :: term) ::
     {:ok, nil} | :remove_handler
   def handle_event({:suite_finished, _run_us, _load_us}, nil) do
-    Generator.run() |> Blueprint.run()
+    Generator.run() |> Writer.run()
     :remove_handler
   end
   def handle_event(_event, nil), do: {:ok, nil}
