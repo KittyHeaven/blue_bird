@@ -1,5 +1,5 @@
 defmodule BlueBird.Test.Writer.BlueprintTest do
-  use ExUnit.Case, async: true
+  use BlueBird.Test.Support.ConnCase
 
   import BlueBird.Writer.Blueprint
 
@@ -226,38 +226,14 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
     end
   end
 
-  describe "examples: " do
-    def test_example(module) do
-      assert generate_output(module.api_doc) == module.output
-    end
-
-    test "'Grouping' is rendered correctly" do
-      test_example(Examples.Grouping)
-    end
-
-    test "'NotesWarnings' is rendered correctly" do
-      test_example(Examples.NotesWarnings)
-    end
-
-    test "'Parameters' is rendered correctly" do
-      test_example(Examples.Parameters)
-    end
-
-    test "'RouteTitles' is rendered correctly" do
-      test_example(Examples.RouteTitles)
-    end
-
-    test "'Requests' is rendered correctly" do
-      test_example(Examples.Requests)
-    end
-
-    test "'Responses' is rendered correctly" do
-      test_example(Examples.Responses)
-    end
-
-    test "'Simple' is rendered correctly" do
-      test_example(Examples.Simple)
-    end
+  describe "example" do
+    example_test Examples.Grouping
+    example_test Examples.NotesWarnings
+    example_test Examples.Parameters
+    example_test Examples.Requests
+    example_test Examples.Responses
+    example_test Examples.RouteTitles
+    example_test Examples.Simple
   end
 
   describe "run/1" do
@@ -269,7 +245,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       path = Path.join(["priv", "static", "docs", "api.apib"])
 
       assert {:ok, file} = File.read(path)
-      assert file == Grouping.output
+      assert file == Grouping.apib
     end
   end
 end

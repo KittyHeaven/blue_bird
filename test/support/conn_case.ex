@@ -32,4 +32,19 @@ defmodule BlueBird.Test.Support.ConnCase do
       end
     end
   end
+
+  defmacro example_test(module) do
+    quote do
+      test "'#{unquote(module) |> module_to_title}' is rendered to apib" do
+        assert generate_output(unquote(module).api_doc) == unquote(module).apib
+      end
+
+      test "'#{unquote(module) |> module_to_title}' is rendered to swagger" do
+        assert %{} == unquote(module).swagger
+        # swagger generator function will be called here
+      end
+    end
+  end
+
+  def module_to_title(module), do: module |> Module.split |> Enum.at(-1)
 end

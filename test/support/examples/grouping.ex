@@ -63,7 +63,7 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
     }
   end
 
-  def output do
+  def apib do
     """
     FORMAT: 1A
     HOST: https://youarguelikeaninformer.socrates
@@ -107,4 +107,6 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
     ### PUT
     """
   end
+
+  def swagger, do: %{}
 end

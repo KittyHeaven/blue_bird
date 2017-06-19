@@ -58,7 +58,7 @@ defmodule BlueBird.Test.Support.Examples.Responses do
     }
   end
 
-  def output do
+  def apib do
     """
     FORMAT: 1A
     HOST: https://youarguelikeaninformer.socrates
@@ -106,4 +106,6 @@ defmodule BlueBird.Test.Support.Examples.Responses do
                 Against the earth's sweet flowing breast
     """
   end
+
+  def swagger, do: %{}
 end

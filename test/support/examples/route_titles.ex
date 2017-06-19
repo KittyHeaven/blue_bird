@@ -37,7 +37,7 @@ defmodule BlueBird.Test.Support.Examples.RouteTitles do
     }
   end
 
-  def output do
+  def apib do
     """
     FORMAT: 1A
     HOST: https://youarguelikeaninformer.socrates
@@ -60,4 +60,6 @@ defmodule BlueBird.Test.Support.Examples.RouteTitles do
     + Response 204
     """
   end
+
+  def swagger, do: %{}
 end

@@ -43,7 +43,7 @@ defmodule BlueBird.Test.Support.Examples.Simple do
     }
   end
 
-  def output do
+  def apib do
     """
     FORMAT: 1A
     HOST: https://youarguelikeaninformer.socrates
@@ -75,4 +75,6 @@ defmodule BlueBird.Test.Support.Examples.Simple do
     ### GET
     """
   end
+
+  def swagger, do: %{}
 end
