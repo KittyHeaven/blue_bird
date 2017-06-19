@@ -1,0 +1,54 @@
+defmodule BlueBird.Writer do
+  @moduledoc """
+  Defines functions to generate an API BluePrint representation of the
+  `BlueBird.ApiDoc` struct.
+  """
+  alias BlueBird.{ApiDoc, Parameter, Request, Route}
+  alias BlueBird.Writer.Blueprint
+  alias BlueBird.Writer.Swagger
+  alias Mix.Project
+
+  @docs_path Application.get_env(:blue_bird, :docs_path, "docs")
+
+  @doc """
+  Writes a `BlueBird.ApiDoc{}` struct to apib and swagger files.
+
+  This function will be called automatically by `BlueBird.Formatter` after
+  every test run.
+
+  You can set the destination directory in `config.exs`.
+
+      config :blue_bird,
+        docs_path: "priv/static/docs"
+  """
+  @spec run(ApiDoc.t) :: :ok | {:error, File.posix}
+  def run(api_docs) do
+    api_docs
+    |> Blueprint.generate_output()
+    |> write_file("api.apib")
+
+    api_docs
+    |> Swagger.generate_output()
+    |> write_file("api.swagger")
+  end
+
+  @spec write_file(String.t, String.t) :: :ok | {:error, File.posix}
+  defp write_file(output, filename) do
+    path = get_path()
+
+    File.mkdir_p(path)
+
+    path
+    |> Path.join(filename)
+    |> File.write(output)
+  end
+
+  @spec get_path :: binary
+  defp get_path do
+    Project.load_paths
+    |> Enum.at(0)
+    |> String.split("_build")
+    |> Enum.at(0)
+    |> Path.join(@docs_path)
+  end
+end
