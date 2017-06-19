@@ -58,5 +58,9 @@ defmodule BlueBird.Test.Support.Examples.Requests do
     """
   end
 
-  def swagger, do: %{}
+  def swagger do
+    %{
+      swagger: "2.0"
+    }
+  end
 end

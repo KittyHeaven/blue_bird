@@ -108,5 +108,9 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
     """
   end
 
-  def swagger, do: %{}
+  def swagger do
+    %{
+      swagger: "2.0"
+    }
+  end
 end
