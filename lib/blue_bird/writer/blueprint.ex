@@ -180,9 +180,11 @@ defmodule BlueBird.Writer.Blueprint do
     <> print_tos(tos)
   end
 
+  @spec print_description(String.t) :: String.t
   defp print_description(""), do: ""
   defp print_description(description), do: "#{description}\n"
 
+  @spec print_tos(String.t) :: String.t
   defp print_tos(""), do: ""
   defp print_tos(tos), do: "\n## Terms of Service\n#{tos}\n"
 
