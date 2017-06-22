@@ -122,7 +122,10 @@ defmodule BlueBird.Test.Support.Examples.Parameters do
       },
       host: "youarguelikeaninformer.socrates",
       basePath: "/",
-      schemes: ["https"]
+      schemes: ["https"],
+      paths: %{
+        "/pastry/{id}/{type}" => %{}
+      }
     }
   end
 end

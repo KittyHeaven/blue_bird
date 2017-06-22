@@ -119,7 +119,13 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
       },
       host: "youarguelikeaninformer.socrates",
       basePath: "/",
-      schemes: ["https"]
+      schemes: ["https"],
+      paths: %{
+        "/cats" => %{},
+        "/cats/{id}" => %{},
+        "/airplanes" => %{},
+        "/airplanes/{id}" => %{}
+      }
     }
   end
 end

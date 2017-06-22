@@ -70,7 +70,11 @@ defmodule BlueBird.Test.Support.Examples.RouteTitles do
       },
       host: "youarguelikeaninformer.socrates",
       basePath: "/v1",
-      schemes: ["https"]
+      schemes: ["https"],
+      paths: %{
+        "/route-with-title" => %{},
+        "/route-without-title" => %{}
+      }
     }
   end
 end

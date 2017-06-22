@@ -64,7 +64,11 @@ defmodule BlueBird.Test.Support.Examples.NotesWarnings do
       },
       host: "youarguelikeaninformer.socrates",
       basePath: "/",
-      schemes: ["https"]
+      schemes: ["https"],
+      paths: %{
+        "/route-with-note-and-warning" => %{},
+        "/route-with-description-and-note" => %{}
+      }
     }
   end
 end

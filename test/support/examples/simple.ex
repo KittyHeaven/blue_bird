@@ -87,7 +87,12 @@ defmodule BlueBird.Test.Support.Examples.Simple do
       },
       host: "youarguelikeaninformer.socrates",
       basePath: "/",
-      schemes: ["https"]
+      schemes: ["https"],
+      paths: %{
+        "/route-without-info-or-response" => %{},
+        "/route-with-simple-response" => %{},
+        "/route-with-204-response" => %{}
+      }
     }
   end
 end

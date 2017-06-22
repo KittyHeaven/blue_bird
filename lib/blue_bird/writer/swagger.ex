@@ -16,6 +16,7 @@ defmodule BlueBird.Writer.Swagger do
     |> put_version
     |> put_host(api_docs)
     |> put_info(api_docs)
+    |> put_paths(api_docs)
     |> Poison.encode!
   end
 
@@ -51,4 +52,21 @@ defmodule BlueBird.Writer.Swagger do
   @spec put_info_desc(map, String.t) :: map
   defp put_info_desc(info, ""), do: info
   defp put_info_desc(info, desc), do: Map.put(info, :description, desc)
+
+  @spec put_paths(map, ApiDoc.t) :: map
+  defp put_paths(map, api_docs) do
+    paths = Enum.reduce(api_docs.routes, %{}, fn(route, acc) ->
+      path = replace_path_params(route.path)
+      Map.put(acc, path, %{})
+    end)
+
+    Map.put(map, :paths, paths)
+  end
+
+  @spec replace_path_params(String.t) :: String.t
+  defp replace_path_params(path) do
+    ~r/:([\w]+)(\/|\z)/
+    |> Regex.replace(path, "{\\1}/")
+    |> String.trim_trailing("/")
+  end
 end

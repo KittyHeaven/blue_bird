@@ -116,7 +116,12 @@ defmodule BlueBird.Test.Support.Examples.Responses do
       },
       host: "youarguelikeaninformer.socrates",
       basePath: "/",
-      schemes: ["https"]
+      schemes: ["https"],
+      paths: %{
+        "/plain-response" => %{},
+        "/plain-with-line-breaks" => %{},
+        "/multiple-headers" => %{}
+      }
     }
   end
 end

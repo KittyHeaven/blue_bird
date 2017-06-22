@@ -67,7 +67,10 @@ defmodule BlueBird.Test.Support.Examples.Requests do
       },
       host: "youarguelikeaninformer.socrates",
       basePath: "/",
-      schemes: ["https"]
+      schemes: ["https"],
+      paths: %{
+        "/request-headers" => %{}
+      }
     }
   end
 end
