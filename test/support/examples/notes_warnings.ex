@@ -57,7 +57,10 @@ defmodule BlueBird.Test.Support.Examples.NotesWarnings do
 
   def swagger do
     %{
-      swagger: "2.0"
+      swagger: "2.0",
+      host: "youarguelikeaninformer.socrates",
+      basePath: "/",
+      schemes: ["https"]
     }
   end
 end
