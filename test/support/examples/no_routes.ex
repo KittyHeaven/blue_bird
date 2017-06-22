@@ -1,7 +1,7 @@
 defmodule BlueBird.Test.Support.Examples.NoRoutes do
   @moduledoc false
 
-  alias BlueBird.{ApiDoc, Request, Response, Route}
+  alias BlueBird.ApiDoc
 
   def api_doc do
     %ApiDoc{
