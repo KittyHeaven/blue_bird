@@ -213,6 +213,7 @@ config :blue_bird,
 * `host`: API host.
 * `title`: Documentation title (can use Blueprint format).
 * `description`: Documentation description (can use Blueprint format).
+* `terms_of_service` (optional): Terms of service, string.
 
 ## FAQ
 

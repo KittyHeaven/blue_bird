@@ -105,7 +105,8 @@ defmodule BlueBird.Mixfile do
       description: """
                    And the pilot likewise, in the strict sense of the term, is a
                    ruler of sailors and not a mere sailor.
-                   """
+                   """,
+      terms_of_service: "The terms of service have changed."
     ]
   end
 end

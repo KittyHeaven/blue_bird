@@ -97,6 +97,7 @@ defmodule BlueBird.Generator do
       host: Keyword.get(info, :host, @default_url),
       title: Keyword.get(info, :title, @default_title),
       description: Keyword.get(info, :description, @default_description),
+      terms_of_service: Keyword.get(info, :terms_of_service, ""),
       routes: generate_docs_for_routes(router_module)
     }
   end
