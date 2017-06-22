@@ -11,7 +11,7 @@ defmodule BlueBird.Test.Writer do
       Writer.run(Grouping.api_doc)
 
       path_apib = Path.join(["priv", "static", "docs", "api.apib"])
-      path_swagger = Path.join(["priv", "static", "docs", "api.swagger"])
+      path_swagger = Path.join(["priv", "static", "docs", "swagger.json"])
 
       assert {:ok, file} = File.read(path_apib)
       assert file == Grouping.apib
