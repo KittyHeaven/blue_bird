@@ -44,14 +44,16 @@ defmodule BlueBird.Writer.Swagger do
   @spec put_info(map, ApiDoc.t) :: map
   defp put_info(map, api_docs) do
     info = %{title: api_docs.title, version: "1"}
-    |> put_info_desc(api_docs.description)
+    |> put_if_set(:description, api_docs.description)
+    |> put_if_set(:termsOfService, api_docs.terms_of_service)
 
     Map.put(map, :info, info)
   end
 
-  @spec put_info_desc(map, String.t) :: map
-  defp put_info_desc(info, ""), do: info
-  defp put_info_desc(info, desc), do: Map.put(info, :description, desc)
+  @spec put_if_set(map, any, any) :: map
+  defp put_if_set(map, key, nil), do: map
+  defp put_if_set(map, key, ""), do: map
+  defp put_if_set(map, key, value), do: Map.put(map, key, value)
 
   @spec put_paths(map, ApiDoc.t) :: map
   defp put_paths(map, api_docs) do

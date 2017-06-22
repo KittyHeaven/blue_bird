@@ -7,6 +7,7 @@ defmodule BlueBird.Test.Support.Examples.NoRoutes do
     %ApiDoc{
       title: "Heavenly API",
       description: "This is the API description.\n\nIt may be helpful. Or not.",
+      terms_of_service: "The terms.",
       host: "https://youarguelikeaninformer.socrates/v1",
       routes: []
     }
@@ -22,6 +23,9 @@ defmodule BlueBird.Test.Support.Examples.NoRoutes do
 
     It may be helpful. Or not.
 
+    ## Terms of Service
+    The terms.
+
 
     """
   end
@@ -33,6 +37,7 @@ defmodule BlueBird.Test.Support.Examples.NoRoutes do
         title: "Heavenly API",
         description: "This is the API description.\n\n"
                      <> "It may be helpful. Or not.",
+        termsOfService: "The terms.",
         version: "1"
       },
       host: "youarguelikeaninformer.socrates",

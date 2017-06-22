@@ -11,11 +11,11 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
   describe "print_overview/2" do
     test "prints overview with description" do
-      assert print_overview("Title", "One\nTwo") == "# Title\nOne\nTwo\n"
+      assert print_overview("Title", "One\nTwo", "") == "# Title\nOne\nTwo\n"
     end
 
     test "prints overview without description" do
-      assert print_overview("Title", "") == "# Title\n"
+      assert print_overview("Title", "", "") == "# Title\n"
     end
   end
 

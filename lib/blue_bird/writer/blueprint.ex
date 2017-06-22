@@ -11,13 +11,15 @@ defmodule BlueBird.Writer.Blueprint do
   Generates a string from an `BlueBird.ApiDocs{}` struct.
   """
   @spec generate_output(ApiDoc.t) :: String.t
-  def generate_output(api_docs) do
-    doc_routes = api_docs.routes
+  def generate_output(docs) do
+    doc_routes = docs.routes
     |> group_routes(:group)
     |> process_groups
 
-    print_metadata(api_docs.host) <> "\n"
-    <> print_overview(api_docs.title, api_docs.description) <> "\n\n"
+    print_metadata(docs.host)
+    <> "\n"
+    <> print_overview(docs.title, docs.description, docs.terms_of_service)
+    <> "\n\n"
     <> doc_routes
   end
 
@@ -171,9 +173,18 @@ defmodule BlueBird.Writer.Blueprint do
   def print_metadata(host), do: "FORMAT: 1A\nHOST: #{host}\n"
 
   @doc false
-  @spec print_overview(String.t, String.t) :: String.t
-  def print_overview(title, ""), do: "# #{title}\n"
-  def print_overview(title, description), do: "# #{title}\n#{description}\n"
+  @spec print_overview(String.t, String.t, String.t) :: String.t
+  def print_overview(title, description, tos) do
+    "# #{title}\n"
+    <> print_description(description)
+    <> print_tos(tos)
+  end
+
+  defp print_description(""), do: ""
+  defp print_description(description), do: "#{description}\n"
+
+  defp print_tos(""), do: ""
+  defp print_tos(tos), do: "\n## Terms of Service\n#{tos}\n"
 
   ## Route Definition
 
