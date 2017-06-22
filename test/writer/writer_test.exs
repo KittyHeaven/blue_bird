@@ -23,6 +23,7 @@ defmodule BlueBird.Test.Writer do
 
   describe "example" do
     example_test Examples.Grouping
+    example_test Examples.NoRoutes
     example_test Examples.NotesWarnings
     example_test Examples.Parameters
     example_test Examples.Requests
