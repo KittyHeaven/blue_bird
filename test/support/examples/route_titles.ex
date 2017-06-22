@@ -72,8 +72,20 @@ defmodule BlueBird.Test.Support.Examples.RouteTitles do
       basePath: "/v1",
       schemes: ["https"],
       paths: %{
-        "/route-with-title" => %{},
-        "/route-without-title" => %{}
+        "/route-with-title" => %{
+          "get" => %{
+            responses: %{
+              "204" => %{}
+            }
+          }
+        },
+        "/route-without-title" => %{
+          "get" => %{
+            responses: %{
+              "204" => %{}
+            }
+          }
+        }
       }
     }
   end

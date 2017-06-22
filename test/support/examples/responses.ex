@@ -118,9 +118,30 @@ defmodule BlueBird.Test.Support.Examples.Responses do
       basePath: "/",
       schemes: ["https"],
       paths: %{
-        "/plain-response" => %{},
-        "/plain-with-line-breaks" => %{},
-        "/multiple-headers" => %{}
+        "/plain-response" => %{
+          "get" => %{
+            produces: "text/plain",
+            responses: %{
+              "200" => %{}
+            }
+          }
+        },
+        "/plain-with-line-breaks" => %{
+          "get" => %{
+            produces: "text/plain",
+            responses: %{
+              "200" => %{}
+            }
+          }
+        },
+        "/multiple-headers" => %{
+          "get" => %{
+            produces: "text/plain",
+            responses: %{
+              "200" => %{}
+            }
+          }
+        }
       }
     }
   end

@@ -66,8 +66,12 @@ defmodule BlueBird.Test.Support.Examples.NotesWarnings do
       basePath: "/",
       schemes: ["https"],
       paths: %{
-        "/route-with-note-and-warning" => %{},
-        "/route-with-description-and-note" => %{}
+        "/route-with-note-and-warning" => %{
+          "get" => %{}
+        },
+        "/route-with-description-and-note" => %{
+          "get" => %{}
+        }
       }
     }
   end

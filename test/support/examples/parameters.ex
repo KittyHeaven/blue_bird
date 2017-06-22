@@ -124,7 +124,13 @@ defmodule BlueBird.Test.Support.Examples.Parameters do
       basePath: "/",
       schemes: ["https"],
       paths: %{
-        "/pastry/{id}/{type}" => %{}
+        "/pastry/{id}/{type}" => %{
+          "get" => %{
+            responses: %{
+              "204" => %{}
+            }
+          }
+        }
       }
     }
   end

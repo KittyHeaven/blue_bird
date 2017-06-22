@@ -69,7 +69,14 @@ defmodule BlueBird.Test.Support.Examples.Requests do
       basePath: "/",
       schemes: ["https"],
       paths: %{
-        "/request-headers" => %{}
+        "/request-headers" => %{
+          "get" => %{
+            consumes: "application/json",
+            responses: %{
+              "204" => %{}
+            }
+          }
+        }
       }
     }
   end

@@ -89,9 +89,26 @@ defmodule BlueBird.Test.Support.Examples.Simple do
       basePath: "/",
       schemes: ["https"],
       paths: %{
-        "/route-without-info-or-response" => %{},
-        "/route-with-simple-response" => %{},
-        "/route-with-204-response" => %{}
+        "/route-without-info-or-response" => %{
+          "get" => %{
+
+          }
+        },
+        "/route-with-simple-response" => %{
+          "get" => %{
+            produces: ["text/plain"],
+            responses: %{
+              "200" => %{}
+            }
+          }
+        },
+        "/route-with-204-response" => %{
+          "get" => %{
+            responses: %{
+              "204" => %{}
+            }
+          }
+        }
       }
     }
   end

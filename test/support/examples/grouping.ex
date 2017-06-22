@@ -121,10 +121,18 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
       basePath: "/",
       schemes: ["https"],
       paths: %{
-        "/cats" => %{},
-        "/cats/{id}" => %{},
-        "/airplanes" => %{},
-        "/airplanes/{id}" => %{}
+        "/cats" => %{
+          "get" => %{}
+        },
+        "/cats/{id}" => %{
+          "get" => %{}
+        },
+        "/airplanes" => %{
+          "get" => %{}
+        },
+        "/airplanes/{id}" => %{
+          "get" => %{}
+        }
       }
     }
   end
