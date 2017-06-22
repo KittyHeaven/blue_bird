@@ -28,7 +28,7 @@ defmodule BlueBird.Writer do
 
     api_docs
     |> Swagger.generate_output()
-    |> write_file("api.swagger")
+    |> write_file("swagger.json")
   end
 
   @spec write_file(String.t, String.t) :: :ok | {:error, File.posix}
