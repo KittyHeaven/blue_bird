@@ -61,6 +61,10 @@ defmodule BlueBird.Test.Support.Examples.Requests do
   def swagger do
     %{
       swagger: "2.0",
+      info: %{
+        title: "Trendy API",
+        version: "1"
+      },
       host: "youarguelikeaninformer.socrates",
       basePath: "/",
       schemes: ["https"]

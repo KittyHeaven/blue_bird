@@ -64,6 +64,10 @@ defmodule BlueBird.Test.Support.Examples.RouteTitles do
   def swagger do
     %{
       swagger: "2.0",
+      info: %{
+        title: "Heavenly API",
+        version: "1"
+      },
       host: "youarguelikeaninformer.socrates",
       basePath: "/v1",
       schemes: ["https"]

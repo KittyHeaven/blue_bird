@@ -58,6 +58,10 @@ defmodule BlueBird.Test.Support.Examples.NotesWarnings do
   def swagger do
     %{
       swagger: "2.0",
+      info: %{
+        title: "Heavenly API",
+        version: "1"
+      },
       host: "youarguelikeaninformer.socrates",
       basePath: "/",
       schemes: ["https"]

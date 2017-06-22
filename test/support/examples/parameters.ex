@@ -116,6 +116,10 @@ defmodule BlueBird.Test.Support.Examples.Parameters do
   def swagger do
     %{
       swagger: "2.0",
+      info: %{
+        title: "Pastry API",
+        version: "1"
+      },
       host: "youarguelikeaninformer.socrates",
       basePath: "/",
       schemes: ["https"]
