@@ -89,7 +89,6 @@ defmodule BlueBird.Writer.Swagger do
          path = replace_path_params(path)
          Map.put(acc, path, path_item_object(routes))
        end)
-    #[{String.t, [Route.t]}]
 
     Map.put(map, :paths, paths)
   end
