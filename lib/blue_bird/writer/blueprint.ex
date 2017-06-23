@@ -37,11 +37,12 @@ defmodule BlueBird.Writer.Blueprint do
 
   @spec get_path :: binary
   defp get_path do
-    Project.load_paths
-    |> Enum.at(0)
+    docs_path = Application.get_env(:blue_bird, :docs_path, "docs")
+
+    Project.build_path()
     |> String.split("_build")
     |> Enum.at(0)
-    |> Path.join(@docs_path)
+    |> Path.join(docs_path)
   end
 
   @doc """
