@@ -22,13 +22,20 @@ defmodule BlueBird.Writer do
   """
   @spec run(ApiDoc.t) :: :ok | {:error, File.posix}
   def run(api_docs) do
+    run_apib(api_docs, "api.apib")
+    run_swagger(api_docs, "swagger.json")
+  end
+
+  def run_apib(api_docs, filename) do
     api_docs
     |> Blueprint.generate_output()
-    |> write_file("api.apib")
+    |> write_file(filename)
+  end
 
+  def run_swagger(api_docs, filename) do
     api_docs
     |> Swagger.generate_output()
-    |> write_file("swagger.json")
+    |> write_file(filename)
   end
 
   @spec write_file(String.t, String.t) :: :ok | {:error, File.posix}
