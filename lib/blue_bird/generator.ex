@@ -27,8 +27,19 @@ defmodule BlueBird.Generator do
   ## Example response
 
       %BlueBird.ApiDoc{
+        title: "The API",
         description: "Enter API description in mix.exs - blue_bird_info",
+        terms_of_service: "Use on your own risk.",
         host: "http://localhost",
+        contact: %{
+          name: "Henry",
+          url: "https://henry.something",
+          email: "mail@henry.something"
+        },
+        license: %{
+          name: "Apache 2.0",
+          url: "https://www.apache.org/licenses/LICENSE-2.0"
+        },
         routes: [
           %BlueBird.Route{
             description: "Gets a single user.",
@@ -92,12 +103,23 @@ defmodule BlueBird.Generator do
   @spec prepare_docs(atom) :: ApiDoc.t
   defp prepare_docs(router_module) do
     info = blue_bird_info()
+    contact = Keyword.get(info, :contact, [])
+    license = Keyword.get(info, :license, [])
 
     %ApiDoc{
       host: Keyword.get(info, :host, @default_url),
       title: Keyword.get(info, :title, @default_title),
       description: Keyword.get(info, :description, @default_description),
       terms_of_service: Keyword.get(info, :terms_of_service, ""),
+      contact: [
+        name: Keyword.get(contact, :name, ""),
+        url: Keyword.get(contact, :url, ""),
+        email: Keyword.get(contact, :email, "")
+      ],
+      license: [
+        name: Keyword.get(license, :name, ""),
+        url: Keyword.get(license, :url, "")
+      ],
       routes: generate_docs_for_routes(router_module)
     }
   end

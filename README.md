@@ -214,6 +214,13 @@ config :blue_bird,
 * `title`: Documentation title (can use Blueprint format).
 * `description`: Documentation description (can use Blueprint format).
 * `terms_of_service` (optional): Terms of service, string.
+* `contact` (optional)
+  * `name` (optional)
+  * `url` (optional)
+  * `email` (optional)
+* `license` (optional)
+  * `name` (optional)
+  * `url` (optional)
 
 ## FAQ
 

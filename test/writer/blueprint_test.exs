@@ -3,19 +3,26 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
   import BlueBird.Writer.Blueprint
 
-  alias BlueBird.{Parameter, Request, Response, Route}
+  alias BlueBird.{ApiDoc, Parameter, Request, Response, Route}
 
   test "print_metadata/1 prints metadata" do
     assert print_metadata("http://yo") == "FORMAT: 1A\nHOST: http://yo\n"
   end
 
-  describe "print_overview/2" do
+  describe "print_overview/1" do
     test "prints overview with description" do
-      assert print_overview("Title", "One\nTwo", "") == "# Title\nOne\nTwo\n"
+      api_doc = %ApiDoc{
+        title: "Title",
+        description: "One\nTwo"
+      }
+      assert print_overview(api_doc) == "# Title\nOne\nTwo\n"
     end
 
     test "prints overview without description" do
-      assert print_overview("Title", "", "") == "# Title\n"
+      api_doc = %ApiDoc{
+        title: "Title"
+      }
+      assert print_overview(api_doc) == "# Title\n"
     end
   end
 

@@ -9,6 +9,15 @@ defmodule BlueBird.Test.Support.Examples.NoRoutes do
       description: "This is the API description.\n\nIt may be helpful. Or not.",
       terms_of_service: "The terms.",
       host: "https://youarguelikeaninformer.socrates/v1",
+      contact: [
+        name: "Louis",
+        url: "https://louis.louis.louis",
+        email: "louis@louis.louis"
+      ],
+      license: [
+        name: "Louis' License",
+        url: "https://louis.louis/license"
+      ],
       routes: []
     }
   end
@@ -26,6 +35,15 @@ defmodule BlueBird.Test.Support.Examples.NoRoutes do
     ## Terms of Service
     The terms.
 
+    ## Contact
+    Louis
+    [https://louis.louis.louis](https://louis.louis.louis)
+    [louis@louis.louis](mailto:louis@louis.louis)
+
+    ## License
+    Louis' License
+    [https://louis.louis/license](https://louis.louis/license)
+
 
     """
   end
@@ -37,8 +55,17 @@ defmodule BlueBird.Test.Support.Examples.NoRoutes do
         title: "Heavenly API",
         description: "This is the API description.\n\n"
                      <> "It may be helpful. Or not.",
+        version: "1",
         termsOfService: "The terms.",
-        version: "1"
+        contact: %{
+          name: "Louis",
+          url: "https://louis.louis.louis",
+          email: "louis@louis.louis"
+        },
+        license: %{
+          name: "Louis' License",
+          url: "https://louis.louis/license"
+        }
       },
       host: "youarguelikeaninformer.socrates",
       basePath: "/v1",

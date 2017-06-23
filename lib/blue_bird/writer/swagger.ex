@@ -46,8 +46,32 @@ defmodule BlueBird.Writer.Swagger do
     info = %{title: api_docs.title, version: "1"}
     |> put_if_set(:description, api_docs.description)
     |> put_if_set(:termsOfService, api_docs.terms_of_service)
+    |> put_contact(api_docs.contact)
+    |> put_license(api_docs.license)
 
     Map.put(map, :info, info)
+  end
+
+  @spec put_contact(map, [name: String.t, url: String.t, email: String.t])
+    :: map
+  defp put_contact(map, [name: "", url: "", email: ""]), do: map
+  defp put_contact(map, contact) do
+    contact_map = %{}
+    |> put_if_set(:name, contact[:name])
+    |> put_if_set(:url, contact[:url])
+    |> put_if_set(:email, contact[:email])
+
+    Map.put(map, :contact, contact_map)
+  end
+
+  @spec put_license(map, [name: String.t, url: String.t]) :: map
+  defp put_license(map, %{name: "", url: ""}), do: map
+  defp put_license(map, license) do
+    license_map = %{}
+    |> put_if_set(:name, license[:name])
+    |> put_if_set(:url, license[:url])
+
+    Map.put(map, :license, license_map)
   end
 
   @spec put_if_set(map, any, any) :: map

@@ -18,7 +18,7 @@ defmodule BlueBird.Writer.Blueprint do
 
     print_metadata(docs.host)
     <> "\n"
-    <> print_overview(docs.title, docs.description, docs.terms_of_service)
+    <> print_overview(docs)
     <> "\n\n"
     <> doc_routes
   end
@@ -173,11 +173,13 @@ defmodule BlueBird.Writer.Blueprint do
   def print_metadata(host), do: "FORMAT: 1A\nHOST: #{host}\n"
 
   @doc false
-  @spec print_overview(String.t, String.t, String.t) :: String.t
-  def print_overview(title, description, tos) do
-    "# #{title}\n"
-    <> print_description(description)
-    <> print_tos(tos)
+  @spec print_overview(ApiDoc.t) :: String.t
+  def print_overview(api_doc) do
+    "# #{api_doc.title}\n"
+    <> print_description(api_doc.description)
+    <> print_tos(api_doc.terms_of_service)
+    <> print_contact(api_doc.contact)
+    <> print_license(api_doc.license)
   end
 
   @spec print_description(String.t) :: String.t
@@ -187,6 +189,36 @@ defmodule BlueBird.Writer.Blueprint do
   @spec print_tos(String.t) :: String.t
   defp print_tos(""), do: ""
   defp print_tos(tos), do: "\n## Terms of Service\n#{tos}\n"
+
+  @spec print_contact([name: String.t, url: String.t, email: String.t])
+    :: String.t
+  defp print_contact([name: "", url: "", email: ""]), do: ""
+  defp print_contact(contact) do
+    "\n## Contact\n"
+    <> print_if_set(contact[:name])
+    <> print_if_set(contact[:url] |> print_link)
+    <> print_if_set(contact[:email] |> print_email)
+  end
+
+  @spec print_license([name: String.t, url: String.t]) :: String.t
+  defp print_license([name: "", url: ""]), do: ""
+  defp print_license(license) do
+    "\n## License\n"
+    <> print_if_set(license[:name])
+    <> print_if_set(license[:url] |> print_link)
+  end
+
+  @spec print_if_set(String.t) :: String.t
+  defp print_if_set(""), do: ""
+  defp print_if_set(line), do: "#{line}\n"
+
+  @spec print_link(String.t) :: String.t
+  defp print_link(""), do: ""
+  defp print_link(link), do: "[#{link}](#{link})"
+
+  @spec print_email(String.t) :: String.t
+  defp print_email(""), do: ""
+  defp print_email(email), do: "[#{email}](mailto:#{email})"
 
   ## Route Definition
 

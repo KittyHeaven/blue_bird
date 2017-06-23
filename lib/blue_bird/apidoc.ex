@@ -7,6 +7,15 @@ defmodule BlueBird.ApiDoc do
     description: "",
     terms_of_service: "",
     host: "",
+    contact: [
+      name: "",
+      url: "",
+      email: ""
+    ],
+    license: [
+      name: "",
+      url: ""
+    ],
     routes: []
   ]
 
@@ -18,6 +27,19 @@ defmodule BlueBird.ApiDoc do
     description: String.t,
     terms_of_service: String.t,
     host: String.t,
+    contact: contact,
+    license: license,
     routes: [BlueBird.Route.t]
   }
+
+  @type contact :: [
+    name: String.t,
+    url: String.t,
+    email: String.t
+  ]
+
+  @type license :: [
+    name: String.t,
+    url: String.t
+  ]
 end
