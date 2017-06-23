@@ -27,8 +27,7 @@ defmodule BlueBird.Writer.Blueprint do
 
   ## Groups
 
-  @spec process_groups([{String.t, [{String.t, String.t, [Route.t]}]}]) ::
-    String.t
+  @spec process_groups([{String.t, [Route.t]}]) :: String.t
   defp process_groups(groups) do
     Enum.map_join(groups, "\n", &process_group(&1))
   end
