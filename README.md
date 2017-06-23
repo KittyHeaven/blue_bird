@@ -89,7 +89,7 @@ defmodule App.CommentController do
     title "List comments"
     description "Optional description"
     note "Optional note"
-    warn "Optional warning"
+    warning "Optional warning"
     parameter :post_id, :integer, [description: "Post ID or slug"]
   end
   def index(conn, %{"post_id" => post_id}) do
