@@ -170,11 +170,14 @@ $ mix test
 ```
 
 To generate an HTML documentation, use the convenience wrapper to the
-[Aglio renderer](https://github.com/danielgtaylor/aglio).
+[Aglio renderer](https://github.com/danielgtaylor/aglio). 
 
 ```
 $ mix bird.gen.docs
 ```
+
+If you use BlueBird in an umbrella app, you must run the command from within
+the folder of the child app (e.g. `apps/myapp_web`).
 
 ## Configuration
 
@@ -194,8 +197,9 @@ config :blue_bird,
 #### Options
 
 * `docs_path`: Specify the path where the documentation will be generated. If
-  you want to serve the documentation directly from the `phoenix`, you can
-  specify `priv/static/docs`.
+  you want to serve the documentation directly from the `phoenix` app, you can
+  specify `priv/static/docs`. If you use BlueBird within an umbrella app, the
+  path is relative to the root folder of the umbrella app.
 * `theme`: HTML theme is generated using the
   [Aglio renderer](https://github.com/danielgtaylor/aglio).
 * `router`: Router of your application, in Phoenix 1.3 it will be
