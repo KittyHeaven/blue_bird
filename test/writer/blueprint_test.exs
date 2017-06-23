@@ -212,23 +212,4 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
                        """
     end
   end
-
-  describe "group_routes/2" do
-    test "groups routes" do
-      route_a = %Route{group: "a"}
-      route_b1 = %Route{group: "b"}
-      route_b2 = %Route{group: "b"}
-      route_c = %Route{group: "c"}
-
-      routes = [route_b1, route_a, route_c, route_b2]
-
-      expected = [
-        {"a", [route_a]},
-        {"b", [route_b1, route_b2]},
-        {"c", [route_c]}
-      ]
-
-      assert group_routes(routes, :group) == expected
-    end
-  end
 end

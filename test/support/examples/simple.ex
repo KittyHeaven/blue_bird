@@ -96,17 +96,17 @@ defmodule BlueBird.Test.Support.Examples.Simple do
         },
         "/route-with-simple-response" => %{
           "get" => %{
-            produces: ["text/plain"],
-            responses: %{
-              "200" => %{}
-            }
+            # produces: ["text/plain"],
+            # responses: %{
+            #   "200" => %{}
+            # }
           }
         },
         "/route-with-204-response" => %{
           "get" => %{
-            responses: %{
-              "204" => %{}
-            }
+            # responses: %{
+            #   "204" => %{}
+            # }
           }
         }
       }

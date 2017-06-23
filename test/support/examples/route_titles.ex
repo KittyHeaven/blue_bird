@@ -74,16 +74,16 @@ defmodule BlueBird.Test.Support.Examples.RouteTitles do
       paths: %{
         "/route-with-title" => %{
           "get" => %{
-            responses: %{
-              "204" => %{}
-            }
+            # responses: %{
+            #   "204" => %{}
+            # }
           }
         },
         "/route-without-title" => %{
           "get" => %{
-            responses: %{
-              "204" => %{}
-            }
+            # responses: %{
+            #   "204" => %{}
+            # }
           }
         }
       }

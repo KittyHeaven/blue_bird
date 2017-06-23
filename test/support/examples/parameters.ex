@@ -126,9 +126,9 @@ defmodule BlueBird.Test.Support.Examples.Parameters do
       paths: %{
         "/pastry/{id}/{type}" => %{
           "get" => %{
-            responses: %{
-              "204" => %{}
-            }
+            # responses: %{
+            #   "204" => %{}
+            # }
           }
         }
       }

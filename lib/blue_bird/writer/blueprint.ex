@@ -3,6 +3,8 @@ defmodule BlueBird.Writer.Blueprint do
   Defines functions to generate an API BluePrint representation of the
   `BlueBird.ApiDoc` struct.
   """
+  import BlueBird.Writer, only: [group_routes: 2]
+
   alias BlueBird.{ApiDoc, Parameter, Request, Route}
 
   @ignore_headers Application.get_env(:blue_bird, :ignore_headers, [])
@@ -21,16 +23,6 @@ defmodule BlueBird.Writer.Blueprint do
     <> print_overview(docs)
     <> "\n\n"
     <> doc_routes
-  end
-
-  ## Grouping
-
-  @doc false
-  @spec group_routes([Route.t], atom) :: [{String.t, [Route.t]}]
-  def group_routes(routes, key) do
-    routes
-    |> Enum.group_by(fn(route) -> Map.get(route, key) end)
-    |> Enum.to_list()
   end
 
   ## Groups

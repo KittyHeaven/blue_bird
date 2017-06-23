@@ -120,26 +120,26 @@ defmodule BlueBird.Test.Support.Examples.Responses do
       paths: %{
         "/plain-response" => %{
           "get" => %{
-            produces: "text/plain",
-            responses: %{
-              "200" => %{}
-            }
+            # produces: "text/plain",
+            # responses: %{
+            #   "200" => %{}
+            # }
           }
         },
         "/plain-with-line-breaks" => %{
           "get" => %{
-            produces: "text/plain",
-            responses: %{
-              "200" => %{}
-            }
+            # produces: "text/plain",
+            # responses: %{
+            #   "200" => %{}
+            # }
           }
         },
         "/multiple-headers" => %{
           "get" => %{
-            produces: "text/plain",
-            responses: %{
-              "200" => %{}
-            }
+            # produces: "text/plain",
+            # responses: %{
+            #   "200" => %{}
+            # }
           }
         }
       }

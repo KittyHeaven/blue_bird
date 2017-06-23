@@ -3,6 +3,8 @@ defmodule BlueBird.Writer.Swagger do
   Defines functions to convert `BlueBird.ApiDoc` struct into a Swagger json
   string.
   """
+  import BlueBird.Writer, only: [group_routes: 2]
+
   alias BlueBird.{ApiDoc, Parameter, Request, Route}
 
   @ignore_headers Application.get_env(:blue_bird, :ignore_headers, [])
@@ -65,7 +67,7 @@ defmodule BlueBird.Writer.Swagger do
   end
 
   @spec put_license(map, [name: String.t, url: String.t]) :: map
-  defp put_license(map, %{name: "", url: ""}), do: map
+  defp put_license(map, [name: "", url: ""]), do: map
   defp put_license(map, license) do
     license_map = %{}
     |> put_if_set(:name, license[:name])
@@ -81,12 +83,23 @@ defmodule BlueBird.Writer.Swagger do
 
   @spec put_paths(map, ApiDoc.t) :: map
   defp put_paths(map, api_docs) do
-    paths = Enum.reduce(api_docs.routes, %{}, fn(route, acc) ->
-      path = replace_path_params(route.path)
-      Map.put(acc, path, %{})
-    end)
+    paths = api_docs.routes
+    |> group_routes(:path)
+    |> Enum.reduce(%{}, fn({path, routes}, acc) ->
+         path = replace_path_params(path)
+         Map.put(acc, path, path_item_object(routes))
+       end)
+    #[{String.t, [Route.t]}]
 
     Map.put(map, :paths, paths)
+  end
+
+  defp path_item_object(routes) do
+    routes
+    |> group_routes(:method)
+    |> Enum.reduce(%{}, fn({method, routes}, acc) ->
+         Map.put(acc, String.downcase(method), %{})
+       end)
   end
 
   @spec replace_path_params(String.t) :: String.t

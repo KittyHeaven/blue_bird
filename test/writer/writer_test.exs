@@ -1,6 +1,7 @@
 defmodule BlueBird.Test.Writer do
   use BlueBird.Test.Support.ConnCase
 
+  alias BlueBird.Route
   alias BlueBird.Test.Support.Examples
   alias BlueBird.Writer
 
@@ -18,6 +19,25 @@ defmodule BlueBird.Test.Writer do
 
       assert {:ok, file} = File.read(path_swagger)
       assert file == Poison.encode!(Grouping.swagger)
+    end
+  end
+
+  describe "group_routes/2" do
+    test "groups routes" do
+      route_a = %Route{group: "a"}
+      route_b1 = %Route{group: "b"}
+      route_b2 = %Route{group: "b"}
+      route_c = %Route{group: "c"}
+
+      routes = [route_b1, route_a, route_c, route_b2]
+
+      expected = [
+        {"a", [route_a]},
+        {"b", [route_b1, route_b2]},
+        {"c", [route_c]}
+      ]
+
+      assert Writer.group_routes(routes, :group) == expected
     end
   end
 

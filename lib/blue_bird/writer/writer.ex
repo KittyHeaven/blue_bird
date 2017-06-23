@@ -57,4 +57,12 @@ defmodule BlueBird.Writer do
     |> Enum.at(0)
     |> Path.join(@docs_path)
   end
+
+  @doc false
+  @spec group_routes([Route.t], atom) :: [{String.t, [Route.t]}]
+  def group_routes(routes, key) do
+    routes
+    |> Enum.group_by(fn(route) -> Map.get(route, key) end)
+    |> Enum.to_list()
+  end
 end
