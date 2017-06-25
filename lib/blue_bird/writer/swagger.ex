@@ -88,6 +88,7 @@ defmodule BlueBird.Writer.Swagger do
     Map.put(map, :paths, paths)
   end
 
+  @spec path_item_object([Route.t]) :: map
   defp path_item_object(routes) do
     routes
     |> group_routes(:method)
@@ -96,11 +97,23 @@ defmodule BlueBird.Writer.Swagger do
        end)
   end
 
+  @spec operation_object(Route.t) :: map
   defp operation_object(route) do
     %{}
     |> put_if_set(:summary, route.title)
     |> put_if_set(:description, route.description)
     |> put_if_set(:tags, [route.group])
+    |> put_if_set(:parameters, parameter_objects(route))
+  end
+
+  @spec parameter_objects(Route.t) :: map
+  defp parameter_objects(route) do
+    route.parameters
+    |> Enum.map(fn(parameter) ->
+      %{}
+      |> put_if_set(:name, parameter.name)
+      |> put_if_set(:description, parameter.description)
+    end)
   end
 
   @spec replace_path_params(String.t) :: String.t

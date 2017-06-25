@@ -126,9 +126,19 @@ defmodule BlueBird.Test.Support.Examples.Parameters do
       paths: %{
         "/pastry/{id}/{type}" => %{
           "get" => %{
-            # responses: %{
-            #   "204" => %{}
-            # }
+            parameters: [
+              %{
+                name: "id"
+              },
+              %{
+                name: "name",
+                description: "The name of the pastry."
+              },
+              %{
+                name: "type",
+                description: "The type of the pastry."
+              }
+            ]
           }
         }
       }
