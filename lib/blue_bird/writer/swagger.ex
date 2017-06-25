@@ -5,9 +5,7 @@ defmodule BlueBird.Writer.Swagger do
   """
   import BlueBird.Writer, only: [group_routes: 2]
 
-  alias BlueBird.{ApiDoc, Parameter, Request, Route}
-
-  @ignore_headers Application.get_env(:blue_bird, :ignore_headers, [])
+  alias BlueBird.{ApiDoc, Parameter, Route}
 
   @doc """
   Generates a Swagger json string from an `BlueBird.ApiDocs{}` struct.
@@ -103,12 +101,12 @@ defmodule BlueBird.Writer.Swagger do
     |> put_if_set(:summary, route.title)
     |> put_if_set(:description, route.description)
     |> put_if_set(:tags, [route.group])
-    |> put_if_set(:parameters, parameter_objects(route))
+    |> put_if_set(:parameters, parameter_objects(route.parameters))
   end
 
-  @spec parameter_objects(Route.t) :: map
-  defp parameter_objects(route) do
-    route.parameters
+  @spec parameter_objects([Parameter.t]) :: [map]
+  defp parameter_objects(parameters) do
+    parameters
     |> Enum.map(fn(parameter) ->
       %{}
       |> put_if_set(:name, parameter.name)
@@ -124,9 +122,9 @@ defmodule BlueBird.Writer.Swagger do
   end
 
   @spec put_if_set(map, any, any) :: map
-  defp put_if_set(map, key, nil), do: map
-  defp put_if_set(map, key, ""), do: map
-  defp put_if_set(map, key, []), do: map
-  defp put_if_set(map, key, [nil]), do: map
+  defp put_if_set(map, _key, nil), do: map
+  defp put_if_set(map, _key, ""), do: map
+  defp put_if_set(map, _key, []), do: map
+  defp put_if_set(map, _key, [nil]), do: map
   defp put_if_set(map, key, value), do: Map.put(map, key, value)
 end
