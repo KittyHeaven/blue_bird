@@ -76,11 +76,6 @@ defmodule BlueBird.Writer.Swagger do
     Map.put(map, :license, license_map)
   end
 
-  @spec put_if_set(map, any, any) :: map
-  defp put_if_set(map, key, nil), do: map
-  defp put_if_set(map, key, ""), do: map
-  defp put_if_set(map, key, value), do: Map.put(map, key, value)
-
   @spec put_paths(map, ApiDoc.t) :: map
   defp put_paths(map, api_docs) do
     paths = api_docs.routes
@@ -96,9 +91,16 @@ defmodule BlueBird.Writer.Swagger do
   defp path_item_object(routes) do
     routes
     |> group_routes(:method)
-    |> Enum.reduce(%{}, fn({method, routes}, acc) ->
-         Map.put(acc, String.downcase(method), %{})
+    |> Enum.reduce(%{}, fn({method, [route]}, acc) ->
+         Map.put(acc, String.downcase(method), operation_object(route))
        end)
+  end
+
+  defp operation_object(route) do
+    %{}
+    |> put_if_set(:summary, route.title)
+    |> put_if_set(:description, route.description)
+    |> put_if_set(:tags, [route.group])
   end
 
   @spec replace_path_params(String.t) :: String.t
@@ -107,4 +109,11 @@ defmodule BlueBird.Writer.Swagger do
     |> Regex.replace(path, "{\\1}/")
     |> String.trim_trailing("/")
   end
+
+  @spec put_if_set(map, any, any) :: map
+  defp put_if_set(map, key, nil), do: map
+  defp put_if_set(map, key, ""), do: map
+  defp put_if_set(map, key, []), do: map
+  defp put_if_set(map, key, [nil]), do: map
+  defp put_if_set(map, key, value), do: Map.put(map, key, value)
 end

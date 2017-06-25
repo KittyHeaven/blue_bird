@@ -70,7 +70,9 @@ defmodule BlueBird.Test.Support.Examples.NotesWarnings do
           "get" => %{}
         },
         "/route-with-description-and-note" => %{
-          "get" => %{}
+          "get" => %{
+            description: "This is my route. My route is not my enemy."
+          }
         }
       }
     }

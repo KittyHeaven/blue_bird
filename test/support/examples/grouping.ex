@@ -122,22 +122,42 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
       schemes: ["https"],
       paths: %{
         "/cats" => %{
-          "get" => %{},
-          "post" => %{}
+          "get" => %{
+            tags: ["Cats"]
+          },
+          "post" => %{
+            tags: ["Cats"]
+          }
         },
         "/cats/{id}" => %{
-          "get" => %{},
-          "delete" => %{},
-          "put" => %{}
+          "get" => %{
+            tags: ["Cats"]
+          },
+          "delete" => %{
+            tags: ["Cats"]
+          },
+          "put" => %{
+            tags: ["Cats"]
+          }
         },
         "/airplanes" => %{
-          "get" => %{},
-          "post" => %{}
+          "get" => %{
+            tags: ["Airplanes"]
+          },
+          "post" => %{
+            tags: ["Airplanes"]
+          }
         },
         "/airplanes/{id}" => %{
-          "get" => %{},
-          "delete" => %{},
-          "put" => %{}
+          "get" => %{
+            tags: ["Airplanes"]
+          },
+          "delete" => %{
+            tags: ["Airplanes"]
+          },
+          "put" => %{
+            tags: ["Airplanes"]
+          }
         }
       }
     }
