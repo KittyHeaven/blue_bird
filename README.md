@@ -15,7 +15,7 @@ It lets you generate API documentation in the [API Blueprint](https://apibluepri
 
 ``` elixir
 defp deps do
-  [{:blue_bird, "~> 0.3.2"}]
+  [{:blue_bird, "~> 0.3.3"}]
 end
 ```
 
