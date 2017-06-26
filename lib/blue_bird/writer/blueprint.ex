@@ -178,7 +178,9 @@ defmodule BlueBird.Writer.Blueprint do
     if req_str == "" && content_type == "" do
       ""
     else
-      "+ Request#{content_type}\n\n" <> req_str <> "\n"
+      "+ Request #{request.response.status}#{content_type}\n\n"
+      <> req_str
+      <> "\n"
     end
   end
 
