@@ -176,7 +176,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       assert result == """
                        ### POST
 
-                       + Request (application/json)
+                       + Request 201 (application/json)
 
                            + Headers
 
@@ -192,7 +192,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
                                    {"name":"George","kind":"dog"}
 
-                       + Request
+                       + Request 200
 
                            + Headers
 

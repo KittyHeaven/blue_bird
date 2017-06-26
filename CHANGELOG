@@ -1,5 +1,9 @@
 # Changelog BlueBird
 
+## v0.3.4 (unreleased)
+
+- add status code to documented response
+
 ## v0.3.3
 
 - fix `doc_path` and `ignore_headers` config not working
