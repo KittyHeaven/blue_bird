@@ -6,9 +6,6 @@ defmodule BlueBird.Writer.Blueprint do
   alias BlueBird.{ApiDoc, Parameter, Request, Route}
   alias Mix.Project
 
-  @docs_path Application.get_env(:blue_bird, :docs_path, "docs")
-  @ignore_headers Application.get_env(:blue_bird, :ignore_headers, [])
-
   @doc """
   Writes a `BlueBird.ApiDoc{}` struct to file.
 
@@ -40,11 +37,12 @@ defmodule BlueBird.Writer.Blueprint do
 
   @spec get_path :: binary
   defp get_path do
-    Project.load_paths
-    |> Enum.at(0)
+    docs_path = Application.get_env(:blue_bird, :docs_path, "docs")
+
+    Project.build_path()
     |> String.split("_build")
     |> Enum.at(0)
-    |> Path.join(@docs_path)
+    |> Path.join(docs_path)
   end
 
   @doc """
@@ -300,8 +298,10 @@ defmodule BlueBird.Writer.Blueprint do
 
   @spec filter_headers([{String.t, String.t}]) :: [String.t]
   defp filter_headers([_|_] = headers) do
+    ignore_headers = Application.get_env(:blue_bird, :ignore_headers, [])
+
     Enum.reject(headers, fn({key, _}) ->
-      key == "content-type" || Enum.member?(@ignore_headers, key)
+      key == "content-type" || Enum.member?(ignore_headers, key)
     end)
   end
   defp filter_headers(_), do: []
