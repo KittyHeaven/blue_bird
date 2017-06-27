@@ -7,9 +7,6 @@ defmodule BlueBird.Writer.Blueprint do
 
   alias BlueBird.{ApiDoc, Parameter, Request, Route}
 
-  @ignore_headers Application.get_env(:blue_bird, :ignore_headers, [])
-
-  @doc """
   Generates a string from an `BlueBird.ApiDocs{}` struct.
   """
   @spec generate_output(ApiDoc.t) :: String.t
@@ -133,7 +130,9 @@ defmodule BlueBird.Writer.Blueprint do
     if req_str == "" && content_type == "" do
       ""
     else
-      "+ Request#{content_type}\n\n" <> req_str <> "\n"
+      "+ Request #{request.response.status}#{content_type}\n\n"
+      <> req_str
+      <> "\n"
     end
   end
 
@@ -296,8 +295,10 @@ defmodule BlueBird.Writer.Blueprint do
 
   @spec filter_headers([{String.t, String.t}]) :: [String.t]
   defp filter_headers([_|_] = headers) do
+    ignore_headers = Application.get_env(:blue_bird, :ignore_headers, [])
+
     Enum.reject(headers, fn({key, _}) ->
-      key == "content-type" || Enum.member?(@ignore_headers, key)
+      key == "content-type" || Enum.member?(ignore_headers, key)
     end)
   end
   defp filter_headers(_), do: []

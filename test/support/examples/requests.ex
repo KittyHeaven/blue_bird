@@ -43,7 +43,7 @@ defmodule BlueBird.Test.Support.Examples.Requests do
 
     ### GET
 
-    + Request
+    + Request 204
 
         + Headers
 

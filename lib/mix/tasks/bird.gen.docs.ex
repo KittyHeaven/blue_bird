@@ -19,12 +19,10 @@ defmodule Mix.Tasks.Bird.Gen.Docs do
     docs_path = Application.get_env(:blue_bird, :docs_path, "docs")
     docs_theme = Application.get_env(:blue_bird, :docs_theme, "triple")
 
-    project_path = Project.load_paths
-    |> Enum.at(0)
+    path = Project.build_path()
     |> String.split("_build")
     |> Enum.at(0)
-
-    path = Path.join(project_path, docs_path)
+    |> Path.join(docs_path)
 
     System.cmd(
       "aglio",
