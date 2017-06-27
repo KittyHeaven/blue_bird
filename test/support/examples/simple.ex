@@ -91,22 +91,18 @@ defmodule BlueBird.Test.Support.Examples.Simple do
       paths: %{
         "/route-without-info-or-response" => %{
           "get" => %{
-
+            responses: %{}
           }
         },
         "/route-with-simple-response" => %{
           "get" => %{
-            # produces: ["text/plain"],
-            # responses: %{
-            #   "200" => %{}
-            # }
+            produces: ["text/plain"],
+            responses: %{}
           }
         },
         "/route-with-204-response" => %{
           "get" => %{
-            # responses: %{
-            #   "204" => %{}
-            # }
+            responses: %{}
           }
         }
       }

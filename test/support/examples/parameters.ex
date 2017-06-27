@@ -138,7 +138,8 @@ defmodule BlueBird.Test.Support.Examples.Parameters do
                 name: "type",
                 description: "The type of the pastry."
               }
-            ]
+            ],
+            responses: %{}
           }
         }
       }

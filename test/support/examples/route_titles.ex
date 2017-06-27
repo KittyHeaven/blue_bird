@@ -75,12 +75,14 @@ defmodule BlueBird.Test.Support.Examples.RouteTitles do
         "/route-with-title" => %{
           "get" => %{
             summary: "Ride",
-            tags: ["Pony"]
+            tags: ["Pony"],
+            responses: %{}
           }
         },
         "/route-without-title" => %{
           "get" => %{
-            tags: ["Pony"]
+            tags: ["Pony"],
+            responses: %{}
           }
         }
       }

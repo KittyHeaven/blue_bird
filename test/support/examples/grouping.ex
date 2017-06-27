@@ -123,40 +123,50 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
       paths: %{
         "/cats" => %{
           "get" => %{
-            tags: ["Cats"]
+            tags: ["Cats"],
+            responses: %{}
           },
           "post" => %{
-            tags: ["Cats"]
+            tags: ["Cats"],
+            responses: %{}
           }
         },
         "/cats/{id}" => %{
           "get" => %{
-            tags: ["Cats"]
+            tags: ["Cats"],
+            responses: %{}
           },
           "delete" => %{
-            tags: ["Cats"]
+            tags: ["Cats"],
+            responses: %{}
           },
           "put" => %{
-            tags: ["Cats"]
+            tags: ["Cats"],
+            responses: %{}
           }
         },
         "/airplanes" => %{
           "get" => %{
-            tags: ["Airplanes"]
+            tags: ["Airplanes"],
+            responses: %{}
           },
           "post" => %{
-            tags: ["Airplanes"]
+            tags: ["Airplanes"],
+            responses: %{}
           }
         },
         "/airplanes/{id}" => %{
           "get" => %{
-            tags: ["Airplanes"]
+            tags: ["Airplanes"],
+            responses: %{}
           },
           "delete" => %{
-            tags: ["Airplanes"]
+            tags: ["Airplanes"],
+            responses: %{}
           },
           "put" => %{
-            tags: ["Airplanes"]
+            tags: ["Airplanes"],
+            responses: %{}
           }
         }
       }

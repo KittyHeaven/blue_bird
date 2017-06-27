@@ -102,6 +102,19 @@ defmodule BlueBird.Writer.Swagger do
     |> put_if_set(:description, route.description)
     |> put_if_set(:tags, [route.group])
     |> put_if_set(:parameters, parameter_objects(route.parameters))
+    |> put_if_set(:produces, response_content_types(route.requests))
+    |> Map.put(:responses, %{})
+  end
+
+  @spec response_content_types([Request.t]) :: [String.t]
+  defp response_content_types(requests) do
+    requests
+    |> Enum.map(fn(request) ->
+         request.response.headers
+         |> Enum.filter_map(&elem(&1, 0) == "content-type", &elem(&1, 1))
+    end)
+    |> Enum.concat
+    |> Enum.uniq
   end
 
   @spec parameter_objects([Parameter.t]) :: [map]

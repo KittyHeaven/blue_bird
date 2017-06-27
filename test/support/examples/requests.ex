@@ -71,10 +71,8 @@ defmodule BlueBird.Test.Support.Examples.Requests do
       paths: %{
         "/request-headers" => %{
           "get" => %{
-            # consumes: "application/json",
-            # responses: %{
-            #   "204" => %{}
-            # }
+            # consumes: "application/json"
+            responses: %{}
           }
         }
       }
