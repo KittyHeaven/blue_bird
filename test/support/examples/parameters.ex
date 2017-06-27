@@ -67,7 +67,12 @@ defmodule BlueBird.Test.Support.Examples.Parameters do
                 "phyllo",
                 "hot water crust"
               ]
-            }
+            },
+            %Parameter{
+              name: "query",
+              type: "string",
+              example: "delicious"
+            },
           ]
         },
       ]
@@ -107,6 +112,8 @@ defmodule BlueBird.Test.Support.Examples.Parameters do
                 + phyllo
                 + hot water crust
 
+        + query: delicious (string, required)
+
     + Response 204
 
     + Response 204
@@ -137,6 +144,9 @@ defmodule BlueBird.Test.Support.Examples.Parameters do
               %{
                 name: "type",
                 description: "The type of the pastry."
+              },
+              %{
+                name: "query"
               }
             ],
             responses: %{}
