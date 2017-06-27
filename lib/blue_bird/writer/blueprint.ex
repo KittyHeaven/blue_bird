@@ -7,6 +7,7 @@ defmodule BlueBird.Writer.Blueprint do
 
   alias BlueBird.{ApiDoc, Parameter, Request, Route}
 
+  @doc """
   Generates a string from an `BlueBird.ApiDocs{}` struct.
   """
   @spec generate_output(ApiDoc.t) :: String.t
