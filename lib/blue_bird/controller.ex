@@ -39,7 +39,8 @@ defmodule BlueBird.Controller do
 
   defmacro __using__(_) do
     quote do
-      import BlueBird.Controller, only: [api: 3, apigroup: 1, apigroup: 2]
+      import BlueBird.Controller, only: [
+        api: 3, apigroup: 1, apigroup: 2, api_parameters: 2]
     end
   end
 
@@ -82,10 +83,16 @@ defmodule BlueBird.Controller do
     note          = extract_option(metadata, :note)
     warning       = extract_option(metadata, :warning)
     parameters    = extract_parameters(metadata)
+    parameter_objects = extract_parameter_objects(metadata)
 
     quote do
       @spec api_doc(String.t, String.t) :: Route.t
       def api_doc(unquote(method_str), unquote(path)) do
+        param_objects = unquote(parameter_objects)
+        |> Enum.concat()
+
+        params = unquote(Macro.escape(parameters)) ++ param_objects
+
         %Route{
           title:        unquote(title),
           description:  unquote(description),
@@ -93,7 +100,7 @@ defmodule BlueBird.Controller do
           method:       unquote(method_str),
           warning:      unquote(warning),
           path:         unquote(path),
-          parameters:   unquote(Macro.escape(parameters))
+          parameters:   params
         }
       end
     end
@@ -128,6 +135,28 @@ defmodule BlueBird.Controller do
         }
       end
     end
+  end
+
+  defmacro api_parameters(id, do: block) do
+    process_parameters(id, block)
+  end
+
+  defp process_parameters(id, block) do
+    metadata      = extract_metadata(block)
+    parameters    = extract_parameters(metadata)
+
+    quote do
+      def api_parameter_object(unquote(id)) do
+        unquote(Macro.escape(parameters))
+      end
+    end
+  end
+
+  defp extract_parameter_objects(metadata) do
+    metadata
+    |> Keyword.get_values(:parameter_object)
+    |> Enum.concat()
+    |> Enum.map(fn(p) -> quote do api_parameter_object(unquote(p)) end end)
   end
 
   @spec method_to_string(String.t | atom) :: String.t
