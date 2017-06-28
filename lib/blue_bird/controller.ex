@@ -138,10 +138,6 @@ defmodule BlueBird.Controller do
   end
 
   defmacro api_parameters(id, do: block) do
-    process_parameters(id, block)
-  end
-
-  defp process_parameters(id, block) do
     metadata      = extract_metadata(block)
     parameters    = extract_parameters(metadata)
 
