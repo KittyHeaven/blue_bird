@@ -214,7 +214,12 @@ defmodule BlueBird.Test.GeneratorTest do
       method: "POST",
       note: nil,
       warning: nil,
-      parameters: [%Parameter{description: "ID", name: "id", type: "int"}],
+      parameters: [
+        %Parameter{description: "ID", name: "id", type: "int"},
+        %Parameter{members: [], name: "page", type: "number"},
+        %Parameter{default: 100, name: "limit", type: "number"},
+        %Parameter{name: "order_by", type: "string"}
+      ],
       path: "/statler/:id",
       requests: [],
       title: "Post Statler"
