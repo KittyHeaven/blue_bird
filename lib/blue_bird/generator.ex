@@ -167,7 +167,7 @@ defmodule BlueBird.Generator do
     %Request{
       method: conn.method,
       path: route.path,
-      headers: conn.req_headers,
+      headers: reject_empty_headers(conn.req_headers),
       path_params: conn.path_params,
       body_params: conn.body_params,
       query_params: conn.query_params,
@@ -177,6 +177,10 @@ defmodule BlueBird.Generator do
         headers: conn.resp_headers
       }
     }
+  end
+
+  defp reject_empty_headers(headers) do
+    Enum.reject(headers, &(elem(&1, 1) == ""))
   end
 
   @spec process_routes([Request.t], [%PhxRoute{}]) :: [Request.t]
