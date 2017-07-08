@@ -167,16 +167,34 @@ defmodule BlueBird.Generator do
     %Request{
       method: conn.method,
       path: route.path,
-      headers: conn.req_headers,
+      headers: filter_headers(conn.req_headers, :request),
       path_params: conn.path_params,
       body_params: conn.body_params,
       query_params: conn.query_params,
       response: %Response{
         status: conn.status,
         body: conn.resp_body,
-        headers: conn.resp_headers
+        headers: filter_headers(conn.resp_headers, :response)
       }
     }
+  end
+
+  @spec filter_headers([{String.t, String.t}], atom) :: [{String.t, String.t}]
+  defp filter_headers(headers, type) do
+    ignore_headers = get_ignore_headers(type)
+
+    Enum.reject(headers, fn({key, value}) ->
+      value == "" || Enum.member?(ignore_headers, key)
+    end)
+  end
+
+  @spec get_ignore_headers(atom) :: [String.t]
+  defp get_ignore_headers(type) when type == :request or type == :response do
+    case Application.get_env(:blue_bird, :ignore_headers) do
+      [_|_] = headers -> headers
+      %{} = header_map -> Map.get(header_map, type, [])
+      _ -> []
+    end
   end
 
   @spec process_routes([Request.t], [%PhxRoute{}]) :: [Request.t]
