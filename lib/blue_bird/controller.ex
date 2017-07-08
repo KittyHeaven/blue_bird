@@ -86,7 +86,6 @@ defmodule BlueBird.Controller do
     parameter_objects = extract_parameter_objects(metadata)
 
     quote do
-      @spec api_doc(String.t, String.t) :: Route.t
       def api_doc(unquote(method_str), unquote(path)) do
         param_objects = unquote(parameter_objects)
         |> Enum.concat()
@@ -127,7 +126,6 @@ defmodule BlueBird.Controller do
     description = to_string(description)
 
     quote do
-      @spec api_group :: %{name: String.t, description: String.t}
       def api_group do
         %{
           name: unquote(name),
