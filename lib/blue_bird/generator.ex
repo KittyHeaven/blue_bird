@@ -188,7 +188,8 @@ defmodule BlueBird.Generator do
     end)
   end
 
-  def get_ignore_headers(type) when type == :request or type == :response do
+  @spec get_ignore_headers(atom) :: [String.t]
+  defp get_ignore_headers(type) when type == :request or type == :response do
     case Application.get_env(:blue_bird, :ignore_headers) do
       [_|_] = headers -> headers
       %{} = header_map -> Map.get(header_map, type, [])
