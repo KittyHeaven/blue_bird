@@ -39,7 +39,8 @@ defmodule BlueBird.Controller do
 
   defmacro __using__(_) do
     quote do
-      import BlueBird.Controller, only: [api: 3, apigroup: 1, apigroup: 2]
+      import BlueBird.Controller, only: [api: 3, apigroup: 1, apigroup: 2, parameters: 1, notes: 1,
+                                         warnings: 1]
     end
   end
 
@@ -144,6 +145,37 @@ defmodule BlueBird.Controller do
           name: unquote(name),
           description: unquote(description)
         }
+      end
+    end
+  end
+
+  defmacro parameters(params) do
+    for param <- params do
+      [name | spread] = param
+
+      quote do
+        def parameter(unquote(name), arg_name), do: {:parameter, [arg_name | unquote(spread)]}
+        def parameter(unquote(name)), do: {:parameter, unquote(param)}
+      end
+    end
+  end
+
+  defmacro notes(notes) do
+    for note <- notes do
+      [name | spread] = note
+
+      quote do
+        def note(unquote(name)), do: {:note, unquote(spread)}
+      end
+    end
+  end
+
+  defmacro warnings(warnings) do
+    for warning <- warnings do
+      [name | spread] = warning
+
+      quote do
+        def warning(unquote(name)), do: {:warning, unquote(spread)}
       end
     end
   end

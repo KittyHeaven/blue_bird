@@ -20,16 +20,19 @@ defmodule BlueBird.Test.ControllerTest do
                         "third argument."
 
   defmodule Docs do
-    params = [
+    use BlueBird.Controller
+
+    parameters [
       [:topic, :string, []]
     ]
 
-    for param <- params do
-      [name | spread] = param
+    notes [
+      [:no_customers, "Please don't use this route if you are a customer."]
+    ]
 
-      def unquote(name)(arg_name), do: {:parameter, [arg_name | unquote(spread)]}
-      def unquote(name)(), do: {:parameter, unquote(param)}
-    end
+    warnings [
+      [:could_be_bad, "Could be really bad"]
+    ]
   end
 
   defmodule Controller do
@@ -41,7 +44,7 @@ defmodule BlueBird.Test.ControllerTest do
       group "Users"
       title "List all users"
       description "This route returns a list of all users."
-      note "Please don't use this route if you are a customer."
+      shared_item BlueBird.Test.ControllerTest.Docs.note(:no_customers)
       warning "May have undocumented side effects."
     end
 
@@ -58,7 +61,8 @@ defmodule BlueBird.Test.ControllerTest do
     api :PATCH, "/users/:id/:pid/:topic" do
       parameter :id, :integer, [description: "the user ID"]
       parameter :pid, :integer, [description: "the post ID"]
-      shared_item BlueBird.Test.ControllerTest.Docs.topic()
+      shared_item BlueBird.Test.ControllerTest.Docs.parameter(:topic)
+      shared_item BlueBird.Test.ControllerTest.Docs.warning(:could_be_bad)
     end
   end
 
@@ -123,7 +127,13 @@ defmodule BlueBird.Test.ControllerTest do
           type: "string"
         }
     ]
-    end
+  end
+
+  test "extracts shared warnings" do
+    path = "/users/:id/:pid/:topic"
+
+    assert Controller.api_doc("PATCH", path).warning === "Could be really bad"
+  end
 
     test "raises error if single value fields have too many values" do
       message = "Expected single value for title, got 2"
