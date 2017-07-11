@@ -74,9 +74,32 @@ defmodule BlueBird.Controller do
           example: "whatever"
         ]
   """
+
+{
+  [
+    {
+      {
+        :.,
+        [line: 61],
+        [
+          {
+            :__aliases__,
+            [line: 61],
+            [:BlueBird, :Test, :ControllerTest, :Docs]
+          },
+          :topic
+        ]
+      },
+      [line: 61],
+      []
+    }
+  ]
+}
   defmacro api(method, path, do: block) do
     method_str    = method_to_string(method)
-    metadata      = extract_metadata(block)
+    metadata      = block
+                    |> extract_metadata
+                    |> extract_shared_params
     title         = extract_option(metadata, :title)
     description   = extract_option(metadata, :description)
     note          = extract_option(metadata, :note)
@@ -98,6 +121,20 @@ defmodule BlueBird.Controller do
       end
     end
   end
+
+  defp extract_shared_params(metadata) do
+    metadata
+    |> Enum.map(&eval_shared_param/1)
+  end
+
+  defp eval_shared_param({key, value}) do
+    {key, _eval_shared_param(value)}
+  end
+
+  defp _eval_shared_param([{_, _, _}] = value) do
+    value |> Code.eval_quoted |> elem(0) |> List.first()
+  end
+  defp _eval_shared_param(v), do: v
 
   @doc """
   Defines the name and an optional description for a resource group.
@@ -164,10 +201,6 @@ defmodule BlueBird.Controller do
   defp extract_parameters(metadata) do
     metadata
     |> Keyword.get_values(:parameter)
-    |> Enum.map(fn
-      [quoted] -> quoted |> Code.eval_quoted |> elem(0)
-      param -> param
-    end)
     |> Enum.reduce([], fn(param, list) -> [param_to_map(param) | list] end)
     |> Enum.reverse
   end
