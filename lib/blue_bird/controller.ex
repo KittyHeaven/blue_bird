@@ -75,7 +75,6 @@ defmodule BlueBird.Controller do
           example: "whatever"
         ]
   """
-
   defmacro api(method, path, do: block) do
     method_str    = method_to_string(method)
     metadata      = block
@@ -109,14 +108,12 @@ defmodule BlueBird.Controller do
   end
 
   defp eval_shared_param({:shared_item, value}) do
-    value |> Code.eval_quoted |> elem(0) |> List.first()
+    value
+    |> Code.eval_quoted
+    |> elem(0)
+    |> List.first()
   end
   defp eval_shared_param(value), do: value
-
-  # defp _eval_shared_param([{_, _, _}] = value) do
-  #   value |> Code.eval_quoted |> elem(0) |> List.first()
-  # end
-  # defp _eval_shared_param(v), do: v
 
   @doc """
   Defines the name and an optional description for a resource group.
@@ -149,6 +146,18 @@ defmodule BlueBird.Controller do
     end
   end
 
+  @doc """
+  Defines a list of parameters that can be used via the `shared_item` macro.
+
+  Each item in the list is the exact same as what would normally be passed directly to the
+  `parameter` key inside of an `api` macro.
+
+  ## Example
+
+      parameters [
+        [:some_param, :string, [description: "Neato param"]]
+      ]
+  """
   defmacro parameters(params) do
     for param <- params do
       [name | spread] = param
@@ -160,6 +169,15 @@ defmodule BlueBird.Controller do
     end
   end
 
+  @doc """
+  Defines a list of notes that can be used via the `shared_item` macro.
+
+  ## Example
+
+      notes [
+        [:authenticated, "Authentication required"]
+      ]
+  """
   defmacro notes(notes) do
     for note <- notes do
       [name | spread] = note
@@ -170,6 +188,15 @@ defmodule BlueBird.Controller do
     end
   end
 
+  @doc """
+  Defines a list of warnings that can be used via the `shared_item` macro.
+
+  ## Example
+
+      notes [
+        [:destructive, "This will permanently destroy everything"]
+      ]
+  """
   defmacro warnings(warnings) do
     for warning <- warnings do
       [name | spread] = warning
@@ -222,15 +249,15 @@ defmodule BlueBird.Controller do
   defp param_to_map([name, type, options]) when is_list(options) do
     Map.merge(
       %Parameter{
-        name: to_string(name),
+        name: name |> to_string |> wrap_in_backticks,
         type: to_string(type)
       },
-      Enum.into(options, %{})
+      options |> wrap_param_options |> Enum.into(%{})
     )
   end
   defp param_to_map([name, type]) do
     %Parameter{
-      name: to_string(name),
+      name: name |> to_string |> wrap_in_backticks,
       type: to_string(type)
     }
   end
@@ -253,4 +280,14 @@ defmodule BlueBird.Controller do
                                        optional: true]
           """
   end
+
+  defp wrap_param_options(options) do
+    options
+    |> Enum.map(&_wrap_param_options/1)
+  end
+  defp _wrap_param_options({:members, values}) when is_list(values), do: {:members, values |> Enum.map(&wrap_in_backticks/1)}
+  defp _wrap_param_options({key, value}) when key in [:default, :example], do: {key, wrap_in_backticks(value)}
+  defp _wrap_param_options(v), do: v
+  defp wrap_in_backticks(v) when is_list(v), do: v |> Enum.map(&wrap_in_backticks/1) |> IO.inspect
+  defp wrap_in_backticks(v), do: "`#{v}`"
 end

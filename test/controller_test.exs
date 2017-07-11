@@ -100,9 +100,9 @@ defmodule BlueBird.Test.ControllerTest do
       assert Controller.api_doc("PUT", "/users/:id").parameters == [
         %Parameter{
           description: nil,
-          name: "id",
+          name: "`id`",
           type: "integer",
-          default: "brownie",
+          default: "`brownie`",
           optional: true
         }
       ]
@@ -113,17 +113,17 @@ defmodule BlueBird.Test.ControllerTest do
       assert Controller.api_doc("PATCH", path).parameters == [
         %Parameter{
           description: "the user ID",
-          name: "id",
+          name: "`id`",
           type: "integer"
         },
         %Parameter{
           description: "the post ID",
-          name: "pid",
+          name: "`pid`",
           type: "integer"
         },
         %Parameter{
           description: nil,
-          name: "topic",
+          name: "`topic`",
           type: "string"
         }
     ]
