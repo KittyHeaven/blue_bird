@@ -75,26 +75,6 @@ defmodule BlueBird.Controller do
         ]
   """
 
-{
-  [
-    {
-      {
-        :.,
-        [line: 61],
-        [
-          {
-            :__aliases__,
-            [line: 61],
-            [:BlueBird, :Test, :ControllerTest, :Docs]
-          },
-          :topic
-        ]
-      },
-      [line: 61],
-      []
-    }
-  ]
-}
   defmacro api(method, path, do: block) do
     method_str    = method_to_string(method)
     metadata      = block
@@ -127,14 +107,15 @@ defmodule BlueBird.Controller do
     |> Enum.map(&eval_shared_param/1)
   end
 
-  defp eval_shared_param({key, value}) do
-    {key, _eval_shared_param(value)}
-  end
-
-  defp _eval_shared_param([{_, _, _}] = value) do
+  defp eval_shared_param({:shared_item, value}) do
     value |> Code.eval_quoted |> elem(0) |> List.first()
   end
-  defp _eval_shared_param(v), do: v
+  defp eval_shared_param(value), do: value
+
+  # defp _eval_shared_param([{_, _, _}] = value) do
+  #   value |> Code.eval_quoted |> elem(0) |> List.first()
+  # end
+  # defp _eval_shared_param(v), do: v
 
   @doc """
   Defines the name and an optional description for a resource group.

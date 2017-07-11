@@ -27,8 +27,8 @@ defmodule BlueBird.Test.ControllerTest do
     for param <- params do
       [name | spread] = param
 
-      def unquote(name)(arg_name), do: [arg_name | unquote(spread)]
-      def unquote(name)(), do: unquote(param)
+      def unquote(name)(arg_name), do: {:parameter, [arg_name | unquote(spread)]}
+      def unquote(name)(), do: {:parameter, unquote(param)}
     end
   end
 
@@ -58,7 +58,7 @@ defmodule BlueBird.Test.ControllerTest do
     api :PATCH, "/users/:id/:pid/:topic" do
       parameter :id, :integer, [description: "the user ID"]
       parameter :pid, :integer, [description: "the post ID"]
-      parameter BlueBird.Test.ControllerTest.Docs.topic()
+      shared_item BlueBird.Test.ControllerTest.Docs.topic()
     end
   end
 
