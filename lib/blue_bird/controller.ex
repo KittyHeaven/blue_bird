@@ -164,6 +164,10 @@ defmodule BlueBird.Controller do
   defp extract_parameters(metadata) do
     metadata
     |> Keyword.get_values(:parameter)
+    |> Enum.map(fn
+      [quoted] -> quoted |> Code.eval_quoted |> elem(0)
+      param -> param
+    end)
     |> Enum.reduce([], fn(param, list) -> [param_to_map(param) | list] end)
     |> Enum.reverse
   end

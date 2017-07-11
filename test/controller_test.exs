@@ -19,6 +19,19 @@ defmodule BlueBird.Test.ControllerTest do
   @parameter_type_error "The parameter macro expects a keyword list as " <>
                         "third argument."
 
+  defmodule Docs do
+    params = [
+      [:topic, :string, []]
+    ]
+
+    for param <- params do
+      [name | spread] = param
+
+      def unquote(name)(arg_name), do: [arg_name | unquote(spread)]
+      def unquote(name)(), do: unquote(param)
+    end
+  end
+
   defmodule Controller do
     use BlueBird.Controller
 
@@ -45,7 +58,7 @@ defmodule BlueBird.Test.ControllerTest do
     api :PATCH, "/users/:id/:pid/:topic" do
       parameter :id, :integer, [description: "the user ID"]
       parameter :pid, :integer, [description: "the post ID"]
-      parameter :topic, :string
+      parameter BlueBird.Test.ControllerTest.Docs.topic()
     end
   end
 
