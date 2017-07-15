@@ -288,6 +288,6 @@ defmodule BlueBird.Controller do
   defp _wrap_param_options({:members, values}) when is_list(values), do: {:members, values |> Enum.map(&wrap_in_backticks/1)}
   defp _wrap_param_options({key, value}) when key in [:default, :example], do: {key, wrap_in_backticks(value)}
   defp _wrap_param_options(v), do: v
-  defp wrap_in_backticks(v) when is_list(v), do: v |> Enum.map(&wrap_in_backticks/1) |> IO.inspect
+  defp wrap_in_backticks(v) when is_list(v), do: v |> Enum.map(&wrap_in_backticks/1)
   defp wrap_in_backticks(v), do: "`#{v}`"
 end
