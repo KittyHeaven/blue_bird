@@ -15,7 +15,7 @@ It lets you generate API documentation in the [API Blueprint](https://apibluepri
 
 ``` elixir
 defp deps do
-  [{:blue_bird, "~> 0.3.3"}]
+  [{:blue_bird, "~> 0.3.4"}]
 end
 ```
 
@@ -170,7 +170,7 @@ $ mix test
 ```
 
 To generate an HTML documentation, use the convenience wrapper to the
-[Aglio renderer](https://github.com/danielgtaylor/aglio). 
+[Aglio renderer](https://github.com/danielgtaylor/aglio).
 
 ```
 $ mix bird.gen.docs
