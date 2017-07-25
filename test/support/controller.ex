@@ -22,16 +22,9 @@ defmodule BlueBird.Test.Support.TestController do
     warning "Warning"
   end
 
-  api_parameters :my_parameters do
-    parameter :page, :number
-    parameter :limit, :number, [default: 100]
-    parameter :order_by, :string
-  end
-
   api :POST, "/statler/:id" do
     title "Post Statler"
     parameter :id, :int, [description: "ID"]
-    parameter_object :my_parameters
   end
 
   def catchall(conn, params) do
