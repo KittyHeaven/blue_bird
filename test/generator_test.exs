@@ -79,6 +79,20 @@ defmodule BlueBird.Test.GeneratorTest do
       ]
     end
 
+    test "doesn't include empty headers" do
+      :get
+      |> build_conn("/waldorf")
+      |> put_req_header("empty", "")
+      |> Router.call(@opts)
+      |> ConnLogger.save()
+
+      Logger.disable(self())
+      route = Generator.run() |> find_route("GET", "/waldorf")
+      headers = List.first(route.requests).headers
+
+      assert headers == []
+    end
+
     test "uses values from api/3 macro" do
       Logger.disable(self())
       route = Generator.run() |> find_route("GET", "/statler")

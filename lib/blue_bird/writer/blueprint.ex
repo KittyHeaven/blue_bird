@@ -298,13 +298,9 @@ defmodule BlueBird.Writer.Blueprint do
     "#{key}: #{value}\n"
   end
 
-  @spec filter_headers([{String.t, String.t}]) :: [String.t]
+  @spec filter_headers([{String.t, String.t}]) :: [{String.t, String.t}]
   defp filter_headers([_|_] = headers) do
-    ignore_headers = Application.get_env(:blue_bird, :ignore_headers, [])
-
-    Enum.reject(headers, fn({key, _}) ->
-      key == "content-type" || Enum.member?(ignore_headers, key)
-    end)
+    Enum.reject(headers, fn({key, _}) -> key == "content-type" end)
   end
   defp filter_headers(_), do: []
 

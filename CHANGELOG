@@ -1,5 +1,11 @@
 # Changelog BlueBird
 
+## v0.3.5
+
+- add `trim_path` option to trim path prefixes
+- allow to set ignore header options for request and response headers separately
+- don't add empty headers to the documentation
+
 ## v0.3.4
 
 - add status code to documented response
