@@ -223,6 +223,7 @@ defmodule BlueBird.Generator do
       |> apply(:api_doc, [method, route.path])
       |> set_group(controller, route)
       |> Map.put(:requests, route_requests)
+      |> remove_path_prefix()
 
       {:ok, route_docs}
     rescue
@@ -233,6 +234,27 @@ defmodule BlueBird.Generator do
         Logger.warn fn -> "No api doc defined for #{method} #{route.path}." end
         :error
     end
+  end
+
+  @spec remove_path_prefix(Route.t) :: Route.t
+  defp remove_path_prefix(route) do
+    new_path = route.path
+    |> trim_path()
+    |> add_slash()
+
+    %{route | path: new_path}
+  end
+
+  @spec trim_path(String.t) :: String.t
+  defp trim_path(path) do
+    to_trim = Application.get_env(:blue_bird, :trim_path, "")
+
+    if path == to_trim, do: "/", else: String.trim_leading(path, to_trim <> "/")
+  end
+
+  @spec add_slash(String.t) :: String.t
+  defp add_slash(path) do
+    if String.starts_with?(path, "/"), do: path, else: "/" <> path
   end
 
   @spec set_group(Route.t, module, PhxRoute.t) :: Route.t

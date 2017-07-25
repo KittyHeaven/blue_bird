@@ -209,6 +209,9 @@ config :blue_bird,
   if you serve your application behind a proxy.
 * `pipelines` (optional): Only routes that use the specified router pipelines
   will be included in the documentation. Defaults to `[:api]` if not set.
+* `trim_path` (optional): Allows you to remove a path prefix from the docs. For
+  example, if all your routes start with `/api` and you don't want to display
+  this prefix in the documentation, set `trim_path` to `"/api"`.
 
 ### `blue_bird_info()`:
 
