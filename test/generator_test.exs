@@ -60,6 +60,21 @@ defmodule BlueBird.Test.GeneratorTest do
       end) =~ "No api doc defined for GET /undocumented."
     end
 
+    test "warns if api docs are missing for all routes" do
+      prev_conf = Application.get_env(:blue_bird, :router)
+      Application.put_env(
+        :blue_bird,
+        :router,
+        BlueBird.Test.Support.RouterUndocumented
+      )
+
+      assert capture_log(fn ->
+        Generator.run()
+      end) =~ "No api doc defined for GET /undocumented."
+
+      Application.put_env(:blue_bird, :router, prev_conf)
+    end
+
     test "includes headers" do
       :get
       |> build_conn("/waldorf")
