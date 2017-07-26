@@ -2,7 +2,6 @@ defmodule BlueBird.Test.FormatterTest do
   use ExUnit.Case
 
   alias BlueBird.Formatter
-  alias BlueBird.Test.Support.Examples
 
   test "Formatter runs Generator and Writer" do
     path_apib = Path.join(["priv", "static", "docs", "api.apib"])
