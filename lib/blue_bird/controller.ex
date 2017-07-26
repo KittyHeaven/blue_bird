@@ -84,7 +84,6 @@ defmodule BlueBird.Controller do
     parameters    = extract_parameters(metadata)
 
     quote do
-      @spec api_doc(String.t, String.t) :: Route.t
       def api_doc(unquote(method_str), unquote(path)) do
         %Route{
           title:        unquote(title),
@@ -120,7 +119,6 @@ defmodule BlueBird.Controller do
     description = to_string(description)
 
     quote do
-      @spec api_group :: %{name: String.t, description: String.t}
       def api_group do
         %{
           name: unquote(name),

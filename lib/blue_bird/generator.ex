@@ -190,16 +190,34 @@ defmodule BlueBird.Generator do
     %Request{
       method: conn.method,
       path: route.path,
-      headers: conn.req_headers,
+      headers: filter_headers(conn.req_headers, :request),
       path_params: conn.path_params,
       body_params: conn.body_params,
       query_params: conn.query_params,
       response: %Response{
         status: conn.status,
         body: conn.resp_body,
-        headers: conn.resp_headers
+        headers: filter_headers(conn.resp_headers, :response)
       }
     }
+  end
+
+  @spec filter_headers([{String.t, String.t}], atom) :: [{String.t, String.t}]
+  defp filter_headers(headers, type) do
+    ignore_headers = get_ignore_headers(type)
+
+    Enum.reject(headers, fn({key, value}) ->
+      value == "" || Enum.member?(ignore_headers, key)
+    end)
+  end
+
+  @spec get_ignore_headers(atom) :: [String.t]
+  defp get_ignore_headers(type) when type == :request or type == :response do
+    case Application.get_env(:blue_bird, :ignore_headers) do
+      [_|_] = headers -> headers
+      %{} = header_map -> Map.get(header_map, type, [])
+      _ -> []
+    end
   end
 
   @spec process_routes([Request.t], [%PhxRoute{}]) :: [Request.t]
@@ -228,6 +246,7 @@ defmodule BlueBird.Generator do
       |> apply(:api_doc, [method, route.path])
       |> set_group(controller, route)
       |> Map.put(:requests, route_requests)
+      |> remove_path_prefix()
 
       {:ok, route_docs}
     rescue
@@ -238,6 +257,27 @@ defmodule BlueBird.Generator do
         Logger.warn fn -> "No api doc defined for #{method} #{route.path}." end
         :error
     end
+  end
+
+  @spec remove_path_prefix(Route.t) :: Route.t
+  defp remove_path_prefix(route) do
+    new_path = route.path
+    |> trim_path()
+    |> add_slash()
+
+    %{route | path: new_path}
+  end
+
+  @spec trim_path(String.t) :: String.t
+  defp trim_path(path) do
+    to_trim = Application.get_env(:blue_bird, :trim_path, "")
+
+    if path == to_trim, do: "/", else: String.trim_leading(path, to_trim <> "/")
+  end
+
+  @spec add_slash(String.t) :: String.t
+  defp add_slash(path) do
+    if String.starts_with?(path, "/"), do: path, else: "/" <> path
   end
 
   @spec set_group(Route.t, module, PhxRoute.t) :: Route.t
