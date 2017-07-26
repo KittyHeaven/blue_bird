@@ -30,6 +30,7 @@ defmodule BlueBird.Test.Support.TestController do
   def catchall(conn, params) do
     body = Map.get(params, "body", @json_response)
     status = Map.get(params, "status", 200)
+    conn = conn |> put_resp_header("ignore-me", "whatever")
 
     send_resp(conn, status, body)
   end

@@ -94,6 +94,77 @@ defmodule BlueBird.Test.GeneratorTest do
       assert headers == []
     end
 
+    test "ignores configured headers" do
+      prev_conf = Application.get_env(:blue_bird, :ignore_headers)
+      Application.put_env(:blue_bird, :ignore_headers, ["ignore-me"])
+
+      :get
+      |> build_conn("/waldorf")
+      |> put_req_header("ignore-me", "whatever")
+      |> Router.call(@opts)
+      |> ConnLogger.save()
+
+      Logger.disable(self())
+      route = Generator.run() |> find_route("GET", "/waldorf")
+      req_headers = List.first(route.requests).headers
+      resp_headers = List.first(route.requests).response.headers
+
+      refute Enum.member?(req_headers, {"ignore-me", "whatever"})
+      refute Enum.member?(resp_headers, {"ignore-me", "whatever"})
+
+      Application.put_env(:blue_bird, :ignore_headers, prev_conf)
+    end
+
+    test "ignores only request headers" do
+      prev_conf = Application.get_env(:blue_bird, :ignore_headers)
+      Application.put_env(
+        :blue_bird,
+        :ignore_headers,
+        %{request: ["ignore-me"]}
+      )
+
+      :get
+      |> build_conn("/waldorf")
+      |> put_req_header("ignore-me", "whatever")
+      |> Router.call(@opts)
+      |> ConnLogger.save()
+
+      Logger.disable(self())
+      route = Generator.run() |> find_route("GET", "/waldorf")
+      req_headers = List.first(route.requests).headers
+      resp_headers = List.first(route.requests).response.headers
+
+      refute Enum.member?(req_headers, {"ignore-me", "whatever"})
+      assert Enum.member?(resp_headers, {"ignore-me", "whatever"})
+
+      Application.put_env(:blue_bird, :ignore_headers, prev_conf)
+    end
+
+    test "ignores only response headers" do
+      prev_conf = Application.get_env(:blue_bird, :ignore_headers)
+      Application.put_env(
+        :blue_bird,
+        :ignore_headers,
+        %{response: ["ignore-me"]}
+      )
+
+      :get
+      |> build_conn("/waldorf")
+      |> put_req_header("ignore-me", "whatever")
+      |> Router.call(@opts)
+      |> ConnLogger.save()
+
+      Logger.disable(self())
+      route = Generator.run() |> find_route("GET", "/waldorf")
+      req_headers = List.first(route.requests).headers
+      resp_headers = List.first(route.requests).response.headers
+
+      assert Enum.member?(req_headers, {"ignore-me", "whatever"})
+      refute Enum.member?(resp_headers, {"ignore-me", "whatever"})
+
+      Application.put_env(:blue_bird, :ignore_headers, prev_conf)
+    end
+
     test "uses values from api/3 macro" do
       Logger.disable(self())
       route = Generator.run() |> find_route("GET", "/statler")
