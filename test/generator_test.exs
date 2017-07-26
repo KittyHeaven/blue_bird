@@ -16,6 +16,10 @@ defmodule BlueBird.Test.GeneratorTest do
     ConnLogger.reset()
   end
 
+  test "warns if contact url is invalid"
+  test "warns if contact email is invalid"
+  test "warns if license url is invalid"
+
   def find_route(api_docs, method, path) do
     Enum.find(api_docs.routes, fn(x) ->
       x.path == path && x.method == method
