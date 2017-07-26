@@ -115,7 +115,8 @@ defmodule BlueBird.Writer.Swagger do
     requests
     |> Enum.map(fn(request) ->
          request.response.headers
-         |> Enum.filter_map(&elem(&1, 0) == "content-type", &elem(&1, 1))
+         |> Enum.filter(&elem(&1, 0) == "content-type")
+         |> Enum.map(&elem(&1, 1))
     end)
     |> Enum.concat
     |> Enum.uniq
