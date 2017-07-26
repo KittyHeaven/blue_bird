@@ -29,7 +29,7 @@ defmodule BlueBird.Formatter do
   receiving a `:suite_finished` message by `ExUnit`.
   """
   @spec handle_cast(request :: term, state :: term) ::
-    {:noreply, :ok}
+    {:noreply, nil}
   def handle_cast({:suite_finished, _run_us, _load_us}, _state) do
     Generator.run() |> Blueprint.run()
     {:noreply, nil}
