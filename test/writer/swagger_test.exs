@@ -170,11 +170,32 @@ defmodule BlueBird.Test.Writer.SwaggerTest do
       assert operation_object(route).tags == ["sweets"]
     end
 
+    test "sets consumes field" do
+      route = %BlueBird.Route{
+        method: "GET",
+        path: "/candy",
+        requests: [
+          %BlueBird.Request{
+            headers: [{"content-type", "application/json"}],
+            response: %BlueBird.Response{}
+          },
+          %BlueBird.Request{
+            headers: [{"content-type", "text/plain"}],
+            response: %BlueBird.Response{}
+          }
+        ]
+      }
+
+      assert operation_object(route).consumes == [
+        "application/json",
+        "text/plain"
+      ]
+    end
+
     test "sets produces field" do
       route = %BlueBird.Route{
         method: "GET",
         path: "/candy",
-        group: "sweets",
         requests: [
           %BlueBird.Request{
             response: %BlueBird.Response{
