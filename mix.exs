@@ -1,7 +1,7 @@
 defmodule BlueBird.Mixfile do
   use Mix.Project
 
-  @version "0.3.4"
+  @version "0.3.6"
   @url "https://github.com/KittyHeaven/blue_bird"
   @maintainers [
     "Djordje Atlialp",
@@ -51,7 +51,7 @@ defmodule BlueBird.Mixfile do
   defp deps do
     [
       # Static code analysis
-      {:credo, "~> 0.8.0", only: [:dev, :test]},
+      {:credo, "~> 0.8.4", only: [:dev, :test]},
       {:dialyxir, "~> 0.5.0", only: [:dev, :test], runtime: false},
 
       # Coverage

@@ -1,5 +1,9 @@
 # Changelog BlueBird
 
+## v0.3.6
+
+- handle deprecation warning from Exunit 1.5
+
 ## v0.3.5
 
 - add `trim_path` option to trim path prefixes
