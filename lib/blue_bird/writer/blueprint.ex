@@ -3,7 +3,7 @@ defmodule BlueBird.Writer.Blueprint do
   Defines functions to generate an API BluePrint representation of the
   `BlueBird.ApiDoc` struct.
   """
-  alias BlueBird.{ApiDoc, Parameter, Request, Route}
+  alias BlueBird.{ApiDoc, Parameter, Request, Response, Route}
   alias Mix.Project
 
   @doc """
@@ -235,7 +235,7 @@ defmodule BlueBird.Writer.Blueprint do
 
   ## Parameters
 
-  @spec print_param_main(Param.t) :: String.t
+  @spec print_param_main(Parameter.t) :: String.t
   defp print_param_main(param) do
     "+ #{param.name}#{example_to_string(param.example)} " <>
     "(#{param.type}, #{optional_to_str(param.optional)})"
