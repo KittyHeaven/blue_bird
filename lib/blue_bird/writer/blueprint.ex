@@ -5,7 +5,7 @@ defmodule BlueBird.Writer.Blueprint do
   """
   import BlueBird.Writer, only: [group_routes: 2]
 
-  alias BlueBird.{ApiDoc, Parameter, Request, Route}
+  alias BlueBird.{ApiDoc, Parameter, Request, Response, Route}
 
   @doc """
   Generates a string from an `BlueBird.ApiDocs{}` struct.
@@ -231,7 +231,7 @@ defmodule BlueBird.Writer.Blueprint do
 
   ## Parameters
 
-  @spec print_param_main(Param.t) :: String.t
+  @spec print_param_main(Parameter.t) :: String.t
   defp print_param_main(param) do
     "+ #{param.name}#{example_to_string(param.example)} " <>
     "(#{param.type}, #{optional_to_str(param.optional)})"
