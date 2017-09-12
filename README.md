@@ -1,10 +1,10 @@
 # BlueBird
 
-[![Build Status](https://travis-ci.org/rhazdon/blue_bird.svg?branch=master)](https://travis-ci.org/rhazdon/blue_bird)
+[![Build Status](https://travis-ci.org/KittyHeaven/blue_bird.svg?branch=master)](https://travis-ci.org/KittyHeaven/blue_bird)
 [![Hex.pm](https://img.shields.io/hexpm/v/blue_bird.svg)](https://hex.pm/packages/blue_bird)
-[![Coverage Status](https://coveralls.io/repos/github/rhazdon/blue_bird/badge.svg?branch=master)](https://coveralls.io/github/rhazdon/blue_bird?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/KittyHeaven/blue_bird/badge.svg?branch=master)](https://coveralls.io/github/KittyHeaven/blue_bird?branch=master)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/rhazdon/blue_bird/blob/master/LICENSE)
-[![Deps Status](https://beta.hexfaktor.org/badge/all/github/rhazdon/blue_bird.svg)](https://beta.hexfaktor.org/github/rhazdon/blue_bird)
+[![Deps Status](https://beta.hexfaktor.org/badge/all/github/KittyHeaven/blue_bird.svg)](https://beta.hexfaktor.org/github/KittyHeaven/blue_bird)
 
 `BlueBird` is a library written in the `Elixir` programming language for the [Phoenix framework](http://www.phoenixframework.org/).
 It lets you generate API documentation in the [API Blueprint](https://apiblueprint.org/) format from annotations in controllers and automated tests.
