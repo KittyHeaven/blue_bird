@@ -21,7 +21,7 @@ defmodule BlueBird.Writer do
   @spec run(ApiDoc.t) :: :ok | {:error, File.posix}
   def run(api_docs) do
     run_apib(api_docs, "api.apib")
-    run_swagger(api_docs, "swagger.json")
+    # run_swagger(api_docs, "swagger.json")
   end
 
   @spec run_apib(ApiDoc.t, String.t) :: {:error, File.posix}

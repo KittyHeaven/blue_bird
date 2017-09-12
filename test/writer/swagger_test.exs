@@ -32,15 +32,33 @@ defmodule BlueBird.Test.Writer.SwaggerTest do
     test "includes path object" do
       assert Map.has_key?(swagger_object(%ApiDoc{}), :paths)
     end
-    # test "includes consumes"
-    # test "includes produces"
-    # test "includes definitions object"
-    # test "includes parameters definitions object"
-    # test "includes responses definitions object"
-    # test "includes security definitions object"
-    # test "includes security requirement objects"
-    # test "includes tags"
-    # test "includes external documentation object"
+
+    @tag :skip
+    test "includes consumes"
+
+    @tag :skip
+    test "includes produces"
+
+    @tag :skip
+    test "includes definitions object"
+
+    @tag :skip
+    test "includes parameters definitions object"
+
+    @tag :skip
+    test "includes responses definitions object"
+
+    @tag :skip
+    test "includes security definitions object"
+
+    @tag :skip
+    test "includes security requirement objects"
+
+    @tag :skip
+    test "includes tags"
+
+    @tag :skip
+    test "includes external documentation object"
   end
 
   describe "info object" do
@@ -246,10 +264,18 @@ defmodule BlueBird.Test.Writer.SwaggerTest do
   end
 
   describe "parameter object" do
-    parameter = %Parameter{name: "id", description: "the id"}
+    test "has id and description fields" do
+      parameter = %Parameter{name: "id", description: "the description"}
 
-    object = parameter_object(parameter)
-    assert object.name == "id"
-    assert object.description == "the id"
+      object = parameter_object(parameter)
+      assert object.name == "id"
+      assert object.description == "the description"
+    end
+
+    @tag :skip
+    test "sets 'in' field"
+
+    @tag :skip
+    test "sets 'in' field of path parameters"
   end
 end
