@@ -16,8 +16,13 @@ defmodule BlueBird.Test.GeneratorTest do
     ConnLogger.reset()
   end
 
+  @tag :skip
   test "warns if contact url is invalid"
+
+  @tag :skip
   test "warns if contact email is invalid"
+
+  @tag :skip
   test "warns if license url is invalid"
 
   def find_route(api_docs, method, path) do
