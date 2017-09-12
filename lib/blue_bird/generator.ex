@@ -153,7 +153,7 @@ defmodule BlueBird.Generator do
     end) |> Enum.uniq
   end
 
-  @spec extract_groups([atom]) :: map
+  @spec extract_groups([atom], map) :: map
   defp extract_groups(list, list \\ %{})
   defp extract_groups([], groups) do
     groups
