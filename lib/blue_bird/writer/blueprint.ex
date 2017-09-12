@@ -52,7 +52,7 @@ defmodule BlueBird.Writer.Blueprint do
   def generate_output(api_docs) do
     doc_routes = api_docs.routes
     |> group_routes(:group)
-    |> process_groups
+    |> process_groups(api_docs.groups)
 
     print_metadata(api_docs.host) <> "\n"
     <> print_overview(api_docs.title, api_docs.description) <> "\n\n"
@@ -71,24 +71,29 @@ defmodule BlueBird.Writer.Blueprint do
 
   ## Groups
 
-  @spec process_groups([{String.t, [{String.t, String.t, [Route.t]}]}]) ::
+  @spec process_groups([{String.t, [{String.t, String.t, [Route.t]}]}], Map.t) ::
     String.t
-  defp process_groups(groups) do
-    Enum.map_join(groups, "\n", &process_group(&1))
+  defp process_groups(groups, groups_map) do
+    Enum.map_join(groups, "\n", &process_group(&1, groups_map))
   end
 
-  @spec process_group({String.t | nil, [Route.t]}) :: String.t
-  defp process_group({nil, routes}) do
+  @spec process_group({String.t | nil, [Route.t]}, Map.t) :: String.t
+  defp process_group({nil, routes}, _) do
     routes
     |> group_routes(:path)
     |> process_resources
   end
-  defp process_group({group_name, routes}) do
+  defp process_group({group_name, routes}, groups_map) do
     grouped_routes = group_routes(routes, :path)
 
     "# Group #{group_name}\n\n"
+    <> group_description(groups_map[group_name])
     <> process_resources(grouped_routes)
   end
+
+  @spec group_description(Group.t | nil) :: String.t
+  defp group_description(nil), do: ""
+  defp group_description(group), do: "#{group.description}\n\n"
 
   ## Resources
 

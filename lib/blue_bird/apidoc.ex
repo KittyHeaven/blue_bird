@@ -6,7 +6,8 @@ defmodule BlueBird.ApiDoc do
     title: "",
     description: "",
     host: "",
-    routes: []
+    routes: [],
+    groups: %{}
   ]
 
   @typedoc """
@@ -16,6 +17,7 @@ defmodule BlueBird.ApiDoc do
     title: String.t,
     description: String.t,
     host: String.t,
-    routes: [BlueBird.Route.t]
+    routes: [BlueBird.Route.t],
+    groups: Map.t
   }
 end
