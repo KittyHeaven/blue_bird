@@ -51,23 +51,23 @@ defmodule BlueBird.Mixfile do
   defp deps do
     [
       # Static code analysis
-      {:credo, "~> 0.8.4", only: [:dev, :test]},
-      {:dialyxir, "~> 0.5.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 0.8.6", only: [:dev, :test]},
+      {:dialyxir, "~> 0.5.1", only: [:dev, :test], runtime: false},
 
       # Coverage
       {:excoveralls, "~> 0.7", only: [:test]},
 
       # Docs
-      {:ex_doc, ">= 0.16.1", only: :dev},
+      {:ex_doc, ">= 0.16.4", only: :dev},
 
       # Phoenix Framework
-      {:phoenix, "~> 1.3.0-rc", optional: true},
+      {:phoenix, "~> 1.3.0", optional: true},
 
       # Composable modules
-      {:plug, ">= 1.3.0"},
+      {:plug, ">= 1.4.3"},
 
       # JSON library
-      {:poison, ">= 2.0.0"}
+      {:poison, ">= 3.1.0"}
     ]
   end
 
