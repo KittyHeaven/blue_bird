@@ -71,13 +71,13 @@ defmodule BlueBird.Writer.Blueprint do
 
   ## Groups
 
-  @spec process_groups([{String.t, [{String.t, String.t, [Route.t]}]}], Map.t) ::
+  @spec process_groups([{String.t, [{String.t, String.t, [Route.t]}]}], map) ::
     String.t
   defp process_groups(groups, groups_map) do
     Enum.map_join(groups, "\n", &process_group(&1, groups_map))
   end
 
-  @spec process_group({String.t | nil, [Route.t]}, Map.t) :: String.t
+  @spec process_group({String.t | nil, [Route.t]}, map) :: String.t
   defp process_group({nil, routes}, _) do
     routes
     |> group_routes(:path)

@@ -18,6 +18,6 @@ defmodule BlueBird.ApiDoc do
     description: String.t,
     host: String.t,
     routes: [BlueBird.Route.t],
-    groups: Map.t
+    groups: map
   }
 end

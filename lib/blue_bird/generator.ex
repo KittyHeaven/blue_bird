@@ -119,7 +119,7 @@ defmodule BlueBird.Generator do
     |> process_routes(routes)
   end
 
-  @spec generate_groups_for_routes(atom) :: Map.t
+  @spec generate_groups_for_routes(atom) :: map
   defp generate_groups_for_routes(router_module) do
     router_module.__routes__
     |> filter_api_routes
@@ -153,7 +153,7 @@ defmodule BlueBird.Generator do
     end) |> Enum.uniq
   end
 
-  @spec extract_groups([atom]) :: Map.t
+  @spec extract_groups([atom]) :: map
   defp extract_groups(list, list \\ %{})
   defp extract_groups([], groups) do
     groups
