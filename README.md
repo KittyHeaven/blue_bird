@@ -204,18 +204,21 @@ config :blue_bird,
   [Aglio renderer](https://github.com/danielgtaylor/aglio).
 * `router`: Router of your application, in Phoenix 1.3 it will be
   YourAppName.Web.Router.
-* `ignore_headers` (optional): If you want certain headers to be hidden from the
-  documentation, you can add a list of header keys here. This can be helpful
-  if you serve your application behind a proxy.
+* `ignore_headers` (optional): You can hide certain headers from the
+  documentation with this option. This can be helpful if you serve your
+  application behind a proxy. If the value is a list of strings as above, the
+  specified headers will be hidden from both requests and responses. If you
+  want to hide different headers from requests and responses, you can use a map:
+  `ignore_headers: %{request: ["ignore-me"], response: ["and-me"]}`.
 * `pipelines` (optional): Only routes that use the specified router pipelines
   will be included in the documentation. Defaults to `[:api]` if not set.
 * `trim_path` (optional): Allows you to remove a path prefix from the docs. For
   example, if all your routes start with `/api` and you don't want to display
   this prefix in the documentation, set `trim_path` to `"/api"`.
 
-### `blue_bird_info()`:
+### `blue_bird_info()`
 
-**Options**:
+**Options**
 
 * `host`: API host.
 * `title`: Documentation title (can use Blueprint format).
