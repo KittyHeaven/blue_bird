@@ -181,7 +181,7 @@ the folder of the child app (e.g. `apps/myapp_web`).
 
 ## Configuration
 
-### `config.exs`:
+### `config.exs`
 
 The configuration options can be setup in `config.exs`:
 
@@ -208,8 +208,8 @@ config :blue_bird,
   documentation with this option. This can be helpful if you serve your
   application behind a proxy. If the value is a list of strings as above, the
   specified headers will be hidden from both requests and responses. If you
-  want to hide different headers from requests and responses, you can use a map:
-  `ignore_headers: %{request: ["ignore-me"], response: ["and-me"]}`.
+  want to hide different headers from requests and responses, you can use a map
+  instead: `ignore_headers: %{request: ["ignore-me"], response: ["and-me"]}`.
 * `pipelines` (optional): Only routes that use the specified router pipelines
   will be included in the documentation. Defaults to `[:api]` if not set.
 * `trim_path` (optional): Allows you to remove a path prefix from the docs. For
