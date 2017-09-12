@@ -6,8 +6,9 @@
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/rhazdon/blue_bird/blob/master/LICENSE)
 [![Deps Status](https://beta.hexfaktor.org/badge/all/github/KittyHeaven/blue_bird.svg)](https://beta.hexfaktor.org/github/KittyHeaven/blue_bird)
 
-`BlueBird` is a library written in the `Elixir` programming language for the [Phoenix framework](http://www.phoenixframework.org/).
-It lets you generate API documentation in the [API Blueprint](https://apiblueprint.org/) format from annotations in controllers and automated tests.
+`BlueBird` is an api documentation builder for the [Phoenix framework](http://www.phoenixframework.org/). The documentation is generated in the
+[API Blueprint](https://apiblueprint.org/) format from annotations in
+your controllers and from automated tests.
 
 ## Installation
 
@@ -21,12 +22,12 @@ end
 
 2. Run `mix deps.get` to fetch the dependencies:
 
-```
+``` bash
 $ mix deps.get
 ```
 
 3. In `test/test_helper.exs`, start the BlueBird logger with `BlueBird.start()`
-and configure the results formatter as follows:
+and configure ExUnit as follows:
 
 ``` elixir
 BlueBird.start()
@@ -39,10 +40,10 @@ ExUnit.start(formatters: [ExUnit.CLIFormatter, BlueBird.Formatter])
 config :blue_bird,
   docs_path: "priv/static/docs",
   theme: "triple",
-  router: MyApp.Web.Router
+  router: AppWeb.Router
 ```
 
-5. Add `blue_bird_info` to your `mix.exs` to improve the generated docs:
+5. Add `blue_bird_info` to your `mix.exs` to add global information:
 
 ``` elixir
 def blue_bird_info do
@@ -77,13 +78,23 @@ $ npm install aglio -g
 
 ## Usage
 
-### Controller
+### Router
 
-Use the `api\3` macro to generate the specification for the controller action.
+By default, documentation is only generated for routes that use the `:api`
+pipeline. You can configure which pipelines to use in the configuration.
 
 ``` elixir
-defmodule App.CommentController do
-  use App.Web, :controller
+config :blue_bird,
+  pipelines: [:something_else]
+```
+
+### Controller
+
+Use the `api/3` macro to annotate your controller functions.
+
+``` elixir
+defmodule AppWeb.CommentController do
+  use AppWeb, :controller
 
   api :GET, "/posts/:post_id/comments" do
     title "List comments"
@@ -98,50 +109,17 @@ defmodule App.CommentController do
 end
 ```
 
-Optionally use the `apigroup` macro to set the resource group name and
-description.
+BlueBird groups routes by controller. By default, it uses the controller names
+as group names in the headings. You can change the group name of a controller
+by adding the `apigroup` macro to your controller modules. The macro can also
+be used to add a group description.
 
 ``` elixir
-defmodule App.CommentController do
-  use App.Web, :controller
+defmodule AppWeb.CommentController do
+  use AppWeb, :controller
 
   apigroup "Blog Comments", "some description"
   ...
-end
-```
-
-### Router
-
-Currently, BlueBird expects that the routes are piped through `:api`.
-
-``` elixir
-defmodule TestRouter do
-  use Phoenix.Router
-  import Plug.Conn
-  import Phoenix.Controller
-
-  pipeline :api do
-    ...
-  end
-
-  pipeline :foo do
-    ...
-  end
-
-  scope "/" do
-    pipe_through :api
-    get "/get", TestController, :get  # This will work
-  end
-
-  scope "/" do
-    pipe_through [:api, :foo]
-    get "/get", TestController, :get  # This will work
-  end
-
-  scope "/" do
-    pipe_through :foo
-    get "/get", TestController, :get  # This will not work
-  end
 end
 ```
 
@@ -162,15 +140,22 @@ test "list comments for post", %{conn: conn} do
 end
 ```
 
-After you run your tests, documentation will be written to `api.apib` in the
-[API Blueprint](https://apiblueprint.org) format.
+## Generating the documentation
 
-```
+First, run your tests:
+
+``` bash
 $ mix test
 ```
 
-To generate an HTML documentation, use the convenience wrapper to the
-[Aglio renderer](https://github.com/danielgtaylor/aglio).
+All `conn`s that were saved to the `ConnLogger` will be processed. The
+documentation will be written to the file `api.apib` in the directory specified
+in the configuration. The file uses the [API Blueprint](https://apiblueprint.org) format.
+
+There are [several tools](https://apiblueprint.org/tools.html#renderers) that
+can render `apib` files to html. `BlueBird` has a mix task which uses
+[Aglio renderer](https://github.com/danielgtaylor/aglio) to generate an html
+document from the generated `apib` file.
 
 ```
 $ mix bird.gen.docs
@@ -189,7 +174,7 @@ The configuration options can be setup in `config.exs`:
 config :blue_bird,
   docs_path: "priv/static/docs",
   theme: "triple",
-  router: YourApp.Web.Router,
+  router: YourAppWeb.Router,
   pipelines: [:api],
   ignore_headers: ["not-wanted"]
 ```
@@ -200,25 +185,24 @@ config :blue_bird,
   you want to serve the documentation directly from the `phoenix` app, you can
   specify `priv/static/docs`. If you use BlueBird within an umbrella app, the
   path is relative to the root folder of the umbrella app.
-* `theme`: HTML theme is generated using the
-  [Aglio renderer](https://github.com/danielgtaylor/aglio).
-* `router`: Router of your application, in Phoenix 1.3 it will be
-  YourAppName.Web.Router.
+* `theme`: The [Aglio](https://github.com/danielgtaylor/aglio) theme to be used
+  for the html documentation.
+* `router`: The router module of your application.
+* `pipelines` (optional): Only routes that use the specified router pipelines
+  will be included in the documentation. Defaults to `[:api]` if not set.
 * `ignore_headers` (optional): You can hide certain headers from the
   documentation with this option. This can be helpful if you serve your
   application behind a proxy. If the value is a list of strings as above, the
   specified headers will be hidden from both requests and responses. If you
   want to hide different headers from requests and responses, you can use a map
   instead: `ignore_headers: %{request: ["ignore-me"], response: ["and-me"]}`.
-* `pipelines` (optional): Only routes that use the specified router pipelines
-  will be included in the documentation. Defaults to `[:api]` if not set.
 * `trim_path` (optional): Allows you to remove a path prefix from the docs. For
   example, if all your routes start with `/api` and you don't want to display
   this prefix in the documentation, set `trim_path` to `"/api"`.
 
 ### `blue_bird_info()`
 
-**Options**
+#### Options
 
 * `host`: API host.
 * `title`: Documentation title (can use Blueprint format).
@@ -241,12 +225,12 @@ route from the `phoenix router` (including params) exactly. Run
 `mix phoenix.routes` (or `mix phx.routes` if Phoenix >= 1.3) and compare the
 routes.
 
-Also note that only routes that use the api pipeline will be added to the
-documentation.
+Also note that only routes that use the api pipeline (or the pipelines you
+configured in config.exs) will be added to the documentation.
 
-### Body Parameter are not rendered
+### Body Parameters are not rendered
 
-BlueBird reads the `body_params` from `%Plug.Conn{}`. These map is only set if
+BlueBird reads the `body_params` from `%Plug.Conn{}`. This map is only set if
 `body_params` is a binary.
 
 #### Example
