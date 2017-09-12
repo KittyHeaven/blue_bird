@@ -1,5 +1,9 @@
 # Changelog BlueBird
 
+## v0.3.7
+
+- fix FunctionClauseError in Formatter
+
 ## v0.3.6
 
 - handle deprecation warning from Exunit 1.5

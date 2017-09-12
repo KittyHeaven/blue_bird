@@ -33,4 +33,5 @@ defmodule BlueBird.Formatter do
     Generator.run() |> Writer.run()
     {:noreply, nil}
   end
+  def handle_cast(_, _), do: {:noreply, nil}
 end
