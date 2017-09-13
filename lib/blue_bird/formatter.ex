@@ -25,7 +25,7 @@ defmodule BlueBird.Formatter do
   def init(_config), do: {:ok, nil}
 
   @doc """
-  Event listener that triggers the generation of the api blueprint file on when
+  Event listener that triggers the generation of the api blueprint file when
   receiving a `:suite_finished` message by `ExUnit`.
   """
   @spec handle_cast(request :: term, state :: term) :: {:noreply, nil}

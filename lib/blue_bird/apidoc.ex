@@ -16,7 +16,8 @@ defmodule BlueBird.ApiDoc do
       name: "",
       url: ""
     ],
-    routes: []
+    routes: [],
+    groups: %{}
   ]
 
   @typedoc """
@@ -29,7 +30,8 @@ defmodule BlueBird.ApiDoc do
     host: String.t,
     contact: contact,
     license: license,
-    routes: [BlueBird.Route.t]
+    routes: [BlueBird.Route.t],
+    groups: %{optional(String.t) => String.t}
   }
 
   @type contact :: [

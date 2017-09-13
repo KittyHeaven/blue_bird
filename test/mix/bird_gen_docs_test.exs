@@ -3,8 +3,8 @@ defmodule BlueBird.Test.Mix.BirdGenDocsTest do
 
   import Mix.Tasks.Bird.Gen.Docs
 
-  alias BlueBird.ApiDoc
   alias BlueBird.Test.Support.Examples.NoRoutes
+  alias BlueBird.Writer
 
   test "bird.gen.docs generates html file" do
     path_apib = Path.join(["priv", "static", "docs", "index.html"])
@@ -13,7 +13,7 @@ defmodule BlueBird.Test.Mix.BirdGenDocsTest do
     refute File.exists?(path_apib)
 
     # generate apib file
-    BlueBird.Writer.run(NoRoutes.api_doc())
+    Writer.run(NoRoutes.api_doc())
 
     # run mix task
     run(nil)

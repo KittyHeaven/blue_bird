@@ -57,9 +57,12 @@ defmodule BlueBird.Test.GeneratorTest do
         routes: [
           empty_route("GET", "/waldorf"),
           empty_route("POST", "/waldorf"),
+          empty_route("GET", "/astoria"),
+          empty_route("POST", "/astoria"),
           empty_route("GET", "/statler"),
-          empty_route("POST", "/statler/:id")
-        ]
+          empty_route("POST", "/statler/:id"),
+        ],
+        groups: %{"Bobtails" => "The Bobtail Resource"}
       }
     end
 
@@ -207,6 +210,13 @@ defmodule BlueBird.Test.GeneratorTest do
       assert route.group == "Test"
     end
 
+    test "uses group name if defined" do
+      Logger.disable(self())
+      route = Generator.run() |> find_route("GET", "/astoria")
+
+      assert route.group == "Bobtails"
+    end
+
     test "includes params" do
       :post
       |> build_conn("/statler/137?s=poodle", Poison.encode!(%{betty: "white"}))
@@ -328,6 +338,32 @@ defmodule BlueBird.Test.GeneratorTest do
       path: "/statler/:id",
       requests: [],
       title: "Post Statler"
+    }
+  end
+
+  defp empty_route("GET", "/astoria") do
+    %BlueBird.Route{description: nil,
+      group: "Bobtails",
+      method: "GET",
+      note: nil,
+      warning: nil,
+      parameters: [],
+      path: "/astoria",
+      requests: [],
+      title: "Get Astoria"
+    }
+  end
+
+  defp empty_route("POST", "/astoria") do
+    %BlueBird.Route{description: nil,
+      group: "Bobtails",
+      method: "POST",
+      note: nil,
+      warning: nil,
+      parameters: [],
+      path: "/astoria",
+      requests: [],
+      title: "Post Astoria"
     }
   end
 end

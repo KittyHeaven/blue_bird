@@ -109,7 +109,8 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
             response: %Response{status: 204}
           }]
         }
-      ]
+      ],
+      groups: %{"Cats" => "The Cat Resource"}
     }
   end
 
@@ -151,6 +152,8 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
     + Response 204
 
     # Group Cats
+
+    The Cat Resource
 
     ## /cats
 
