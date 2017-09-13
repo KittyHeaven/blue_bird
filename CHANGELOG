@@ -3,10 +3,9 @@
 ## v0.3.8
 
 - add `terms_of_service`, `contact` and `license` fields
-- take first steps to integrate swagger (nothing usable yet)
 - add `bird.gen.examples` mix task for generating example tests with aglio
-  (for contributors, not end users)
-- update dependencies
+  (for development)
+- take first steps to integrate swagger (nothing usable yet)
 - render api group description
 
 ## v0.3.7
