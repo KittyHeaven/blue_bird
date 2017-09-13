@@ -91,9 +91,10 @@ defmodule BlueBird.Writer.Blueprint do
     <> process_resources(grouped_routes)
   end
 
-  @spec group_description(Group.t | nil) :: String.t
+  @spec group_description(String.t | nil) :: String.t
   defp group_description(nil), do: ""
-  defp group_description(group), do: "#{group.description}\n\n"
+  defp group_description(""), do: ""
+  defp group_description(description), do: "#{description}\n\n"
 
   ## Resources
 

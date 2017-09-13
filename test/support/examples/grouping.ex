@@ -1,7 +1,7 @@
 defmodule BlueBird.Test.Support.Examples.Grouping do
   @moduledoc false
 
-  alias BlueBird.{ApiDoc, Route, Group}
+  alias BlueBird.{ApiDoc, Route}
 
   def api_doc do
     %ApiDoc{
@@ -60,9 +60,7 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
           group: "Airplanes"
         }
       ],
-      groups: %{
-        "Cats" => %Group{name: "Cats", description: "The Cat Resource"}
-      }
+      groups: %{"Cats" => "The Cat Resource"}
     }
   end
 

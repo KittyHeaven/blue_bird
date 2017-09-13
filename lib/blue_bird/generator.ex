@@ -12,7 +12,7 @@ defmodule BlueBird.Generator do
   """
   require Logger
 
-  alias BlueBird.{ApiDoc, ConnLogger, Request, Response, Route, Group}
+  alias BlueBird.{ApiDoc, ConnLogger, Request, Response, Route}
   alias Mix.Project
   alias Phoenix.Naming
   alias Phoenix.Router.Route, as: PhxRoute
@@ -162,9 +162,7 @@ defmodule BlueBird.Generator do
     %{name: name, description: description} = apply(controller, :api_group, [])
     extract_groups(
       list,
-      Map.put(
-        groups, name, %Group{name: name, description: description}
-      )
+      Map.put(groups, name, description)
     )
   rescue
     UndefinedFunctionError ->

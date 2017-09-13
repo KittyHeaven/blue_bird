@@ -52,12 +52,7 @@ defmodule BlueBird.Test.GeneratorTest do
           empty_route("GET", "/statler"),
           empty_route("POST", "/statler/:id"),
         ],
-        groups: %{
-          "Bobtails" => %BlueBird.Group{
-            name: "Bobtails",
-            description: "The Bobtail Resource"
-          }
-        }
+        groups: %{"Bobtails" => "The Bobtail Resource"}
       }
     end
 
