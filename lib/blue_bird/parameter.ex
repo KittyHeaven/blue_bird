@@ -36,6 +36,6 @@ defmodule BlueBird.Parameter do
     additional_desc: String.t | nil,
     default: String.t | nil,
     example: String.t | nil,
-    optional: boolean,
+    optional: boolean
   }
 end

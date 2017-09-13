@@ -6,7 +6,7 @@ defmodule BlueBird.Test.Support.Examples.RouteTitles do
   def api_doc do
     %ApiDoc{
       title: "Heavenly API",
-      host: "https://youarguelikeaninformer.socrates",
+      host: "https://youarguelikeaninformer.socrates/v1",
       routes: [
         %Route{
           method: "GET",
@@ -37,10 +37,10 @@ defmodule BlueBird.Test.Support.Examples.RouteTitles do
     }
   end
 
-  def output do
+  def apib do
     """
     FORMAT: 1A
-    HOST: https://youarguelikeaninformer.socrates
+    HOST: https://youarguelikeaninformer.socrates/v1
 
     # Heavenly API
 
@@ -59,5 +59,33 @@ defmodule BlueBird.Test.Support.Examples.RouteTitles do
 
     + Response 204
     """
+  end
+
+  def swagger do
+    %{
+      swagger: "2.0",
+      info: %{
+        title: "Heavenly API",
+        version: "1"
+      },
+      host: "youarguelikeaninformer.socrates",
+      basePath: "/v1",
+      schemes: ["https"],
+      paths: %{
+        "/route-with-title" => %{
+          "get" => %{
+            summary: "Ride",
+            tags: ["Pony"],
+            responses: %{}
+          }
+        },
+        "/route-without-title" => %{
+          "get" => %{
+            tags: ["Pony"],
+            responses: %{}
+          }
+        }
+      }
+    }
   end
 end

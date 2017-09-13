@@ -6,6 +6,9 @@ defmodule BlueBird.Test.Support.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  alias BlueBird.Writer.Blueprint
+  alias BlueBird.Writer.Swagger
+
   using do
     quote do
       use Phoenix.ConnTest
@@ -32,4 +35,20 @@ defmodule BlueBird.Test.Support.ConnCase do
       end
     end
   end
+
+  defmacro example_test(module) do
+    quote do
+      test "'#{unquote(module) |> module_to_title}' is rendered to apib" do
+        output = Blueprint.generate_output(unquote(module).api_doc)
+        assert output == unquote(module).apib
+      end
+
+      test "'#{unquote(module) |> module_to_title}' is rendered to swagger" do
+        output = Swagger.generate_output(unquote(module).api_doc)
+        assert output == Poison.encode!(unquote(module).swagger)
+      end
+    end
+  end
+
+  def module_to_title(module), do: module |> Module.split |> Enum.at(-1)
 end

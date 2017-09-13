@@ -27,8 +27,19 @@ defmodule BlueBird.Generator do
   ## Example response
 
       %BlueBird.ApiDoc{
+        title: "The API",
         description: "Enter API description in mix.exs - blue_bird_info",
+        terms_of_service: "Use on your own risk.",
         host: "http://localhost",
+        contact: %{
+          name: "Henry",
+          url: "https://henry.something",
+          email: "mail@henry.something"
+        },
+        license: %{
+          name: "Apache 2.0",
+          url: "https://www.apache.org/licenses/LICENSE-2.0"
+        },
         routes: [
           %BlueBird.Route{
             description: "Gets a single user.",
@@ -92,11 +103,23 @@ defmodule BlueBird.Generator do
   @spec prepare_docs(atom) :: ApiDoc.t
   defp prepare_docs(router_module) do
     info = blue_bird_info()
+    contact = Keyword.get(info, :contact, [])
+    license = Keyword.get(info, :license, [])
 
     %ApiDoc{
       host: Keyword.get(info, :host, @default_url),
       title: Keyword.get(info, :title, @default_title),
       description: Keyword.get(info, :description, @default_description),
+      terms_of_service: Keyword.get(info, :terms_of_service, ""),
+      contact: [
+        name: Keyword.get(contact, :name, ""),
+        url: Keyword.get(contact, :url, ""),
+        email: Keyword.get(contact, :email, "")
+      ],
+      license: [
+        name: Keyword.get(license, :name, ""),
+        url: Keyword.get(license, :url, "")
+      ],
       routes: generate_docs_for_routes(router_module),
       groups: generate_groups_for_routes(router_module)
     }
@@ -153,11 +176,9 @@ defmodule BlueBird.Generator do
     end) |> Enum.uniq
   end
 
-  @spec extract_groups([atom], map) :: map
-  defp extract_groups(list, list \\ %{})
-  defp extract_groups([], groups) do
-    groups
-  end
+  @spec extract_groups([module], map) :: map
+  defp extract_groups(controllers, groups \\ %{})
+  defp extract_groups([], groups), do: groups
   defp extract_groups([controller | list], groups) do
     %{name: name, description: description} = apply(controller, :api_group, [])
     extract_groups(
@@ -165,17 +186,15 @@ defmodule BlueBird.Generator do
       Map.put(groups, name, description)
     )
   rescue
-    UndefinedFunctionError ->
-      extract_groups(list, groups)
+    UndefinedFunctionError -> extract_groups(list, groups)
   end
 
   @spec requests([Plug.Conn.t], [%PhxRoute{}]) :: [Plug.Conn.t]
   defp requests(test_conns, routes) do
     Enum.reduce(test_conns, [], fn(conn, list) ->
-      case find_route(routes, conn.request_path) do
-        nil   -> list
-        route -> [request_map(route, conn) | list]
-      end
+      route = find_route(routes, conn.request_path)
+
+      [request_map(route, conn) | list]
     end)
   end
 

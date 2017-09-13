@@ -58,7 +58,7 @@ defmodule BlueBird.Test.Support.Examples.Responses do
     }
   end
 
-  def output do
+  def apib do
     """
     FORMAT: 1A
     HOST: https://youarguelikeaninformer.socrates
@@ -105,5 +105,38 @@ defmodule BlueBird.Test.Support.Examples.Responses do
                 A tree whose hungry mouth is prest
                 Against the earth's sweet flowing breast
     """
+  end
+
+  def swagger do
+    %{
+      swagger: "2.0",
+      info: %{
+        title: "Lavish API",
+        version: "1"
+      },
+      host: "youarguelikeaninformer.socrates",
+      basePath: "/",
+      schemes: ["https"],
+      paths: %{
+        "/plain-response" => %{
+          "get" => %{
+            produces: ["text/plain"],
+            responses: %{}
+          }
+        },
+        "/plain-with-line-breaks" => %{
+          "get" => %{
+            produces: ["text/plain"],
+            responses: %{}
+          }
+        },
+        "/multiple-headers" => %{
+          "get" => %{
+            produces: ["text/plain"],
+            responses: %{}
+          }
+        }
+      }
+    }
   end
 end

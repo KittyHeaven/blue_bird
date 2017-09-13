@@ -67,14 +67,19 @@ defmodule BlueBird.Test.Support.Examples.Parameters do
                 "phyllo",
                 "hot water crust"
               ]
-            }
+            },
+            %Parameter{
+              name: "query",
+              type: "string",
+              example: "delicious"
+            },
           ]
         },
       ]
     }
   end
 
-  def output do
+  def apib do
     """
     FORMAT: 1A
     HOST: https://youarguelikeaninformer.socrates
@@ -107,9 +112,47 @@ defmodule BlueBird.Test.Support.Examples.Parameters do
                 + phyllo
                 + hot water crust
 
+        + query: delicious (string, required)
+
     + Response 204
 
     + Response 204
     """
+  end
+
+  def swagger do
+    %{
+      swagger: "2.0",
+      info: %{
+        title: "Pastry API",
+        version: "1"
+      },
+      host: "youarguelikeaninformer.socrates",
+      basePath: "/",
+      schemes: ["https"],
+      paths: %{
+        "/pastry/{id}/{type}" => %{
+          "get" => %{
+            parameters: [
+              %{
+                name: "id"
+              },
+              %{
+                name: "name",
+                description: "The name of the pastry."
+              },
+              %{
+                name: "type",
+                description: "The type of the pastry."
+              },
+              %{
+                name: "query"
+              }
+            ],
+            responses: %{}
+          }
+        }
+      }
+    }
   end
 end

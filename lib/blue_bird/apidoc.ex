@@ -5,7 +5,17 @@ defmodule BlueBird.ApiDoc do
   defstruct [
     title: "",
     description: "",
+    terms_of_service: "",
     host: "",
+    contact: [
+      name: "",
+      url: "",
+      email: ""
+    ],
+    license: [
+      name: "",
+      url: ""
+    ],
     routes: [],
     groups: %{}
   ]
@@ -16,8 +26,22 @@ defmodule BlueBird.ApiDoc do
   @type t :: %BlueBird.ApiDoc{
     title: String.t,
     description: String.t,
+    terms_of_service: String.t,
     host: String.t,
+    contact: contact,
+    license: license,
     routes: [BlueBird.Route.t],
-    groups: map
+    groups: %{optional(String.t) => String.t}
   }
+
+  @type contact :: [
+    name: String.t,
+    url: String.t,
+    email: String.t
+  ]
+
+  @type license :: [
+    name: String.t,
+    url: String.t
+  ]
 end
