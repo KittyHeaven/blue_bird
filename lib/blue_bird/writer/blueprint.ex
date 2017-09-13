@@ -3,92 +3,50 @@ defmodule BlueBird.Writer.Blueprint do
   Defines functions to generate an API BluePrint representation of the
   `BlueBird.ApiDoc` struct.
   """
+  import BlueBird.Writer, only: [group_routes: 2]
+
   alias BlueBird.{ApiDoc, Parameter, Request, Response, Route}
-  alias Mix.Project
-
-  @doc """
-  Writes a `BlueBird.ApiDoc{}` struct to file.
-
-  This function will be called automatically by `BlueBird.Formatter` after
-  every test run.
-
-  You can set the destination directory in `config.exs`.
-
-      config :blue_bird,
-        docs_path: "priv/static/docs"
-  """
-  @spec run(ApiDoc.t) :: :ok | {:error, File.posix}
-  def run(api_docs) do
-    api_docs
-    |> generate_output()
-    |> write_file()
-  end
-
-  @spec write_file(String.t) :: :ok | {:error, File.posix}
-  defp write_file(output) do
-    path = get_path()
-
-    File.mkdir_p(path)
-
-    path
-    |> Path.join("api.apib")
-    |> File.write(output)
-  end
-
-  @spec get_path :: binary
-  defp get_path do
-    docs_path = Application.get_env(:blue_bird, :docs_path, "docs")
-
-    Project.build_path()
-    |> String.split("_build")
-    |> Enum.at(0)
-    |> Path.join(docs_path)
-  end
 
   @doc """
   Generates a string from an `BlueBird.ApiDocs{}` struct.
   """
   @spec generate_output(ApiDoc.t) :: String.t
-  def generate_output(api_docs) do
-    doc_routes = api_docs.routes
+  def generate_output(docs) do
+    doc_routes = docs.routes
     |> group_routes(:group)
-    |> process_groups
+    |> process_groups(docs.groups)
 
-    print_metadata(api_docs.host) <> "\n"
-    <> print_overview(api_docs.title, api_docs.description) <> "\n\n"
+    print_metadata(docs.host)
+    <> "\n"
+    <> print_overview(docs)
+    <> "\n\n"
     <> doc_routes
-  end
-
-  ## Grouping
-
-  @doc false
-  @spec group_routes([Route.t], atom) :: [{String.t, [Route.t]}]
-  def group_routes(routes, key) do
-    routes
-    |> Enum.group_by(fn(route) -> Map.get(route, key) end)
-    |> Enum.to_list()
   end
 
   ## Groups
 
-  @spec process_groups([{String.t, [{String.t, String.t, [Route.t]}]}]) ::
-    String.t
-  defp process_groups(groups) do
-    Enum.map_join(groups, "\n", &process_group(&1))
+  @spec process_groups([{String.t, [Route.t]}], map) :: String.t
+  defp process_groups(groups, groups_map) do
+    Enum.map_join(groups, "\n", &process_group(&1, groups_map))
   end
 
-  @spec process_group({String.t | nil, [Route.t]}) :: String.t
-  defp process_group({nil, routes}) do
+  @spec process_group({String.t | nil, [Route.t]}, map) :: String.t
+  defp process_group({nil, routes}, _) do
     routes
     |> group_routes(:path)
     |> process_resources
   end
-  defp process_group({group_name, routes}) do
+  defp process_group({group_name, routes}, groups_map) do
     grouped_routes = group_routes(routes, :path)
 
     "# Group #{group_name}\n\n"
+    <> group_description(Map.get(groups_map, group_name, ""))
     <> process_resources(grouped_routes)
   end
+
+  @spec group_description(String.t) :: String.t
+  defp group_description(""), do: ""
+  defp group_description(description), do: "#{description}\n\n"
 
   ## Resources
 
@@ -211,9 +169,52 @@ defmodule BlueBird.Writer.Blueprint do
   def print_metadata(host), do: "FORMAT: 1A\nHOST: #{host}\n"
 
   @doc false
-  @spec print_overview(String.t, String.t) :: String.t
-  def print_overview(title, ""), do: "# #{title}\n"
-  def print_overview(title, description), do: "# #{title}\n#{description}\n"
+  @spec print_overview(ApiDoc.t) :: String.t
+  def print_overview(api_doc) do
+    "# #{api_doc.title}\n"
+    <> print_description(api_doc.description)
+    <> print_tos(api_doc.terms_of_service)
+    <> print_contact(api_doc.contact)
+    <> print_license(api_doc.license)
+  end
+
+  @spec print_description(String.t) :: String.t
+  defp print_description(""), do: ""
+  defp print_description(description), do: "#{description}\n"
+
+  @spec print_tos(String.t) :: String.t
+  defp print_tos(""), do: ""
+  defp print_tos(tos), do: "\n## Terms of Service\n#{tos}\n"
+
+  @spec print_contact([name: String.t, url: String.t, email: String.t])
+    :: String.t
+  defp print_contact([name: "", url: "", email: ""]), do: ""
+  defp print_contact(contact) do
+    "\n## Contact\n"
+    <> print_if_set(contact[:name])
+    <> print_if_set(contact[:url] |> print_link)
+    <> print_if_set(contact[:email] |> print_email)
+  end
+
+  @spec print_license([name: String.t, url: String.t]) :: String.t
+  defp print_license([name: "", url: ""]), do: ""
+  defp print_license(license) do
+    "\n## License\n"
+    <> print_if_set(license[:name])
+    <> print_if_set(license[:url] |> print_link)
+  end
+
+  @spec print_if_set(String.t) :: String.t
+  defp print_if_set(""), do: ""
+  defp print_if_set(line), do: "#{line}\n"
+
+  @spec print_link(String.t) :: String.t
+  defp print_link(""), do: ""
+  defp print_link(link), do: "[#{link}](#{link})"
+
+  @spec print_email(String.t) :: String.t
+  defp print_email(""), do: ""
+  defp print_email(email), do: "[#{email}](mailto:#{email})"
 
   ## Route Definition
 

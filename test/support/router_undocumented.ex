@@ -1,4 +1,4 @@
-defmodule BlueBird.Test.Support.Router do
+defmodule BlueBird.Test.Support.RouterUndocumented do
   @moduledoc """
   `BlueBird.Test.Support.Router` simulates a Phoenix Framework router.
   """
@@ -26,23 +26,21 @@ defmodule BlueBird.Test.Support.Router do
   scope "/", BlueBird.Test.Support do
     pipe_through :api
 
-    get     "/waldorf",         TestController, :catchall
-    post    "/waldorf",         TestController, :catchall
-    get     "/undocumented",    TestController, :catchall
-    get     "/astoria",         TestNamedController, :catchall
-    post    "/astoria",         TestNamedController, :catchall
+    get     "/waldorf",         TestControllerUndocumented, :catchall
+    post    "/waldorf",         TestControllerUndocumented, :catchall
+    get     "/undocumented",    TestControllerUndocumented, :catchall
   end
 
   scope "/", BlueBird.Test.Support do
     pipe_through :another_api
 
-    get     "/statler",         TestController, :catchall
-    post    "/statler/:id",     TestController, :catchall
+    get     "/statler",         TestControllerUndocumented, :catchall
+    post    "/statler/:id",     TestControllerUndocumented, :catchall
   end
 
   scope "/", BlueBird.Test.Support do
     pipe_through :not_configured
 
-    get     "/fozzie",          TestController, :catchall
+    get     "/fozzie",          TestControllerUndocumented, :catchall
   end
 end

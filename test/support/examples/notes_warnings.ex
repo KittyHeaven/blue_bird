@@ -24,7 +24,7 @@ defmodule BlueBird.Test.Support.Examples.NotesWarnings do
     }
   end
 
-  def output do
+  def apib do
     """
     FORMAT: 1A
     HOST: https://youarguelikeaninformer.socrates
@@ -53,5 +53,31 @@ defmodule BlueBird.Test.Support.Examples.NotesWarnings do
     My route is fine.
     :::
     """
+  end
+
+  def swagger do
+    %{
+      swagger: "2.0",
+      info: %{
+        title: "Heavenly API",
+        version: "1"
+      },
+      host: "youarguelikeaninformer.socrates",
+      basePath: "/",
+      schemes: ["https"],
+      paths: %{
+        "/route-with-note-and-warning" => %{
+          "get" => %{
+            responses: %{}
+          }
+        },
+        "/route-with-description-and-note" => %{
+          "get" => %{
+            description: "This is my route. My route is not my enemy.",
+            responses: %{}
+          }
+        }
+      }
+    }
   end
 end

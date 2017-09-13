@@ -1,7 +1,7 @@
 defmodule BlueBird.Mixfile do
   use Mix.Project
 
-  @version "0.3.7"
+  @version "0.3.8"
   @url "https://github.com/KittyHeaven/blue_bird"
   @maintainers [
     "Djordje Atlialp",
@@ -46,28 +46,28 @@ defmodule BlueBird.Mixfile do
 
   # Specifies which paths to compile per environment
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_),     do: ["lib"]
+  defp elixirc_paths(_),     do: ["lib", "test/support/examples"]
 
   defp deps do
     [
       # Static code analysis
-      {:credo, "~> 0.8.4", only: [:dev, :test]},
-      {:dialyxir, "~> 0.5.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 0.8.6", only: [:dev, :test]},
+      {:dialyxir, "~> 0.5.1", only: [:dev, :test], runtime: false},
 
       # Coverage
       {:excoveralls, "~> 0.7", only: [:test]},
 
       # Docs
-      {:ex_doc, ">= 0.16.1", only: :dev},
+      {:ex_doc, ">= 0.16.4", only: :dev},
 
       # Phoenix Framework
       {:phoenix, "~> 1.3.0", optional: true},
 
       # Composable modules
-      {:plug, ">= 1.3.0"},
+      {:plug, ">= 1.4.3"},
 
       # JSON library
-      {:poison, ">= 2.0.0"}
+      {:poison, ">= 3.1.0"}
     ]
   end
 
@@ -79,7 +79,7 @@ defmodule BlueBird.Mixfile do
   end
 
   defp dialyzer do
-    []
+    [plt_add_apps: [:mix, :phoenix]]
   end
 
   defp description do
@@ -105,7 +105,8 @@ defmodule BlueBird.Mixfile do
       description: """
                    And the pilot likewise, in the strict sense of the term, is a
                    ruler of sailors and not a mere sailor.
-                   """
+                   """,
+      terms_of_service: "The terms of service have changed."
     ]
   end
 end

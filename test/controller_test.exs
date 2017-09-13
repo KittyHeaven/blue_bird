@@ -4,20 +4,20 @@ defmodule BlueBird.Test.ControllerTest do
   alias BlueBird.Parameter
 
   @parameter_error """
-                   Wrong number of arguments for parameter option.
-                   Expected either two or three arguments: The name, the type
-                   and an optional keyword list. Correct usage:
+    Wrong number of arguments for parameter option.
+    Expected either two or three arguments: The name, the type
+    and an optional keyword list. Correct usage:
 
-                       parameter :name, :type
+        parameter :name, :type
 
-                       or
+        or
 
-                       parameter :name, :type, [description: "description",
-                                                optional: true]
-                   """
+        parameter :name, :type, [description: "description",
+                                 optional: true]
+    """
 
   @parameter_type_error "The parameter macro expects a keyword list as " <>
-                        "third argument."
+    "third argument."
 
   defmodule Controller do
     use BlueBird.Controller
@@ -46,6 +46,12 @@ defmodule BlueBird.Test.ControllerTest do
       parameter :id, :integer, [description: "the user ID"]
       parameter :pid, :integer, [description: "the post ID"]
       parameter :topic, :string
+    end
+  end
+
+  describe "apigroup/2" do
+    test "generates a function api_group" do
+      assert Controller.api_group == %{name: "Bobtails", description: "The Bobtail Resource"}
     end
   end
 

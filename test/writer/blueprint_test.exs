@@ -1,22 +1,28 @@
 defmodule BlueBird.Test.Writer.BlueprintTest do
-  use ExUnit.Case, async: true
+  use BlueBird.Test.Support.ConnCase
 
   import BlueBird.Writer.Blueprint
 
-  alias BlueBird.Test.Support.Examples
-  alias BlueBird.{Parameter, Request, Response, Route}
+  alias BlueBird.{ApiDoc, Parameter, Request, Response, Route}
 
   test "print_metadata/1 prints metadata" do
     assert print_metadata("http://yo") == "FORMAT: 1A\nHOST: http://yo\n"
   end
 
-  describe "print_overview/2" do
+  describe "print_overview/1" do
     test "prints overview with description" do
-      assert print_overview("Title", "One\nTwo") == "# Title\nOne\nTwo\n"
+      api_doc = %ApiDoc{
+        title: "Title",
+        description: "One\nTwo"
+      }
+      assert print_overview(api_doc) == "# Title\nOne\nTwo\n"
     end
 
     test "prints overview without description" do
-      assert print_overview("Title", "") == "# Title\n"
+      api_doc = %ApiDoc{
+        title: "Title"
+      }
+      assert print_overview(api_doc) == "# Title\n"
     end
   end
 
@@ -204,72 +210,6 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
                                    [{"name":"George","kind":"dog"}]
                        """
-    end
-  end
-
-  describe "group_routes/2" do
-    test "groups routes" do
-      route_a = %Route{group: "a"}
-      route_b1 = %Route{group: "b"}
-      route_b2 = %Route{group: "b"}
-      route_c = %Route{group: "c"}
-
-      routes = [route_b1, route_a, route_c, route_b2]
-
-      expected = [
-        {"a", [route_a]},
-        {"b", [route_b1, route_b2]},
-        {"c", [route_c]}
-      ]
-
-      assert group_routes(routes, :group) == expected
-    end
-  end
-
-  describe "examples: " do
-    def test_example(module) do
-      assert generate_output(module.api_doc) == module.output
-    end
-
-    test "'Grouping' is rendered correctly" do
-      test_example(Examples.Grouping)
-    end
-
-    test "'NotesWarnings' is rendered correctly" do
-      test_example(Examples.NotesWarnings)
-    end
-
-    test "'Parameters' is rendered correctly" do
-      test_example(Examples.Parameters)
-    end
-
-    test "'RouteTitles' is rendered correctly" do
-      test_example(Examples.RouteTitles)
-    end
-
-    test "'Requests' is rendered correctly" do
-      test_example(Examples.Requests)
-    end
-
-    test "'Responses' is rendered correctly" do
-      test_example(Examples.Responses)
-    end
-
-    test "'Simple' is rendered correctly" do
-      test_example(Examples.Simple)
-    end
-  end
-
-  describe "run/1" do
-    test "writes api doc to file" do
-      alias BlueBird.Test.Support.Examples.Grouping
-
-      run(Grouping.api_doc)
-
-      path = Path.join(["priv", "static", "docs", "api.apib"])
-
-      assert {:ok, file} = File.read(path)
-      assert file == Grouping.output
     end
   end
 end

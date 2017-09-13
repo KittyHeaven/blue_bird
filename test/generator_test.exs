@@ -16,6 +16,15 @@ defmodule BlueBird.Test.GeneratorTest do
     ConnLogger.reset()
   end
 
+  @tag :skip
+  test "warns if contact url is invalid"
+
+  @tag :skip
+  test "warns if contact email is invalid"
+
+  @tag :skip
+  test "warns if license url is invalid"
+
   def find_route(api_docs, method, path) do
     Enum.find(api_docs.routes, fn(x) ->
       x.path == path && x.method == method
@@ -42,14 +51,18 @@ defmodule BlueBird.Test.GeneratorTest do
           And the pilot likewise, in the strict sense of the term, is a
           ruler of sailors and not a mere sailor.
           """,
+        terms_of_service: "The terms of service have changed.",
         host: "https://justiceisusefulwhenmoneyisuseless.fake",
         title: "Fancy API",
         routes: [
           empty_route("GET", "/waldorf"),
           empty_route("POST", "/waldorf"),
+          empty_route("GET", "/astoria"),
+          empty_route("POST", "/astoria"),
           empty_route("GET", "/statler"),
-          empty_route("POST", "/statler/:id")
-        ]
+          empty_route("POST", "/statler/:id"),
+        ],
+        groups: %{"Bobtails" => "The Bobtail Resource"}
       }
     end
 
@@ -57,6 +70,21 @@ defmodule BlueBird.Test.GeneratorTest do
       assert capture_log(fn ->
         Generator.run()
       end) =~ "No api doc defined for GET /undocumented."
+    end
+
+    test "warns if api docs are missing for all routes" do
+      prev_conf = Application.get_env(:blue_bird, :router)
+      Application.put_env(
+        :blue_bird,
+        :router,
+        BlueBird.Test.Support.RouterUndocumented
+      )
+
+      assert capture_log(fn ->
+        Generator.run()
+      end) =~ "No api doc defined for GET /undocumented."
+
+      Application.put_env(:blue_bird, :router, prev_conf)
     end
 
     test "includes headers" do
@@ -93,6 +121,77 @@ defmodule BlueBird.Test.GeneratorTest do
       assert headers == []
     end
 
+    test "ignores configured headers" do
+      prev_conf = Application.get_env(:blue_bird, :ignore_headers)
+      Application.put_env(:blue_bird, :ignore_headers, ["ignore-me"])
+
+      :get
+      |> build_conn("/waldorf")
+      |> put_req_header("ignore-me", "whatever")
+      |> Router.call(@opts)
+      |> ConnLogger.save()
+
+      Logger.disable(self())
+      route = Generator.run() |> find_route("GET", "/waldorf")
+      req_headers = List.first(route.requests).headers
+      resp_headers = List.first(route.requests).response.headers
+
+      refute Enum.member?(req_headers, {"ignore-me", "whatever"})
+      refute Enum.member?(resp_headers, {"ignore-me", "whatever"})
+
+      Application.put_env(:blue_bird, :ignore_headers, prev_conf)
+    end
+
+    test "ignores only request headers" do
+      prev_conf = Application.get_env(:blue_bird, :ignore_headers)
+      Application.put_env(
+        :blue_bird,
+        :ignore_headers,
+        %{request: ["ignore-me"]}
+      )
+
+      :get
+      |> build_conn("/waldorf")
+      |> put_req_header("ignore-me", "whatever")
+      |> Router.call(@opts)
+      |> ConnLogger.save()
+
+      Logger.disable(self())
+      route = Generator.run() |> find_route("GET", "/waldorf")
+      req_headers = List.first(route.requests).headers
+      resp_headers = List.first(route.requests).response.headers
+
+      refute Enum.member?(req_headers, {"ignore-me", "whatever"})
+      assert Enum.member?(resp_headers, {"ignore-me", "whatever"})
+
+      Application.put_env(:blue_bird, :ignore_headers, prev_conf)
+    end
+
+    test "ignores only response headers" do
+      prev_conf = Application.get_env(:blue_bird, :ignore_headers)
+      Application.put_env(
+        :blue_bird,
+        :ignore_headers,
+        %{response: ["ignore-me"]}
+      )
+
+      :get
+      |> build_conn("/waldorf")
+      |> put_req_header("ignore-me", "whatever")
+      |> Router.call(@opts)
+      |> ConnLogger.save()
+
+      Logger.disable(self())
+      route = Generator.run() |> find_route("GET", "/waldorf")
+      req_headers = List.first(route.requests).headers
+      resp_headers = List.first(route.requests).response.headers
+
+      assert Enum.member?(req_headers, {"ignore-me", "whatever"})
+      refute Enum.member?(resp_headers, {"ignore-me", "whatever"})
+
+      Application.put_env(:blue_bird, :ignore_headers, prev_conf)
+    end
+
     test "uses values from api/3 macro" do
       Logger.disable(self())
       route = Generator.run() |> find_route("GET", "/statler")
@@ -109,6 +208,13 @@ defmodule BlueBird.Test.GeneratorTest do
       route = Generator.run() |> find_route("GET", "/waldorf")
 
       assert route.group == "Test"
+    end
+
+    test "uses group name if defined" do
+      Logger.disable(self())
+      route = Generator.run() |> find_route("GET", "/astoria")
+
+      assert route.group == "Bobtails"
     end
 
     test "includes params" do
@@ -232,6 +338,32 @@ defmodule BlueBird.Test.GeneratorTest do
       path: "/statler/:id",
       requests: [],
       title: "Post Statler"
+    }
+  end
+
+  defp empty_route("GET", "/astoria") do
+    %BlueBird.Route{description: nil,
+      group: "Bobtails",
+      method: "GET",
+      note: nil,
+      warning: nil,
+      parameters: [],
+      path: "/astoria",
+      requests: [],
+      title: "Get Astoria"
+    }
+  end
+
+  defp empty_route("POST", "/astoria") do
+    %BlueBird.Route{description: nil,
+      group: "Bobtails",
+      method: "POST",
+      note: nil,
+      warning: nil,
+      parameters: [],
+      path: "/astoria",
+      requests: [],
+      title: "Post Astoria"
     }
   end
 end
