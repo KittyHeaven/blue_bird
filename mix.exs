@@ -79,7 +79,7 @@ defmodule BlueBird.Mixfile do
   end
 
   defp dialyzer do
-    []
+    [plt_add_apps: [:mix, :phoenix]]
   end
 
   defp description do

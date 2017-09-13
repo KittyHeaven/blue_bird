@@ -3,6 +3,7 @@ defmodule BlueBird.Writer do
   Writes api documentations in apib and swagger format to files.
   """
   alias BlueBird.ApiDoc
+  alias BlueBird.Route
   alias BlueBird.Writer.Blueprint
   alias BlueBird.Writer.Swagger
   alias Mix.Project
