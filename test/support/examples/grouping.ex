@@ -59,7 +59,8 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
           path: "/airplanes/:id",
           group: "Airplanes"
         }
-      ]
+      ],
+      groups: %{"Cats" => "The Cat Resource"}
     }
   end
 
@@ -91,6 +92,8 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
     ### PUT
 
     # Group Cats
+
+    The Cat Resource
 
     ## /cats
 

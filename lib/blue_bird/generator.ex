@@ -97,7 +97,8 @@ defmodule BlueBird.Generator do
       host: Keyword.get(info, :host, @default_url),
       title: Keyword.get(info, :title, @default_title),
       description: Keyword.get(info, :description, @default_description),
-      routes: generate_docs_for_routes(router_module)
+      routes: generate_docs_for_routes(router_module),
+      groups: generate_groups_for_routes(router_module)
     }
   end
 
@@ -118,6 +119,14 @@ defmodule BlueBird.Generator do
     |> process_routes(routes)
   end
 
+  @spec generate_groups_for_routes(atom) :: map
+  defp generate_groups_for_routes(router_module) do
+    router_module.__routes__
+    |> filter_api_routes
+    |> controllers
+    |> extract_groups
+  end
+
   @spec filter_api_routes([%PhxRoute{}]) :: [%PhxRoute{}]
   defp filter_api_routes(routes) do
     pipelines = Application.get_env(
@@ -135,6 +144,29 @@ defmodule BlueBird.Generator do
         )
       end
     )
+  end
+
+  @spec controllers([%PhxRoute{}]) :: [atom]
+  defp controllers(routes) do
+    Enum.reduce(routes, [], fn(route, list) ->
+      [Module.concat([:Elixir | Module.split(route.plug)]) | list]
+    end) |> Enum.uniq
+  end
+
+  @spec extract_groups([atom], map) :: map
+  defp extract_groups(list, list \\ %{})
+  defp extract_groups([], groups) do
+    groups
+  end
+  defp extract_groups([controller | list], groups) do
+    %{name: name, description: description} = apply(controller, :api_group, [])
+    extract_groups(
+      list,
+      Map.put(groups, name, description)
+    )
+  rescue
+    UndefinedFunctionError ->
+      extract_groups(list, groups)
   end
 
   @spec requests([Plug.Conn.t], [%PhxRoute{}]) :: [Plug.Conn.t]

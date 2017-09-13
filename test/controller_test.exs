@@ -49,6 +49,12 @@ defmodule BlueBird.Test.ControllerTest do
     end
   end
 
+  describe "apigroup/2" do
+    test "generates a function api_group" do
+      assert Controller.api_group == %{name: "Bobtails", description: "The Bobtail Resource"}
+    end
+  end
+
   describe "api/3" do
     test "expands to function returning a map" do
       assert Controller.api_doc("GET", "/users") == %BlueBird.Route{
