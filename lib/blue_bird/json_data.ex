@@ -31,6 +31,10 @@ defimpl BlueBird.JSONData, for: Float do
   def type(_), do: "number"
 end
 
+defimpl BlueBird.JSONData, for: Function do
+  def type(_), do: "null"
+end
+
 defimpl BlueBird.JSONData, for: Integer do
   def type(_), do: "number"
 end
@@ -41,6 +45,18 @@ end
 
 defimpl BlueBird.JSONData, for: Map do
   def type(_), do: "object"
+end
+
+defimpl BlueBird.JSONData, for: PID do
+  def type(_), do: "null"
+end
+
+defimpl BlueBird.JSONData, for: Port do
+  def type(_), do: "null"
+end
+
+defimpl BlueBird.JSONData, for: Reference do
+  def type(_), do: "null"
 end
 
 defimpl BlueBird.JSONData, for: Tuple do
