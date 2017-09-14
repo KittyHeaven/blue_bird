@@ -73,6 +73,7 @@ defmodule BlueBird.Controller do
           description: "This is the post slug.",
           example: "whatever"
         ]
+      end
   """
   defmacro api(method, path, do: block) do
     method_str    = method_to_string(method)
