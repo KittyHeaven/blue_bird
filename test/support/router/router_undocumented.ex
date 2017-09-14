@@ -26,21 +26,21 @@ defmodule BlueBird.Test.Support.RouterUndocumented do
   scope "/", BlueBird.Test.Support do
     pipe_through :api
 
-    get     "/waldorf",         TestControllerUndocumented, :catchall
-    post    "/waldorf",         TestControllerUndocumented, :catchall
-    get     "/undocumented",    TestControllerUndocumented, :catchall
+    get     "/waldorf",         ControllerUndocumented, :catchall
+    post    "/waldorf",         ControllerUndocumented, :catchall
+    get     "/undocumented",    ControllerUndocumented, :catchall
   end
 
   scope "/", BlueBird.Test.Support do
     pipe_through :another_api
 
-    get     "/statler",         TestControllerUndocumented, :catchall
-    post    "/statler/:id",     TestControllerUndocumented, :catchall
+    get     "/statler",         ControllerUndocumented, :catchall
+    post    "/statler/:id",     ControllerUndocumented, :catchall
   end
 
   scope "/", BlueBird.Test.Support do
     pipe_through :not_configured
 
-    get     "/fozzie",          TestControllerUndocumented, :catchall
+    get     "/fozzie",          ControllerUndocumented, :catchall
   end
 end
