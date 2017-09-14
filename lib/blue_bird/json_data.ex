@@ -15,7 +15,7 @@ defprotocol BlueBird.JSONData do
         iex> JSONData.type(1)
         "number"
   """
-  @spec type(Any) :: String.t
+  @spec type(any) :: String.t
   def type(data)
 end
 
