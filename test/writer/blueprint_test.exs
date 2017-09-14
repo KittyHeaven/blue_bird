@@ -59,8 +59,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
     test "prints single header" do
       headers = [{"accept", "application/json"}]
-      assert print_headers(headers) ==
-        """
+      assert print_headers(headers) == """
         + Headers
 
                 accept: application/json
@@ -72,8 +71,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
         {"accept", "application/json"},
         {"authorization", "I'm a bear"}
       ]
-      assert print_headers(headers) ==
-        """
+      assert print_headers(headers) == """
         + Headers
 
                 accept: application/json
@@ -88,25 +86,24 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
     end
 
     test "prints attributes correctly" do
-      assert print_attributes(@complex_body) ==
-      """
-      + Attributes (object)
+      assert print_attributes(@complex_body) == """
+        + Attributes (object)
 
-              + boolean (string)
-              + number (number)
-              + object (object)
-                  + ac (string)
-                  + likes (array)
-                  + name (string)
-                  + object_in_object (object)
-                      + first_name (string)
-                      + second_name (string)
-              + object_list (array)
-                  + (object)
-                      + key (string)
-              + simple_list (array)
-              + string (string)
-      """
+                + boolean (string)
+                + number (number)
+                + object (object)
+                    + ac (string)
+                    + likes (array)
+                    + name (string)
+                    + object_in_object (object)
+                        + first_name (string)
+                        + second_name (string)
+                + object_list (array)
+                    + (object)
+                        + key (string)
+                + simple_list (array)
+                + string (string)
+        """
     end
   end
 
@@ -120,11 +117,11 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       })
 
       assert result == """
-                       ### Get all [POST]
-                       This route gets all things.
+        ### Get all [POST]
+        This route gets all things.
 
-                       Really.
-                       """
+        Really.
+        """
     end
 
     test "prints header with method, without title and description" do
@@ -140,14 +137,14 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
         note: "This is important.\n\nVery."
       })
       assert result == """
-                      ### POST
+        ### POST
 
-                      ::: note
-                      This is important.
+        ::: note
+        This is important.
 
-                      Very.
-                      :::
-                      """
+        Very.
+        :::
+        """
     end
 
     test "prints warning" do
@@ -157,14 +154,14 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
         warning: "This is important.\n\nEven more."
       })
       assert result == """
-                      ### POST
+        ### POST
 
-                      ::: warning
-                      This is important.
+        ::: warning
+        This is important.
 
-                      Even more.
-                      :::
-                      """
+        Even more.
+        :::
+        """
     end
 
     test "prints parameters" do
@@ -186,14 +183,14 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       })
 
       assert result == """
-                       ### POST
+        ### POST
 
-                       + Parameters
+        + Parameters
 
-                           + one (int, required) - The first parameter.
+            + one (int, required) - The first parameter.
 
-                           + two (string, required) - The second parameter.
-                       """
+            + two (string, required) - The second parameter.
+        """
     end
 
     test "prints requests" do
@@ -234,41 +231,41 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       })
 
       assert result == """
-                       ### POST
+        ### POST
 
-                       + Request 201 (application/json)
+        + Request 201 (application/json)
 
-                           + Headers
+            + Headers
 
-                                   accept: application/json
+                    accept: application/json
 
-                           + Attributes (object)
+            + Attributes (object)
 
-                                   + kind (string)
-                                   + name (string)
+                    + kind (string)
+                    + name (string)
 
-                           + Body
+            + Body
 
-                                   {"name":"George","kind":"dog"}
+                    {"name":"George","kind":"dog"}
 
-                       + Response 201 (application/json)
+        + Response 201 (application/json)
 
-                           + Body
+            + Body
 
-                                   {"name":"George","kind":"dog"}
+                    {"name":"George","kind":"dog"}
 
-                       + Request 200
+        + Request 200
 
-                           + Headers
+            + Headers
 
-                                   accept: application/json
+                    accept: application/json
 
-                       + Response 200 (application/json)
+        + Response 200 (application/json)
 
-                           + Body
+            + Body
 
-                                   [{"name":"George","kind":"dog"}]
-                       """
+                    [{"name":"George","kind":"dog"}]
+        """
     end
   end
 end
