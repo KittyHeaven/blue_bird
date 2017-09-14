@@ -25,32 +25,6 @@ defmodule BlueBird.Test.GeneratorTest do
   @tag :skip
   test "warns if license url is invalid"
 
-  @complex_body %{
-    string: "some value",
-    number: 8,
-    boolean: false,
-    object: %{
-      ac: :dc,
-      name: "Martha",
-      object_in_object: %{
-        first_name: "A",
-        second_name: "B",
-      },
-      likes: [
-        "Apples",
-        "Technology"
-      ]
-    },
-   simple_list: [
-      "Banana",
-      "Apple"
-    ],
-    object_list: [
-      %{key: "value"},
-      %{key: "value2"},
-    ]
-  }
-
   def find_route(api_docs, method, path) do
     Enum.find(api_docs.routes, fn(x) ->
       x.path == path && x.method == method
@@ -245,7 +219,7 @@ defmodule BlueBird.Test.GeneratorTest do
 
     test "includes params" do
       :post
-      |> build_conn("/statler/137?s=poodle", Poison.encode!(@complex_body))
+      |> build_conn("/statler/137?s=poodle", Poison.encode!(%{"betty": "white"}))
       |> put_req_header("content-type", "application/json")
       |> Router.call(@opts)
       |> ConnLogger.save()
@@ -256,31 +230,7 @@ defmodule BlueBird.Test.GeneratorTest do
 
       assert request.query_params == %{"s" => "poodle"}
       assert request.path_params == %{"id" => "137"}
-      assert request.body_params == %{
-        "boolean" => false,
-        "number" => 8,
-        "object" => %{
-          "ac" => "dc",
-          "likes" => [
-            "Apples",
-            "Technology"
-          ],
-          "name" => "Martha",
-          "object_in_object" => %{
-            "first_name" => "A",
-            "second_name" => "B"
-          }
-        },
-        "object_list" => [
-          %{"key" => "value"},
-          %{"key" => "value2"}
-        ],
-        "simple_list" => [
-          "Banana",
-          "Apple"
-        ],
-        "string" => "some value"
-      }
+      assert request.body_params == %{"betty" => "white"}
     end
 
     test "includes all requests for a particular route and method" do
