@@ -171,9 +171,11 @@ defmodule BlueBird.Generator do
 
   @spec controllers([%PhxRoute{}]) :: [atom]
   defp controllers(routes) do
-    Enum.reduce(routes, [], fn(route, list) ->
+    routes
+    |> Enum.reduce([], fn(route, list) ->
       [Module.concat([:Elixir | Module.split(route.plug)]) | list]
-    end) |> Enum.uniq
+    end)
+    |> Enum.uniq
   end
 
   @spec extract_groups([module], map) :: map
