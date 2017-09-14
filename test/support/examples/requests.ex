@@ -49,6 +49,11 @@ defmodule BlueBird.Test.Support.Examples.Requests do
                 accept: application/json
                 authorization: I'm a star
 
+        + Attributes (object)
+
+                + mary (string)
+                + peter (string)
+
         + Body
 
                 {"peter":"paul","mary":"peter"}

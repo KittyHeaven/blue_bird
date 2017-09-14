@@ -5,6 +5,32 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
   alias BlueBird.{ApiDoc, Parameter, Request, Response, Route}
 
+  @complex_body %{
+    string: "some value",
+    number: 8,
+    boolean: false,
+    object: %{
+      ac: :dc,
+      name: "Martha",
+      object_in_object: %{
+        first_name: "A",
+        second_name: "B",
+      },
+      likes: [
+        "Apples",
+        "Technology"
+      ]
+    },
+   simple_list: [
+      "Banana",
+      "Apple"
+    ],
+    object_list: [
+      %{key: "value"},
+      %{key: "value2"},
+    ]
+  }
+
   test "print_metadata/1 prints metadata" do
     assert print_metadata("http://yo") == "FORMAT: 1A\nHOST: http://yo\n"
   end
@@ -53,6 +79,34 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
                 accept: application/json
                 authorization: I'm a bear
         """
+    end
+  end
+
+  describe "print_attributes/1" do
+    test "prints empty attributes correctly" do
+      assert print_attributes(%{}) == ""
+    end
+
+    test "prints attributes correctly" do
+      assert print_attributes(@complex_body) ==
+      """
+      + Attributes (object)
+
+              + boolean (string)
+              + number (number)
+              + object (object)
+                  + ac (string)
+                  + likes (array)
+                  + name (string)
+                  + object_in_object (object)
+                      + first_name (string)
+                      + second_name (string)
+              + object_list (array)
+                  + (object)
+                      + key (string)
+              + simple_list (array)
+              + string (string)
+      """
     end
   end
 
@@ -187,6 +241,11 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
                            + Headers
 
                                    accept: application/json
+
+                           + Attributes (object)
+
+                                   + kind (string)
+                                   + name (string)
 
                            + Body
 
