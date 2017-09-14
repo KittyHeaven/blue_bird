@@ -249,7 +249,6 @@ defmodule BlueBird.Writer.Blueprint do
     print_attribute_name_and_type(key, value)
     <> walk_through_attributes(value, 4)
   end
-
   defp print_attribute({key, value}) when is_list(value) do
     if is_map(List.first(value)) do
       print_attribute_name_and_type(key, value)
@@ -259,13 +258,16 @@ defmodule BlueBird.Writer.Blueprint do
       print_attribute_name_and_type(key, value)
     end
   end
-
-  defp print_attribute({key, value}), do: print_attribute_name_and_type(key, value)
+  defp print_attribute({key, value}) do
+    print_attribute_name_and_type(key, value)
+  end
 
   defp print_attribute_name_and_type(key, value), do: "+ #{key} (#{JSONData.type(value)})\n"
 
   defp walk_through_attributes(attributes, indent \\ 8) do
-    (attributes |> Enum.map_join(&(print_attribute(&1))) |> indent(indent))
+    attributes
+    |> Enum.map_join(&(print_attribute(&1)))
+    |> indent(indent)
   end
 
   ## Parameters
