@@ -245,6 +245,7 @@ defmodule BlueBird.Writer.Blueprint do
     <> walk_through_attributes(attributes)
   end
 
+  @spec print_attribute(Tuple.t) :: String.t
   defp print_attribute({key, value}) when is_map(value) do
     print_attribute_name_and_type(key, value)
     <> walk_through_attributes(value, 4)
@@ -262,10 +263,12 @@ defmodule BlueBird.Writer.Blueprint do
     print_attribute_name_and_type(key, value)
   end
 
+  @spec print_attribute_name_and_type(String.t, any) :: String.t
   defp print_attribute_name_and_type(key, value) do
     "+ #{key} (#{JSONData.type(value)})\n"
   end
 
+  @spec walk_through_attributes(map, number) :: String.t
   defp walk_through_attributes(attributes, indent \\ 8) do
     attributes
     |> Enum.map_join(&(print_attribute(&1)))
