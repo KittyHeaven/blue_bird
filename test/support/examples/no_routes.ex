@@ -1,6 +1,8 @@
 defmodule BlueBird.Test.Support.Examples.NoRoutes do
   @moduledoc false
 
+  # credo:disable-for-this-file Credo.Check.Readability.RedundantBlankLines
+
   alias BlueBird.ApiDoc
 
   def api_doc do
