@@ -262,7 +262,9 @@ defmodule BlueBird.Writer.Blueprint do
     print_attribute_name_and_type(key, value)
   end
 
-  defp print_attribute_name_and_type(key, value), do: "+ #{key} (#{JSONData.type(value)})\n"
+  defp print_attribute_name_and_type(key, value) do
+    "+ #{key} (#{JSONData.type(value)})\n"
+  end
 
   defp walk_through_attributes(attributes, indent \\ 8) do
     attributes
