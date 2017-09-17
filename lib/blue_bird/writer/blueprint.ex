@@ -5,7 +5,7 @@ defmodule BlueBird.Writer.Blueprint do
   """
   import BlueBird.Writer, only: [group_routes: 2]
 
-  alias BlueBird.{ApiDoc, Parameter, Request, Response, Route}
+  alias BlueBird.{ApiDoc, JSONData, Parameter, Request, Response, Route}
 
   @doc """
   Generates a string from an `BlueBird.ApiDocs{}` struct.
@@ -128,8 +128,10 @@ defmodule BlueBird.Writer.Blueprint do
 
   defp process_request(request) do
     content_type = get_content_type(request.headers)
+
     req_str = [
       request.headers |> filter_headers() |> print_headers() |> indent(4),
+      request.body_params |> print_attributes |> indent(4),
       request.body_params |> print_body_params |> indent(4),
     ] |> Enum.reject(&(&1 == "")) |> Enum.join("\n")
 
@@ -233,6 +235,45 @@ defmodule BlueBird.Writer.Blueprint do
   @spec print_route_description(String.t | nil) :: String.t
   defp print_route_description(nil), do: ""
   defp print_route_description(description), do: "#{description}\n"
+
+  ## Attributes
+
+  @spec print_attributes(map) :: String.t
+  def print_attributes(attributes) when attributes == %{}, do: ""
+  def print_attributes(attributes) do
+    "+ Attributes (object)\n\n"
+    <> walk_through_attributes(attributes)
+  end
+
+  @spec print_attribute({String.t, any}) :: String.t
+  defp print_attribute({key, value}) when is_map(value) do
+    print_attribute_name_and_type(key, value)
+    <> walk_through_attributes(value, 4)
+  end
+  defp print_attribute({key, value}) when is_list(value) do
+    if is_map(List.first(value)) do
+      print_attribute_name_and_type(key, value)
+      <> ("+ (object)\n" |> indent(4))
+      <> walk_through_attributes(List.first(value))
+    else
+      print_attribute_name_and_type(key, value)
+    end
+  end
+  defp print_attribute({key, value}) do
+    print_attribute_name_and_type(key, value)
+  end
+
+  @spec print_attribute_name_and_type(String.t, any) :: String.t
+  defp print_attribute_name_and_type(key, value) do
+    "+ #{key} (#{JSONData.type(value)})\n"
+  end
+
+  @spec walk_through_attributes(map, number) :: String.t
+  defp walk_through_attributes(attributes, indent \\ 8) do
+    attributes
+    |> Enum.map_join(&(print_attribute(&1)))
+    |> indent(indent)
+  end
 
   ## Parameters
 

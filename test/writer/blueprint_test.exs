@@ -5,6 +5,32 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
   alias BlueBird.{ApiDoc, Parameter, Request, Response, Route}
 
+  @complex_body %{
+    string: "some value",
+    number: 8,
+    boolean: false,
+    object: %{
+      ac: :dc,
+      name: "Martha",
+      object_in_object: %{
+        first_name: "A",
+        second_name: "B",
+      },
+      likes: [
+        "Apples",
+        "Technology"
+      ]
+    },
+   simple_list: [
+      "Banana",
+      "Apple"
+    ],
+    object_list: [
+      %{key: "value"},
+      %{key: "value2"},
+    ]
+  }
+
   test "print_metadata/1 prints metadata" do
     assert print_metadata("http://yo") == "FORMAT: 1A\nHOST: http://yo\n"
   end
@@ -33,8 +59,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
     test "prints single header" do
       headers = [{"accept", "application/json"}]
-      assert print_headers(headers) ==
-        """
+      assert print_headers(headers) == """
         + Headers
 
                 accept: application/json
@@ -46,12 +71,38 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
         {"accept", "application/json"},
         {"authorization", "I'm a bear"}
       ]
-      assert print_headers(headers) ==
-        """
+      assert print_headers(headers) == """
         + Headers
 
                 accept: application/json
                 authorization: I'm a bear
+        """
+    end
+  end
+
+  describe "print_attributes/1" do
+    test "prints empty attributes correctly" do
+      assert print_attributes(%{}) == ""
+    end
+
+    test "prints attributes correctly" do
+      assert print_attributes(@complex_body) == """
+        + Attributes (object)
+
+                + boolean (string)
+                + number (number)
+                + object (object)
+                    + ac (string)
+                    + likes (array)
+                    + name (string)
+                    + object_in_object (object)
+                        + first_name (string)
+                        + second_name (string)
+                + object_list (array)
+                    + (object)
+                        + key (string)
+                + simple_list (array)
+                + string (string)
         """
     end
   end
@@ -66,11 +117,11 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       })
 
       assert result == """
-                       ### Get all [POST]
-                       This route gets all things.
+        ### Get all [POST]
+        This route gets all things.
 
-                       Really.
-                       """
+        Really.
+        """
     end
 
     test "prints header with method, without title and description" do
@@ -86,14 +137,14 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
         note: "This is important.\n\nVery."
       })
       assert result == """
-                      ### POST
+        ### POST
 
-                      ::: note
-                      This is important.
+        ::: note
+        This is important.
 
-                      Very.
-                      :::
-                      """
+        Very.
+        :::
+        """
     end
 
     test "prints warning" do
@@ -103,14 +154,14 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
         warning: "This is important.\n\nEven more."
       })
       assert result == """
-                      ### POST
+        ### POST
 
-                      ::: warning
-                      This is important.
+        ::: warning
+        This is important.
 
-                      Even more.
-                      :::
-                      """
+        Even more.
+        :::
+        """
     end
 
     test "prints parameters" do
@@ -132,14 +183,14 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       })
 
       assert result == """
-                       ### POST
+        ### POST
 
-                       + Parameters
+        + Parameters
 
-                           + one (int, required) - The first parameter.
+            + one (int, required) - The first parameter.
 
-                           + two (string, required) - The second parameter.
-                       """
+            + two (string, required) - The second parameter.
+        """
     end
 
     test "prints requests" do
@@ -180,36 +231,41 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       })
 
       assert result == """
-                       ### POST
+        ### POST
 
-                       + Request 201 (application/json)
+        + Request 201 (application/json)
 
-                           + Headers
+            + Headers
 
-                                   accept: application/json
+                    accept: application/json
 
-                           + Body
+            + Attributes (object)
 
-                                   {"name":"George","kind":"dog"}
+                    + kind (string)
+                    + name (string)
 
-                       + Response 201 (application/json)
+            + Body
 
-                           + Body
+                    {"name":"George","kind":"dog"}
 
-                                   {"name":"George","kind":"dog"}
+        + Response 201 (application/json)
 
-                       + Request 200
+            + Body
 
-                           + Headers
+                    {"name":"George","kind":"dog"}
 
-                                   accept: application/json
+        + Request 200
 
-                       + Response 200 (application/json)
+            + Headers
 
-                           + Body
+                    accept: application/json
 
-                                   [{"name":"George","kind":"dog"}]
-                       """
+        + Response 200 (application/json)
+
+            + Body
+
+                    [{"name":"George","kind":"dog"}]
+        """
     end
   end
 end

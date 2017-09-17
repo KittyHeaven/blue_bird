@@ -1,6 +1,6 @@
 defmodule BlueBird.Test.Support.TestController do
   @moduledoc """
-  `BlueBird.Test.Support.Controller` simulates a Phoenix Framework controller.
+  `BlueBird.Test.Support.TestController` simulates a Phoenix Framework controller.
   """
   use BlueBird.Controller
   use Phoenix.Controller

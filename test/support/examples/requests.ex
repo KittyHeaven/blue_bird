@@ -1,6 +1,8 @@
 defmodule BlueBird.Test.Support.Examples.Requests do
   @moduledoc false
 
+  # credo:disable-for-this-file Credo.Check.Readability.RedundantBlankLines
+
   alias BlueBird.{ApiDoc, Request, Response, Route}
 
   def api_doc do
@@ -48,6 +50,11 @@ defmodule BlueBird.Test.Support.Examples.Requests do
 
                 accept: application/json
                 authorization: I'm a star
+
+        + Attributes (object)
+
+                + mary (string)
+                + peter (string)
 
         + Body
 

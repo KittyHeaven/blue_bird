@@ -29,8 +29,8 @@ defmodule BlueBird.Test.Support.Router do
     get     "/waldorf",         TestController, :catchall
     post    "/waldorf",         TestController, :catchall
     get     "/undocumented",    TestController, :catchall
-    get     "/astoria",         TestNamedController, :catchall
-    post    "/astoria",         TestNamedController, :catchall
+    get     "/astoria",         NamedController, :catchall
+    post    "/astoria",         NamedController, :catchall
   end
 
   scope "/", BlueBird.Test.Support do
