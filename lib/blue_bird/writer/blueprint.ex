@@ -245,7 +245,7 @@ defmodule BlueBird.Writer.Blueprint do
     <> walk_through_attributes(attributes)
   end
 
-  @spec print_attribute(Tuple.t) :: String.t
+  @spec print_attribute({String.t, any}) :: String.t
   defp print_attribute({key, value}) when is_map(value) do
     print_attribute_name_and_type(key, value)
     <> walk_through_attributes(value, 4)
