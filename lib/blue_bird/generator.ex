@@ -209,9 +209,9 @@ defmodule BlueBird.Generator do
       {:ok, route_docs}
     rescue
       UndefinedFunctionError ->
-        warning_message()
+        warning_message(method, route)
       FunctionClauseError ->
-        warning_message()
+        warning_message(method, route)
     end
   end
 
@@ -231,7 +231,7 @@ defmodule BlueBird.Generator do
       |> Naming.humanize
   end
 
-  defp warning_message do
+  defp warning_message(method, route) do
     if Application.get_env(:blue_bird, :definition_warning, true) do
       Logger.warn fn -> "No api doc defined for #{method} #{route.path}." end
     end
