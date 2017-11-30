@@ -7,14 +7,14 @@ defmodule BlueBird.Test.Support.NamedController do
 
   @json_response Poison.encode!(%{status: "ok"})
 
-  apigroup "Bobtails", "The Bobtail Resource"
+  apigroup("Bobtails", "The Bobtail Resource")
 
   api :GET, "/astoria" do
-    title "Get Astoria"
+    title("Get Astoria")
   end
 
   api :POST, "/astoria" do
-    title "Post Astoria"
+    title("Post Astoria")
   end
 
   def catchall(conn, params) do

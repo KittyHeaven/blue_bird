@@ -13,21 +13,23 @@ defmodule BlueBird.Test.Support.Examples.Requests do
         %Route{
           method: "GET",
           path: "/request-headers",
-          requests: [%Request{
-            method: "GET",
-            path: "/request-headers",
-            body_params: %{"peter" => "paul", "mary" => "peter"},
-            headers: [
-              {"accept", "application/json"},
-              {"authorization", "I'm a star"}
-            ],
-            response: %Response{
-              status: 204,
-              headers: [],
-              body: ""
+          requests: [
+            %Request{
+              method: "GET",
+              path: "/request-headers",
+              body_params: %{"peter" => "paul", "mary" => "peter"},
+              headers: [
+                {"accept", "application/json"},
+                {"authorization", "I'm a star"}
+              ],
+              response: %Response{
+                status: 204,
+                headers: [],
+                body: ""
+              }
             }
-          }]
-        },
+          ]
+        }
       ]
     }
   end

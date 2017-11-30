@@ -14,20 +14,20 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       name: "Martha",
       object_in_object: %{
         first_name: "A",
-        second_name: "B",
+        second_name: "B"
       },
       likes: [
         "Apples",
         "Technology"
       ]
     },
-   simple_list: [
+    simple_list: [
       "Banana",
       "Apple"
     ],
     object_list: [
       %{key: "value"},
-      %{key: "value2"},
+      %{key: "value2"}
     ]
   }
 
@@ -41,6 +41,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
         title: "Title",
         description: "One\nTwo"
       }
+
       assert print_overview(api_doc) == "# Title\nOne\nTwo\n"
     end
 
@@ -48,6 +49,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
       api_doc = %ApiDoc{
         title: "Title"
       }
+
       assert print_overview(api_doc) == "# Title\n"
     end
   end
@@ -59,11 +61,12 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
     test "prints single header" do
       headers = [{"accept", "application/json"}]
-      assert print_headers(headers) == """
-        + Headers
 
-                accept: application/json
-        """
+      assert print_headers(headers) == """
+             + Headers
+
+                     accept: application/json
+             """
     end
 
     test "prints multiple headers" do
@@ -71,12 +74,13 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
         {"accept", "application/json"},
         {"authorization", "I'm a bear"}
       ]
-      assert print_headers(headers) == """
-        + Headers
 
-                accept: application/json
-                authorization: I'm a bear
-        """
+      assert print_headers(headers) == """
+             + Headers
+
+                     accept: application/json
+                     authorization: I'm a bear
+             """
     end
   end
 
@@ -87,41 +91,42 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
     test "prints attributes correctly" do
       assert print_attributes(@complex_body) == """
-        + Attributes (object)
+             + Attributes (object)
 
-                + boolean (string)
-                + number (number)
-                + object (object)
-                    + ac (string)
-                    + likes (array)
-                    + name (string)
-                    + object_in_object (object)
-                        + first_name (string)
-                        + second_name (string)
-                + object_list (array)
-                    + (object)
-                        + key (string)
-                + simple_list (array)
-                + string (string)
-        """
+                     + boolean (string)
+                     + number (number)
+                     + object (object)
+                         + ac (string)
+                         + likes (array)
+                         + name (string)
+                         + object_in_object (object)
+                             + first_name (string)
+                             + second_name (string)
+                     + object_list (array)
+                         + (object)
+                             + key (string)
+                     + simple_list (array)
+                     + string (string)
+             """
     end
   end
 
   describe "process_route/1" do
     test "prints header with method, title, and description" do
-      result = process_route(%Route{
-        method: "POST",
-        path: "/path",
-        title: "Get all",
-        description: "This route gets all things.\n\nReally."
-      })
+      result =
+        process_route(%Route{
+          method: "POST",
+          path: "/path",
+          title: "Get all",
+          description: "This route gets all things.\n\nReally."
+        })
 
       assert result == """
-        ### Get all [POST]
-        This route gets all things.
+             ### Get all [POST]
+             This route gets all things.
 
-        Really.
-        """
+             Really.
+             """
     end
 
     test "prints header with method, without title and description" do
@@ -131,141 +136,147 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
     end
 
     test "prints note" do
-      result = process_route(%Route{
-        method: "POST",
-        path: "/path",
-        note: "This is important.\n\nVery."
-      })
+      result =
+        process_route(%Route{
+          method: "POST",
+          path: "/path",
+          note: "This is important.\n\nVery."
+        })
+
       assert result == """
-        ### POST
+             ### POST
 
-        ::: note
-        This is important.
+             ::: note
+             This is important.
 
-        Very.
-        :::
-        """
+             Very.
+             :::
+             """
     end
 
     test "prints warning" do
-      result = process_route(%Route{
-        method: "POST",
-        path: "/path",
-        warning: "This is important.\n\nEven more."
-      })
+      result =
+        process_route(%Route{
+          method: "POST",
+          path: "/path",
+          warning: "This is important.\n\nEven more."
+        })
+
       assert result == """
-        ### POST
+             ### POST
 
-        ::: warning
-        This is important.
+             ::: warning
+             This is important.
 
-        Even more.
-        :::
-        """
+             Even more.
+             :::
+             """
     end
 
     test "prints parameters" do
-      result = process_route(%Route{
-        method: "POST",
-        path: "/path",
-        parameters: [
-          %Parameter{
-            name: "one",
-            type: "int",
-            description: "The first parameter."
-          },
-          %Parameter{
-            name: "two",
-            type: "string",
-            description: "The second parameter."
-          }
-        ]
-      })
+      result =
+        process_route(%Route{
+          method: "POST",
+          path: "/path",
+          parameters: [
+            %Parameter{
+              name: "one",
+              type: "int",
+              description: "The first parameter."
+            },
+            %Parameter{
+              name: "two",
+              type: "string",
+              description: "The second parameter."
+            }
+          ]
+        })
 
       assert result == """
-        ### POST
+             ### POST
 
-        + Parameters
+             + Parameters
 
-            + one (int, required) - The first parameter.
+                 + one (int, required) - The first parameter.
 
-            + two (string, required) - The second parameter.
-        """
+                 + two (string, required) - The second parameter.
+             """
     end
 
     test "prints requests" do
-      result = process_route(%Route{
-        method: "POST",
-        path: "/users/:id/pets",
-        requests: [
-          %Request{
-            method: POST,
-            path: "/users/:id/pets",
-            headers: [
-              {"accept", "application/json"},
-              {"content-type", "application/json"}
-            ],
-            path_params: %{"id" => "137"},
-            body_params: %{"name" => "George", "kind" => "dog"},
-            query_params: %{},
-            response: %Response{
-              status: 201,
-              headers: [{"content-type", "application/json"}],
-              body: "{\"name\":\"George\",\"kind\":\"dog\"}"
+      result =
+        process_route(%Route{
+          method: "POST",
+          path: "/users/:id/pets",
+          requests: [
+            %Request{
+              method: POST,
+              path: "/users/:id/pets",
+              headers: [
+                {"accept", "application/json"},
+                {"content-type", "application/json"}
+              ],
+              path_params: %{"id" => "137"},
+              body_params: %{"name" => "George", "kind" => "dog"},
+              query_params: %{},
+              response: %Response{
+                status: 201,
+                headers: [{"content-type", "application/json"}],
+                body: "{\"name\":\"George\",\"kind\":\"dog\"}"
+              }
+            },
+            %Request{
+              method: POST,
+              path: "/users/:id/pets",
+              headers: [{"accept", "application/json"}],
+              path_params: %{},
+              body_params: %{},
+              query_params: %{"q" => "good boy"},
+              response: %Response{
+                status: "200",
+                headers: [{"content-type", "application/json"}],
+                body: "[{\"name\":\"George\",\"kind\":\"dog\"}]"
+              }
             }
-          },
-          %Request{
-            method: POST,
-            path: "/users/:id/pets",
-            headers: [{"accept", "application/json"}],
-            path_params: %{},
-            body_params: %{},
-            query_params: %{"q" => "good boy"},
-            response: %Response{
-              status: "200",
-              headers: [{"content-type", "application/json"}],
-              body: "[{\"name\":\"George\",\"kind\":\"dog\"}]"
-            }
-          }
-        ]
-      })
+          ]
+        })
 
       assert result == """
-        ### POST
+             ### POST
 
-        + Request 201 (application/json)
+             + Request 201 (application/json)
 
-            + Headers
+                 + Headers
 
-                    accept: application/json
+                         accept: application/json
 
-            + Attributes (object)
+                 + Attributes (object)
 
-                    + kind (string)
-                    + name (string)
+                         + kind (string)
+                         + name (string)
 
-            + Body
+                 + Body
 
-                    {"name":"George","kind":"dog"}
+                         {"name":"George","kind":"dog"}
 
-        + Response 201 (application/json)
+             + Response 201 (application/json)
 
-            + Body
+                 + Body
 
-                    {"name":"George","kind":"dog"}
+                         {"name":"George","kind":"dog"}
 
-        + Request 200
+             + Request 200
 
-            + Headers
+                 + Headers
 
-                    accept: application/json
+                         accept: application/json
 
-        + Response 200 (application/json)
+             + Response 200 (application/json)
 
-            + Body
+                 + Body
 
-                    [{"name":"George","kind":"dog"}]
-        """
+                         [{"name":"George","kind":"dog"}]
+             """
     end
   end
 end

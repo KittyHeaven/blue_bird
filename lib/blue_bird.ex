@@ -6,7 +6,7 @@ defmodule BlueBird do
 
   def start(_type, []) do
     children = [
-      worker(BlueBird.ConnLogger, []),
+      worker(BlueBird.ConnLogger, [])
     ]
 
     opts = [strategy: :one_for_one, name: BlueBird.Supervisor]
@@ -15,9 +15,11 @@ defmodule BlueBird do
 
   def start(options \\ []) do
     Application.start(:blue_bird)
-    Enum.each options, fn {k, v} ->
+
+    Enum.each(options, fn {k, v} ->
       Application.put_env(:blue_bird, k, v)
-    end
+    end)
+
     :ok
   end
 end

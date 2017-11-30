@@ -13,48 +13,55 @@ defmodule BlueBird.Test.Support.Examples.Responses do
         %Route{
           method: "GET",
           path: "/plain-response",
-          requests: [%Request{
-            method: "GET",
-            path: "/plain-response",
-            response: %Response{
-              status: 200,
-              headers: [{"content-type", "text/plain"}],
-              body: "Plain response."
+          requests: [
+            %Request{
+              method: "GET",
+              path: "/plain-response",
+              response: %Response{
+                status: 200,
+                headers: [{"content-type", "text/plain"}],
+                body: "Plain response."
+              }
             }
-          }]
+          ]
         },
         %Route{
           method: "GET",
           path: "/plain-with-line-breaks",
-          requests: [%Request{
-            method: "GET",
-            path: "/plain-with-line-breaks",
-            response: %Response{
-              status: 200,
-              headers: [{"content-type", "text/plain"}],
-              body: "I think that I shall never see\n" <>
+          requests: [
+            %Request{
+              method: "GET",
+              path: "/plain-with-line-breaks",
+              response: %Response{
+                status: 200,
+                headers: [{"content-type", "text/plain"}],
+                body:
+                  "I think that I shall never see\n" <>
                     "A poem lovely as a tree\n\n" <>
                     "A tree whose hungry mouth is prest\n" <>
                     "Against the earth's sweet flowing breast"
+              }
             }
-          }]
+          ]
         },
         %Route{
           method: "GET",
           path: "/multiple-headers",
-          requests: [%Request{
-            method: "GET",
-            path: "/multiple-headers",
-            response: %Response{
-              status: 200,
-              headers: [
-                {"content-type", "text/plain"},
-                {"favorite-color", "greenish"},
-                {"age-in-dog-years", "8"}
-              ],
-              body: "Multiple headers."
+          requests: [
+            %Request{
+              method: "GET",
+              path: "/multiple-headers",
+              response: %Response{
+                status: 200,
+                headers: [
+                  {"content-type", "text/plain"},
+                  {"favorite-color", "greenish"},
+                  {"age-in-dog-years", "8"}
+                ],
+                body: "Multiple headers."
+              }
             }
-          }]
+          ]
         }
       ]
     }

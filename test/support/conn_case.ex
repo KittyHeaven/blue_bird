@@ -50,5 +50,5 @@ defmodule BlueBird.Test.Support.ConnCase do
     end
   end
 
-  def module_to_title(module), do: module |> Module.split |> Enum.at(-1)
+  def module_to_title(module), do: module |> Module.split() |> Enum.at(-1)
 end

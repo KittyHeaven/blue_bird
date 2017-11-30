@@ -18,29 +18,33 @@ defmodule BlueBird.Test.Support.Examples.Simple do
         %Route{
           method: "GET",
           path: "/route-with-simple-response",
-          requests: [%Request{
-            method: "GET",
-            path: "/route-with-simple-response",
-            response: %Response{
-              status: 200,
-              headers: [{"content-type", "text/plain"}],
-              body: "Simple response."
+          requests: [
+            %Request{
+              method: "GET",
+              path: "/route-with-simple-response",
+              response: %Response{
+                status: 200,
+                headers: [{"content-type", "text/plain"}],
+                body: "Simple response."
+              }
             }
-          }]
+          ]
         },
         %Route{
           method: "GET",
           path: "/route-with-204-response",
-          requests: [%Request{
-            method: "GET",
-            path: "/route-with-204-response",
-            response: %Response{
-              status: 204,
-              headers: [],
-              body: ""
+          requests: [
+            %Request{
+              method: "GET",
+              path: "/route-with-204-response",
+              response: %Response{
+                status: 204,
+                headers: [],
+                body: ""
+              }
             }
-          }]
-        },
+          ]
+        }
       ]
     }
   end
@@ -83,8 +87,8 @@ defmodule BlueBird.Test.Support.Examples.Simple do
       swagger: "2.0",
       info: %{
         title: "Heavenly API",
-        description: "This is the API description.\n\n"
-                     <> "It may be helpful. Or not.",
+        description:
+          "This is the API description.\n\n" <> "It may be helpful. Or not.",
         version: "1"
       },
       host: "youarguelikeaninformer.socrates",
