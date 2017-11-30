@@ -21,7 +21,7 @@ defmodule BlueBird.Test.Support.Examples.NotesWarnings do
           path: "/route-with-description-and-note",
           description: "This is my route. My route is not my enemy.",
           note: "This is my route."
-        },
+        }
       ]
     }
   end

@@ -16,12 +16,12 @@ defmodule BlueBird.Request do
   Type that represents the Request struct.
   """
   @type t :: %BlueBird.Request{
-    method: String.t,
-    path: String.t,
-    headers: [{String.t, String.t}],
-    path_params: %{optional(String.t) => String.t},
-    body_params: %{optional(String.t) => String.t},
-    query_params: %{optional(String.t) => String.t},
-    response: BlueBird.Response.t
-  }
+          method: String.t(),
+          path: String.t(),
+          headers: [{String.t(), String.t()}],
+          path_params: %{optional(String.t()) => String.t()},
+          body_params: %{optional(String.t()) => String.t()},
+          query_params: %{optional(String.t()) => String.t()},
+          response: BlueBird.Response.t()
+        }
 end

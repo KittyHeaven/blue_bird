@@ -14,7 +14,7 @@ defmodule BlueBird.Test.FormatterTest do
     # refute File.exists?(path_swagger)
 
     assert Formatter.handle_cast({:suite_finished, 1, 2}, nil) ==
-      {:noreply, nil}
+             {:noreply, nil}
 
     assert {:ok, file} = File.read(path_apib)
     assert file =~ "HOST: https://justiceisusefulwhenmoneyisuseless.fake"

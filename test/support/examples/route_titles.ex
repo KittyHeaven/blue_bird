@@ -15,26 +15,30 @@ defmodule BlueBird.Test.Support.Examples.RouteTitles do
           title: "Ride",
           path: "/route-with-title",
           group: "Pony",
-          requests: [%Request{
-            response: %Response{
-              status: 204,
-              headers: [],
-              body: ""
+          requests: [
+            %Request{
+              response: %Response{
+                status: 204,
+                headers: [],
+                body: ""
+              }
             }
-          }]
+          ]
         },
         %Route{
           method: "GET",
           path: "/route-without-title",
           group: "Pony",
-          requests: [%Request{
-            response: %Response{
-              status: 204,
-              headers: [],
-              body: ""
+          requests: [
+            %Request{
+              response: %Response{
+                status: 204,
+                headers: [],
+                body: ""
+              }
             }
-          }]
-        },
+          ]
+        }
       ]
     }
   end

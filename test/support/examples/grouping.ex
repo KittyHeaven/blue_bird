@@ -15,101 +15,121 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
           method: "GET",
           path: "/cats/:id",
           group: "Cats",
-          requests: [%Request{
-            method: "GET",
-            path: "/cats/:id",
-            response: %Response{status: 204}
-          }]
+          requests: [
+            %Request{
+              method: "GET",
+              path: "/cats/:id",
+              response: %Response{status: 204}
+            }
+          ]
         },
         %Route{
           method: "POST",
           path: "/cats",
           group: "Cats",
-          requests: [%Request{
-            method: "POST",
-            path: "/cats",
-            response: %Response{status: 204}
-          }]
+          requests: [
+            %Request{
+              method: "POST",
+              path: "/cats",
+              response: %Response{status: 204}
+            }
+          ]
         },
         %Route{
           method: "GET",
           path: "/airplanes/:id",
           group: "Airplanes",
-          requests: [%Request{
-            method: "GET",
-            path: "/airplanes/:id",
-            response: %Response{status: 204}
-          }]
+          requests: [
+            %Request{
+              method: "GET",
+              path: "/airplanes/:id",
+              response: %Response{status: 204}
+            }
+          ]
         },
         %Route{
           method: "DELETE",
           path: "/cats/:id",
           group: "Cats",
-          requests: [%Request{
-            method: "DELETE",
-            path: "/cats/:id",
-            response: %Response{status: 204}
-          }]
+          requests: [
+            %Request{
+              method: "DELETE",
+              path: "/cats/:id",
+              response: %Response{status: 204}
+            }
+          ]
         },
         %Route{
           method: "DELETE",
           path: "/airplanes/:id",
           group: "Airplanes",
-          requests: [%Request{
-            method: "DELETE",
-            path: "/airplanes/:id",
-            response: %Response{status: 204}
-          }]
+          requests: [
+            %Request{
+              method: "DELETE",
+              path: "/airplanes/:id",
+              response: %Response{status: 204}
+            }
+          ]
         },
         %Route{
           method: "GET",
           path: "/cats",
           group: "Cats",
-          requests: [%Request{
-            method: "GET",
-            path: "/cats",
-            response: %Response{status: 204}
-          }]
+          requests: [
+            %Request{
+              method: "GET",
+              path: "/cats",
+              response: %Response{status: 204}
+            }
+          ]
         },
         %Route{
           method: "GET",
           path: "/airplanes",
           group: "Airplanes",
-          requests: [%Request{
-            method: "GET",
-            path: "/airplanes",
-            response: %Response{status: 204}
-          }]
+          requests: [
+            %Request{
+              method: "GET",
+              path: "/airplanes",
+              response: %Response{status: 204}
+            }
+          ]
         },
         %Route{
           method: "POST",
           path: "/airplanes",
           group: "Airplanes",
-          requests: [%Request{
-            method: "POST",
-            path: "/airplanes",
-            response: %Response{status: 204}
-          }]
+          requests: [
+            %Request{
+              method: "POST",
+              path: "/airplanes",
+              response: %Response{status: 204}
+            }
+          ]
         },
         %Route{
           method: "PUT",
           path: "/cats/:id",
           group: "Cats",
-          requests: [%Request{
-            method: "PUT",
-            path: "/cats/:id",
-            response: %Response{status: 204}
-          }]
+          requests: [
+            %Request{
+              method: "PUT",
+              path: "/cats/:id",
+              response: %Response{status: 204}
+            }
+          ]
         },
         %Route{
           method: "PUT",
           path: "/airplanes/:id",
           group: "Airplanes",
-          requests: [%Request{
-            method: "PUT",
-            path: "/airplanes/:id",
-            response: %Response{status: 204}
-          }]
+          requests: [
+            %Request{
+              method: "PUT",
+              path: "/airplanes/:id",
+              response: %Response{status: 204}
+            }
+          ]
         }
       ],
       groups: %{"Cats" => "The Cat Resource"}
@@ -188,8 +208,8 @@ defmodule BlueBird.Test.Support.Examples.Grouping do
       swagger: "2.0",
       info: %{
         title: "Heavenly API",
-        description: "This is the API description.\n\n"
-                     <> "It may be helpful. Or not.",
+        description:
+          "This is the API description.\n\n" <> "It may be helpful. Or not.",
         version: "1"
       },
       host: "youarguelikeaninformer.socrates",

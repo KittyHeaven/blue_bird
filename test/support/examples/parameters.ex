@@ -74,9 +74,9 @@ defmodule BlueBird.Test.Support.Examples.Parameters do
               name: "query",
               type: "string",
               example: "delicious"
-            },
+            }
           ]
-        },
+        }
       ]
     }
   end

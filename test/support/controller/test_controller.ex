@@ -8,23 +8,23 @@ defmodule BlueBird.Test.Support.TestController do
   @json_response Poison.encode!(%{status: "ok"})
 
   api :GET, "/waldorf" do
-    title "Get Waldorf"
+    title("Get Waldorf")
   end
 
   api :POST, "/waldorf" do
-    title "Post Waldorf"
+    title("Post Waldorf")
   end
 
   api :GET, "/statler" do
-    title "Get Statler"
-    description "Description"
-    note "Note"
-    warning "Warning"
+    title("Get Statler")
+    description("Description")
+    note("Note")
+    warning("Warning")
   end
 
   api :POST, "/statler/:id" do
-    title "Post Statler"
-    parameter :id, :int, [description: "ID"]
+    title("Post Statler")
+    parameter(:id, :int, description: "ID")
   end
 
   def catchall(conn, params) do

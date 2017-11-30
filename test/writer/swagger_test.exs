@@ -99,11 +99,12 @@ defmodule BlueBird.Test.Writer.SwaggerTest do
   describe "contact object" do
     test "includes all values" do
       values = [name: "a name", url: "some url", email: "an email"]
+
       assert contact_object(values) == %{
-        name: "a name",
-        url: "some url",
-        email: "an email"
-      }
+               name: "a name",
+               url: "some url",
+               email: "an email"
+             }
     end
 
     test "doesn't include empty values" do
@@ -114,10 +115,11 @@ defmodule BlueBird.Test.Writer.SwaggerTest do
   describe "license object" do
     test "includes all values" do
       values = [name: "license name", url: "some url"]
+
       assert license_object(values) == %{
-        name: "license name",
-        url: "some url"
-      }
+               name: "license name",
+               url: "some url"
+             }
     end
 
     test "doesn't include empty values" do
@@ -142,9 +144,9 @@ defmodule BlueBird.Test.Writer.SwaggerTest do
       assert Enum.member?(keys, "/brandy")
       assert Enum.member?(keys, "/brandy/{id}")
 
-      assert objects["/candy"] |> Map.keys |> length() == 2
-      assert objects["/brandy"] |> Map.keys |> length() == 1
-      assert objects["/brandy/{id}"] |> Map.keys |> length() == 1
+      assert objects["/candy"] |> Map.keys() |> length() == 2
+      assert objects["/brandy"] |> Map.keys() |> length() == 1
+      assert objects["/brandy/{id}"] |> Map.keys() |> length() == 1
     end
   end
 
@@ -205,9 +207,9 @@ defmodule BlueBird.Test.Writer.SwaggerTest do
       }
 
       assert operation_object(route).consumes == [
-        "application/json",
-        "text/plain"
-      ]
+               "application/json",
+               "text/plain"
+             ]
     end
 
     test "sets produces field" do
@@ -217,21 +219,21 @@ defmodule BlueBird.Test.Writer.SwaggerTest do
         requests: [
           %BlueBird.Request{
             response: %BlueBird.Response{
-              headers: [{"content-type", "application/json"}],
+              headers: [{"content-type", "application/json"}]
             }
           },
           %BlueBird.Request{
             response: %BlueBird.Response{
-              headers: [{"content-type", "text/plain"}],
+              headers: [{"content-type", "text/plain"}]
             }
           }
         ]
       }
 
       assert operation_object(route).produces == [
-        "application/json",
-        "text/plain"
-      ]
+               "application/json",
+               "text/plain"
+             ]
     end
 
     test "includes responses object" do
