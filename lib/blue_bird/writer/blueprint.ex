@@ -69,8 +69,8 @@ defmodule BlueBird.Writer.Blueprint do
     routes
     |> Enum.sort_by(&{&1.path, &1.method})
     |> Enum.map_join("\n", fn route ->
-         process_route(route)
-       end)
+      process_route(route)
+    end)
   end
 
   @doc false
@@ -374,18 +374,18 @@ defmodule BlueBird.Writer.Blueprint do
 
   @spec print_body_params(map) :: String.t()
   defp print_body_params(body) when body == %{}, do: ""
-  defp print_body_params(body), do: body |> Poison.encode!() |> print_body()
+  defp print_body_params(body), do: body |> Jason.encode!() |> print_body()
 
   @spec indent(String.t(), integer) :: String.t()
   defp indent(str, count) do
     str
     |> String.split("\n")
     |> Enum.map(fn line ->
-         case line do
-           "" -> ""
-           s -> String.duplicate(" ", count) <> s
-         end
-       end)
+      case line do
+        "" -> ""
+        s -> String.duplicate(" ", count) <> s
+      end
+    end)
     |> Enum.join("\n")
   end
 
@@ -417,8 +417,8 @@ defmodule BlueBird.Writer.Blueprint do
   defp get_query_param_str(requests) do
     requests
     |> Enum.reduce(%{}, fn request, params ->
-         Map.merge(params, request.query_params)
-       end)
+      Map.merge(params, request.query_params)
+    end)
     |> Map.keys()
     |> Enum.map(&to_string(&1))
     |> Enum.join(",")

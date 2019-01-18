@@ -257,7 +257,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
                  + Body
 
-                         {"name":"George","kind":"dog"}
+                         {"kind":"dog","name":"George"}
 
              + Response 201 (application/json)
 

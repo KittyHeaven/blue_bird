@@ -14,7 +14,7 @@ defmodule BlueBird.Writer.Swagger do
   def generate_output(api_docs) do
     api_docs
     |> swagger_object()
-    |> Poison.encode!()
+    |> Jason.encode!()
   end
 
   @doc """
@@ -83,9 +83,9 @@ defmodule BlueBird.Writer.Swagger do
     routes
     |> group_routes(:path)
     |> Enum.reduce(%{}, fn {path, routes}, acc ->
-         path = replace_path_params(path)
-         Map.put(acc, path, path_item_object(routes))
-       end)
+      path = replace_path_params(path)
+      Map.put(acc, path, path_item_object(routes))
+    end)
   end
 
   @doc false
@@ -94,8 +94,8 @@ defmodule BlueBird.Writer.Swagger do
     routes
     |> group_routes(:method)
     |> Enum.reduce(%{}, fn {method, [route]}, acc ->
-         Map.put(acc, String.downcase(method), operation_object(route))
-       end)
+      Map.put(acc, String.downcase(method), operation_object(route))
+    end)
   end
 
   @doc false
@@ -115,13 +115,12 @@ defmodule BlueBird.Writer.Swagger do
   defp content_types(requests, type) do
     requests
     |> Enum.map(fn req ->
-         headers =
-           if type == :request, do: req.headers, else: req.response.headers
+      headers = if type == :request, do: req.headers, else: req.response.headers
 
-         headers
-         |> Enum.filter(&(elem(&1, 0) == "content-type"))
-         |> Enum.map(&elem(&1, 1))
-       end)
+      headers
+      |> Enum.filter(&(elem(&1, 0) == "content-type"))
+      |> Enum.map(&elem(&1, 1))
+    end)
     |> Enum.concat()
     |> Enum.uniq()
   end

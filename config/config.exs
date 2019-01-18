@@ -29,3 +29,4 @@ config :blue_bird,
   ignore_headers: ["ignore-me"],
   pipelines: [:api, :another_api]
 
+config :phoenix, :json_library, Jason

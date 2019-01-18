@@ -10,7 +10,7 @@ defmodule BlueBird.Test.Support.RouterUndocumented do
       Plug.Parsers,
       parsers: [:urlencoded, :multipart, :json],
       pass: ["*/*"],
-      json_decoder: Poison
+      json_decoder: Jason
     )
 
     plug(:accepts, ["json"])
@@ -21,7 +21,7 @@ defmodule BlueBird.Test.Support.RouterUndocumented do
       Plug.Parsers,
       parsers: [:urlencoded, :multipart, :json],
       pass: ["*/*"],
-      json_decoder: Poison
+      json_decoder: Jason
     )
 
     plug(:accepts, ["json"])

@@ -5,7 +5,7 @@ defmodule BlueBird.Test.Support.NamedController do
   use BlueBird.Controller
   use Phoenix.Controller
 
-  @json_response Poison.encode!(%{status: "ok"})
+  @json_response Jason.encode!(%{status: "ok"})
 
   apigroup("Bobtails", "The Bobtail Resource")
 

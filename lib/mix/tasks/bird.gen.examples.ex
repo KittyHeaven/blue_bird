@@ -4,9 +4,9 @@ defmodule Mix.Tasks.Bird.Gen.Examples do
   """
   use Mix.Task
 
-  alias Mix.Project
   alias BlueBird.Test.Support.Examples
   alias BlueBird.Writer
+  alias Mix.Project
 
   @doc false
   def run(_args) do

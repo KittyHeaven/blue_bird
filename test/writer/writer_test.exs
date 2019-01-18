@@ -18,7 +18,7 @@ defmodule BlueBird.Test.Writer do
       assert file == Grouping.apib()
 
       # assert {:ok, file} = File.read(path_swagger)
-      # assert file == Poison.encode!(Grouping.swagger)
+      # assert file == Jason.encode!(Grouping.swagger)
     end
   end
 
