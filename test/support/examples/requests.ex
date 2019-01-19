@@ -60,7 +60,7 @@ defmodule BlueBird.Test.Support.Examples.Requests do
 
         + Body
 
-                {"peter":"paul","mary":"peter"}
+                {"mary":"peter","peter":"paul"}
 
     + Response 204
     """

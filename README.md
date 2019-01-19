@@ -16,7 +16,7 @@ your controllers and from automated tests.
 
 ``` elixir
 defp deps do
-  [{:blue_bird, "~> 0.3.8"}]
+  [{:blue_bird, "~> 0.4.0"}]
 end
 ```
 

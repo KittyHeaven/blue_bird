@@ -15,8 +15,8 @@ defmodule BlueBird.Formatter do
   """
   use GenServer
 
-  alias BlueBird.Writer
   alias BlueBird.Generator
+  alias BlueBird.Writer
 
   @doc """
   Initializes the handler.

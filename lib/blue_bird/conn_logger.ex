@@ -28,6 +28,8 @@ defmodule BlueBird.ConnLogger do
   """
   use GenServer
 
+  ## Public Interface
+
   @doc """
   Starts the GenServer.
 
@@ -42,8 +44,6 @@ defmodule BlueBird.ConnLogger do
   def start_link do
     {:ok, _} = GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
-
-  ## Public Interface
 
   @doc """
   Returns the logged connections.
@@ -83,12 +83,15 @@ defmodule BlueBird.ConnLogger do
 
   ## Callbacks
 
-  @doc false
-  def handle_call(:get_conns, _from, conns), do: {:reply, conns, conns}
+  @impl true
+  def init(init_arg) do
+    {:ok, init_arg}
+  end
 
-  @doc false
+  @impl true
+  def handle_call(:get_conns, _from, conns), do: {:reply, conns, conns}
   def handle_call(:reset, _from, _conns), do: {:reply, [], []}
 
-  @doc false
+  @impl true
   def handle_cast({:save, conn}, conns), do: {:noreply, conns ++ [conn]}
 end

@@ -166,8 +166,8 @@ defmodule BlueBird.Generator do
   defp controllers(routes) do
     routes
     |> Enum.reduce([], fn route, list ->
-         [Module.concat([:"Elixir" | Module.split(route.plug)]) | list]
-       end)
+      [Module.concat([:"Elixir" | Module.split(route.plug)]) | list]
+    end)
     |> Enum.uniq()
   end
 
@@ -251,11 +251,11 @@ defmodule BlueBird.Generator do
   defp process_routes(requests_list, routes) do
     routes
     |> Enum.reduce([], fn route, generate_docs_for_routes ->
-         case process_route(route, requests_list) do
-           {:ok, route_doc} -> [route_doc | generate_docs_for_routes]
-           _ -> generate_docs_for_routes
-         end
-       end)
+      case process_route(route, requests_list) do
+        {:ok, route_doc} -> [route_doc | generate_docs_for_routes]
+        _ -> generate_docs_for_routes
+      end
+    end)
     |> Enum.reverse()
   end
 

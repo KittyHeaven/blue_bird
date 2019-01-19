@@ -29,4 +29,4 @@ config :blue_bird,
   ignore_headers: ["ignore-me"],
   pipelines: [:api, :another_api]
 
-import_config "#{Mix.env()}.exs"
+config :phoenix, :json_library, Jason
