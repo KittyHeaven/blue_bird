@@ -11,7 +11,11 @@ defmodule Mix.Tasks.Bird.Gen.Docs do
 
   @doc false
   def run(_args) do
-    if System.find_executable("aglio") == nil do
+    aglio_path =
+      Application.get_env(:blue_bird, :aglio_path, "aglio")
+      |> Path.absname()
+
+    if File.exists?(aglio_path) == false do
       raise "Install Aglio to convert Blueprint API to HTML: " <>
               "\"npm install aglio -g\""
     end
@@ -25,7 +29,7 @@ defmodule Mix.Tasks.Bird.Gen.Docs do
       |> Enum.at(0)
       |> Path.join(docs_path)
 
-    System.cmd("aglio", [
+    System.cmd(aglio_path, [
       "--theme-template",
       docs_theme,
       "-i",
