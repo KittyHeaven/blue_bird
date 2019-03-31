@@ -27,6 +27,7 @@ config :blue_bird,
   theme: "triple",
   router: BlueBird.Test.Support.Router,
   ignore_headers: ["ignore-me"],
-  pipelines: [:api, :another_api]
+  pipelines: [:api, :another_api],
+  aglio_path: "aglio"
 
 config :phoenix, :json_library, Jason
