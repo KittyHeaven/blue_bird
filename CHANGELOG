@@ -1,5 +1,13 @@
 # Changelog BlueBird
 
+## v0.4.1
+
+- support local aglio installation
+
+## v0.4.0
+
+- update deps, make it work with Phoenix 1.4
+
 ## v0.3.8
 
 - add `terms_of_service`, `contact` and `license` fields
