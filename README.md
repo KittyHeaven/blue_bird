@@ -14,7 +14,7 @@ your controllers and from automated tests.
 
 1. Add BlueBird to your mix.exs dependencies:
 
-``` elixir
+```elixir
 defp deps do
   [{:blue_bird, "~> 0.4.0"}]
 end
@@ -22,21 +22,21 @@ end
 
 2. Run `mix deps.get` to fetch the dependencies:
 
-``` bash
+```bash
 $ mix deps.get
 ```
 
 3. In `test/test_helper.exs`, start the BlueBird logger with `BlueBird.start()`
-and configure ExUnit as follows:
+   and configure ExUnit as follows:
 
-``` elixir
+```elixir
 BlueBird.start()
 ExUnit.start(formatters: [ExUnit.CLIFormatter, BlueBird.Formatter])
 ```
 
 4. Add the following lines to `config.exs`:
 
-``` elixir
+```elixir
 config :blue_bird,
   docs_path: "priv/static/docs",
   theme: "triple",
@@ -45,7 +45,7 @@ config :blue_bird,
 
 5. Add `blue_bird_info` to your `mix.exs` to add global information:
 
-``` elixir
+```elixir
 def blue_bird_info do
   [
     host: "https://api.acme.com",
@@ -60,7 +60,7 @@ end
 
 6. Add `BlueBird.Controller` to your `web.ex` controller function:
 
-``` elixir
+```elixir
 def controller do
   quote do
     ...
@@ -72,7 +72,7 @@ end
 
 7. Install aglio:
 
-``` bash
+```bash
 $ npm install aglio -g
 ```
 
@@ -83,7 +83,7 @@ $ npm install aglio -g
 By default, documentation is only generated for routes that use the `:api`
 pipeline. You can configure which pipelines to use in the configuration.
 
-``` elixir
+```elixir
 config :blue_bird,
   pipelines: [:something_else]
 ```
@@ -92,7 +92,7 @@ config :blue_bird,
 
 Use the `api/3` macro to annotate your controller functions.
 
-``` elixir
+```elixir
 defmodule AppWeb.CommentController do
   use AppWeb, :controller
 
@@ -114,7 +114,7 @@ as group names in the headings. You can change the group name of a controller
 by adding the `apigroup` macro to your controller modules. The macro can also
 be used to add a group description.
 
-``` elixir
+```elixir
 defmodule AppWeb.CommentController do
   use AppWeb, :controller
 
@@ -128,7 +128,7 @@ end
 In your tests, select which requests and responses you want to include in the
 documentation by saving `conn` to `BlueBird.ConnLogger`:
 
-``` elixir
+```elixir
 test "list comments for post", %{conn: conn} do
   insert_posts_with_comments()
 
@@ -144,7 +144,7 @@ end
 
 First, run your tests:
 
-``` bash
+```bash
 $ mix test
 ```
 
@@ -181,22 +181,22 @@ config :blue_bird,
 
 #### Options
 
-* `docs_path`: Specify the path where the documentation will be generated. If
+- `docs_path`: Specify the path where the documentation will be generated. If
   you want to serve the documentation directly from the `phoenix` app, you can
   specify `priv/static/docs`. If you use BlueBird within an umbrella app, the
   path is relative to the root folder of the umbrella app.
-* `theme`: The [Aglio](https://github.com/danielgtaylor/aglio) theme to be used
+- `theme`: The [Aglio](https://github.com/danielgtaylor/aglio) theme to be used
   for the html documentation.
-* `router`: The router module of your application.
-* `pipelines` (optional): Only routes that use the specified router pipelines
+- `router`: The router module of your application.
+- `pipelines` (optional): Only routes that use the specified router pipelines
   will be included in the documentation. Defaults to `[:api]` if not set.
-* `ignore_headers` (optional): You can hide certain headers from the
+- `ignore_headers` (optional): You can hide certain headers from the
   documentation with this option. This can be helpful if you serve your
   application behind a proxy. If the value is a list of strings as above, the
   specified headers will be hidden from both requests and responses. If you
   want to hide different headers from requests and responses, you can use a map
   instead: `ignore_headers: %{request: ["ignore-me"], response: ["and-me"]}`.
-* `trim_path` (optional): Allows you to remove a path prefix from the docs. For
+- `trim_path` (optional): Allows you to remove a path prefix from the docs. For
   example, if all your routes start with `/api` and you don't want to display
   this prefix in the documentation, set `trim_path` to `"/api"`.
 
@@ -204,17 +204,17 @@ config :blue_bird,
 
 #### Options
 
-* `host`: API host.
-* `title`: Documentation title (can use Blueprint format).
-* `description`: Documentation description (can use Blueprint format).
-* `terms_of_service` (optional): Terms of service, string.
-* `contact` (optional)
-  * `name` (optional)
-  * `url` (optional)
-  * `email` (optional)
-* `license` (optional)
-  * `name` (optional)
-  * `url` (optional)
+- `host`: API host.
+- `title`: Documentation title (can use Blueprint format).
+- `description`: Documentation description (can use Blueprint format).
+- `terms_of_service` (optional): Terms of service, string.
+- `contact` (optional)
+  - `name` (optional)
+  - `url` (optional)
+  - `email` (optional)
+- `license` (optional)
+  - `name` (optional)
+  - `url` (optional)
 
 ## FAQ
 
@@ -235,7 +235,7 @@ BlueBird reads the `body_params` from `%Plug.Conn{}`. This map is only set if
 
 #### Example
 
-``` elixir
+```elixir
 post build_conn(), "/", Poison.encode! %{my: data}  # recommended
 post build_conn(), "/", "my=data"
 ```
