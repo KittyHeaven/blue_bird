@@ -77,8 +77,6 @@ defmodule BlueBird.Generator do
   """
   @spec run :: ApiDoc.t()
   def run do
-    IO.puts "Running BlueBird.Generate"
-
     prepare_docs()
   end
 
@@ -183,12 +181,6 @@ defmodule BlueBird.Generator do
     routes
     |> Enum.sort_by(fn route -> -byte_size(route.path) end)
     |> Enum.find(fn route -> route_match?(route.path, path) end)
-    |> case do
-      nil ->
-        IO.inspect "Couldn't find route for path #{path}"
-        nil
-      r -> r
-    end
   end
 
   @spec route_match?(String.t(), String.t()) :: boolean
@@ -200,10 +192,6 @@ defmodule BlueBird.Generator do
   end
 
   @spec request_map(%PhxRoute{}, %Plug.Conn{}) :: Request.t()
-  defp request_map(nil, conn) do
-    Logger.error("Couldn't find a route")
-    %Request{}
-  end
   defp request_map(route, conn) do
     %Request{
       method: conn.method,

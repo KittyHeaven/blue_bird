@@ -16,6 +16,10 @@ defmodule BlueBird.Writer do
 
       config :blue_bird,
         docs_path: "priv/static/docs"
+
+  For an umbrella app.
+      config :my_app, :blue_bird,
+        docs_path: "priv/static/docs"
   """
   @spec run(ApiDoc.t()) :: :ok | {:error, File.posix()}
   def run(api_docs) do

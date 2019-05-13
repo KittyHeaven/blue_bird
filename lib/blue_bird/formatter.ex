@@ -30,7 +30,6 @@ defmodule BlueBird.Formatter do
   """
   @spec handle_cast(request :: term, state :: term) :: {:noreply, nil}
   def handle_cast({:suite_finished, _run_us, _load_us}, _state) do
-    IO.puts "Tests finished"
     Generator.run() |> Writer.run()
     {:noreply, nil}
   end
