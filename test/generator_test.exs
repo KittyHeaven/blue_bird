@@ -31,16 +31,6 @@ defmodule BlueBird.Test.GeneratorTest do
     end)
   end
 
-  test "get_app_module/0" do
-    app_module = Generator.get_app_module()
-    assert app_module == BlueBird
-  end
-
-  test "get_router_module/1" do
-    router_module = Generator.get_app_module() |> Generator.get_router_module()
-    assert router_module == Router
-  end
-
   describe "run/0" do
     test "includes all defined routes, uses default values" do
       Logger.disable(self())

@@ -12,7 +12,7 @@ defmodule BlueBird.Generator do
   """
   require Logger
 
-  alias BlueBird.{ApiDoc, ConnLogger, Request, Response, Route}
+  alias BlueBird.{ApiDoc, ConnLogger, Request, Response, Route, Config}
   alias Mix.Project
   alias Phoenix.Naming
   alias Phoenix.Router.Route, as: PhxRoute
@@ -84,8 +84,7 @@ defmodule BlueBird.Generator do
 
   @spec prepare_docs() :: ApiDoc.t()
   defp prepare_docs() do
-    config = blue_bird_config()
-    router_module = Keyword.get(config, :router)
+    router_module = Config.get(:router)
     info = blue_bird_info()
     contact = Keyword.get(info, :contact, [])
     license = Keyword.get(info, :license, [])
@@ -136,7 +135,7 @@ defmodule BlueBird.Generator do
 
   @spec filter_api_routes([%PhxRoute{}]) :: [%PhxRoute{}]
   defp filter_api_routes(routes) do
-    pipelines = Keyword.get(blue_bird_config(), :pipelines, [:api])
+    pipelines = Config.get(:pipelines, [:api])
 
     Enum.filter(routes, fn route ->
       Enum.any?(
@@ -224,9 +223,7 @@ defmodule BlueBird.Generator do
 
   @spec get_ignore_headers(atom) :: [String.t()]
   defp get_ignore_headers(type) when type == :request or type == :response do
-    blue_bird_config()
-    |> Keyword.get(:ignore_headers, false)
-    |> case do
+    case Config.get(:ignore_headers, false) do
       [_ | _] = headers -> headers
       %{} = header_map -> Map.get(header_map, type, [])
       _ -> []
@@ -287,7 +284,7 @@ defmodule BlueBird.Generator do
 
   @spec trim_path(String.t()) :: String.t()
   defp trim_path(path) do
-    to_trim = Keyword.get(blue_bird_config(), :trim_path, "")
+    to_trim = Config.get(:trim_path, "")
 
     if path == to_trim, do: "/", else: String.trim_leading(path, to_trim <> "/")
   end
@@ -311,12 +308,5 @@ defmodule BlueBird.Generator do
       route.plug
       |> Naming.resource_name("Controller")
       |> Naming.humanize()
-  end
-
-  @spec blue_bird_config() :: Keyword.t()
-  def blue_bird_config() do
-    Project.get().project()
-    |> Keyword.get(:app)
-    |> Application.get_env(:blue_bird, [])
   end
 end
