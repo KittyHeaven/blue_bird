@@ -179,6 +179,18 @@ config :blue_bird,
   ignore_headers: ["not-wanted"]
 ```
 
+If you wish to have separate configuration options for apps in an Umbrella project,
+you can specify per-app settings as follow in the app specific `config.exs`:
+
+```elixir
+config :my_app, :blue_bird,
+  docs_path: "priv/static/docs",
+  theme: "triple",
+  router: YourAppWeb.Router,
+  pipelines: [:api],
+  ignore_headers: ["not-wanted"]
+```
+
 #### Options
 
 - `docs_path`: Specify the path where the documentation will be generated. If
