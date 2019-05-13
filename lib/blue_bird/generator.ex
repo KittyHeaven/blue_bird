@@ -77,6 +77,7 @@ defmodule BlueBird.Generator do
   """
   @spec run :: ApiDoc.t()
   def run do
+    IO.puts "Running BlueBird.Generate"
     get_app_module()
     |> get_router_module()
     |> prepare_docs()
