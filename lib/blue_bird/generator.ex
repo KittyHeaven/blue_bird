@@ -88,7 +88,6 @@ defmodule BlueBird.Generator do
   @spec get_app_module :: atom
   def get_app_module do
     Project.get().application
-    |> IO.inspect()
     |> Keyword.get(:mod)
     |> elem(0)
   end
@@ -98,6 +97,8 @@ defmodule BlueBird.Generator do
   def get_router_module(app_module) do
     IO.inspect app_module
     IO.inspect Application.get_env(:blue_bird, :router)
+    IO.inspect Project.config()
+    IO.inspect Project.umbrella?()
     Application.get_env(
       :blue_bird,
       :router,
