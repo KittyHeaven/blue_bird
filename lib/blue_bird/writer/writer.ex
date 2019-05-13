@@ -2,10 +2,8 @@ defmodule BlueBird.Writer do
   @moduledoc """
   Writes api documentations in apib and swagger format to files.
   """
-  alias BlueBird.ApiDoc
-  alias BlueBird.Route
-  alias BlueBird.Writer.Blueprint
-  alias BlueBird.Writer.Swagger
+  alias BlueBird.{ApiDoc, Config, Router}
+  alias BlueBird.Writer.{Blueprint, Swagger}
   alias Mix.Project
 
   @doc """
