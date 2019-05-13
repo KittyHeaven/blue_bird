@@ -78,6 +78,8 @@ defmodule BlueBird.Generator do
   @spec run :: ApiDoc.t()
   def run do
     IO.puts "Running BlueBird.Generate"
+    IO.inspect Project.get()
+
     get_app_module()
     |> get_router_module()
     |> prepare_docs()
@@ -106,7 +108,6 @@ defmodule BlueBird.Generator do
   @spec prepare_docs(atom) :: ApiDoc.t()
   defp prepare_docs(router_module) do
     info = blue_bird_info()
-    IO.inspect info
     contact = Keyword.get(info, :contact, [])
     license = Keyword.get(info, :license, [])
 
