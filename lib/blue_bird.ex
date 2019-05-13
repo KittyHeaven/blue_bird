@@ -5,8 +5,6 @@ defmodule BlueBird do
   import Supervisor.Spec
 
   def start(_type, []) do
-    IO.puts "Starting BlueBird"
-
     children = [
       worker(BlueBird.ConnLogger, [])
     ]

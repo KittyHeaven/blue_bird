@@ -16,7 +16,6 @@ defmodule BlueBird.ApiDoc do
               url: ""
             ],
             routes: [],
-            channels: [],
             groups: %{}
 
   @typedoc """
