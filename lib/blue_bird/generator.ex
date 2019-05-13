@@ -79,35 +79,13 @@ defmodule BlueBird.Generator do
   def run do
     IO.puts "Running BlueBird.Generate"
 
-    get_app_module()
-    |> get_router_module()
-    |> prepare_docs()
+    prepare_docs()
   end
 
-  @doc false
-  @spec get_app_module :: atom
-  def get_app_module do
-    Project.get().application
-    |> Keyword.get(:mod)
-    |> elem(0)
-  end
-
-  @doc false
-  @spec get_router_module(atom) :: atom
-  def get_router_module(app_module) do
-    IO.inspect app_module
-    IO.inspect Application.get_env(:blue_bird, :router)
-    IO.inspect Project.config()
-    IO.inspect Project.umbrella?()
-    Application.get_env(
-      :blue_bird,
-      :router,
-      Module.concat([app_module, :Router])
-    )
-  end
-
-  @spec prepare_docs(atom) :: ApiDoc.t()
-  defp prepare_docs(router_module) do
+  @spec prepare_docs() :: ApiDoc.t()
+  defp prepare_docs() do
+    config = blue_bird_config()
+    router_module = Keyword.get(config, :router)
     info = blue_bird_info()
     contact = Keyword.get(info, :contact, [])
     license = Keyword.get(info, :license, [])
@@ -128,8 +106,8 @@ defmodule BlueBird.Generator do
       ],
       routes: [],
       groups: []
-      #routes: generate_docs_for_routes(router_module),
-      #groups: generate_groups_for_routes(router_module)
+      routes: generate_docs_for_routes(router_module),
+      groups: generate_groups_for_routes(router_module)
     }
   end
 
@@ -160,7 +138,7 @@ defmodule BlueBird.Generator do
 
   @spec filter_api_routes([%PhxRoute{}]) :: [%PhxRoute{}]
   defp filter_api_routes(routes) do
-    pipelines = Application.get_env(:blue_bird, :pipelines, [:api])
+    pipelines = Keyword.get(blue_bird_config(), :pipelines, [:api])
 
     Enum.filter(routes, fn route ->
       Enum.any?(
@@ -248,7 +226,9 @@ defmodule BlueBird.Generator do
 
   @spec get_ignore_headers(atom) :: [String.t()]
   defp get_ignore_headers(type) when type == :request or type == :response do
-    case Application.get_env(:blue_bird, :ignore_headers) do
+    blue_bird_config()
+    |> Keyword.get(:ignore_headers, false)
+    |> case do
       [_ | _] = headers -> headers
       %{} = header_map -> Map.get(header_map, type, [])
       _ -> []
@@ -309,7 +289,7 @@ defmodule BlueBird.Generator do
 
   @spec trim_path(String.t()) :: String.t()
   defp trim_path(path) do
-    to_trim = Application.get_env(:blue_bird, :trim_path, "")
+    to_trim = Keyword.get(blue_bird_config(), :trim_path, "")
 
     if path == to_trim, do: "/", else: String.trim_leading(path, to_trim <> "/")
   end
@@ -333,5 +313,12 @@ defmodule BlueBird.Generator do
       route.plug
       |> Naming.resource_name("Controller")
       |> Naming.humanize()
+  end
+
+  @spec blue_bird_config() :: Keyword.t()
+  def blue_bird_config() do
+    Project.get().project()
+    |> Keyword.get(:app)
+    |> Application.get_env(:blue_bird, [])
   end
 end
