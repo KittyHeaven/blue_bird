@@ -87,6 +87,7 @@ defmodule BlueBird.Generator do
   @spec get_app_module :: atom
   def get_app_module do
     Project.get().application
+    |> IO.inspect
     |> Keyword.get(:mod)
     |> elem(0)
   end
