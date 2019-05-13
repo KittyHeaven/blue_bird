@@ -78,7 +78,6 @@ defmodule BlueBird.Generator do
   @spec run :: ApiDoc.t()
   def run do
     IO.puts "Running BlueBird.Generate"
-    IO.inspect Project.get()
 
     get_app_module()
     |> get_router_module()
@@ -89,6 +88,7 @@ defmodule BlueBird.Generator do
   @spec get_app_module :: atom
   def get_app_module do
     Project.get().application
+    |> IO.inspect()
     |> Keyword.get(:mod)
     |> elem(0)
   end
