@@ -42,6 +42,7 @@ defmodule BlueBird.ConnLogger do
   """
   @spec start_link :: {:ok, pid}
   def start_link do
+    IO.puts "ConnLogger starting"
     {:ok, _} = GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
 
