@@ -78,7 +78,6 @@ defmodule BlueBird.ConnLogger do
   """
   @spec save(Plug.Conn.t()) :: :ok
   def save(conn) do
-    IO.puts "Saving conn"
     GenServer.cast(__MODULE__, {:save, conn})
     conn
   end
