@@ -5,14 +5,14 @@ defmodule BlueBird.Test.ConfigTest do
 
   describe "get/0" do
     test "returns all config for bluebird" do
-      assert Config.get() == [
-               aglio_path: "aglio",
-               theme: "triple",
-               ignore_headers: ["ignore-me"],
-               pipelines: [:api, :another_api],
-               router: BlueBird.Test.Support.Router,
-               docs_path: "priv/static/docs"
-             ]
+      conf = Config.get()
+
+      assert Keyword.get(conf, :aglio_path) == "aglio"
+      assert Keyword.get(conf, :theme) ==  "triple"
+      assert Keyword.get(conf, :ignore_headers) == ["ignore-me"]
+      assert Keyword.get(conf, :pipelines) == [:api, :another_api]
+      assert Keyword.get(conf, :router) == BlueBird.Test.Support.Router
+      assert Keyword.get(conf, :docs_path) == "priv/static/docs"
     end
   end
 
