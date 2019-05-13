@@ -106,6 +106,7 @@ defmodule BlueBird.Generator do
   @spec prepare_docs(atom) :: ApiDoc.t()
   defp prepare_docs(router_module) do
     info = blue_bird_info()
+    IO.inspect info
     contact = Keyword.get(info, :contact, [])
     license = Keyword.get(info, :license, [])
 
@@ -123,8 +124,10 @@ defmodule BlueBird.Generator do
         name: Keyword.get(license, :name, ""),
         url: Keyword.get(license, :url, "")
       ],
-      routes: generate_docs_for_routes(router_module),
-      groups: generate_groups_for_routes(router_module)
+      routes: [],
+      groups: []
+      #routes: generate_docs_for_routes(router_module),
+      #groups: generate_groups_for_routes(router_module)
     }
   end
 
