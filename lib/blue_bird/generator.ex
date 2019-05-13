@@ -104,8 +104,6 @@ defmodule BlueBird.Generator do
         name: Keyword.get(license, :name, ""),
         url: Keyword.get(license, :url, "")
       ],
-      routes: [],
-      groups: []
       routes: generate_docs_for_routes(router_module),
       groups: generate_groups_for_routes(router_module)
     }
