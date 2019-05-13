@@ -52,7 +52,7 @@ defmodule BlueBird.Writer do
 
   @spec get_path :: binary
   defp get_path do
-    docs_path = Application.get_env(:blue_bird, :docs_path, "docs")
+    docs_path = Config.get(:docs_path, "docs")
 
     Project.build_path()
     |> String.split("_build")
