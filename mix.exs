@@ -1,7 +1,7 @@
 defmodule BlueBird.Mixfile do
   use Mix.Project
 
-  @version "0.3.8"
+  @version "0.4.1"
   @url "https://github.com/KittyHeaven/blue_bird"
   @maintainers [
     "Djordje Atlialp",
@@ -52,23 +52,23 @@ defmodule BlueBird.Mixfile do
   defp deps do
     [
       # Static code analysis
-      {:credo, "~> 0.8.6", only: [:dev, :test]},
-      {:dialyxir, "~> 0.5.1", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0.0-rc.4", only: [:dev], runtime: false},
 
       # Coverage
-      {:excoveralls, "~> 0.7", only: [:test]},
+      {:excoveralls, "~> 0.10.4", only: [:test]},
 
       # Docs
       {:ex_doc, ">= 0.16.4", only: :dev},
 
       # Phoenix Framework
-      {:phoenix, "~> 1.3.0", optional: true},
+      {:phoenix, ">= 1.3.0", optional: true},
 
       # Composable modules
       {:plug, ">= 1.4.3"},
 
       # JSON library
-      {:poison, ">= 3.1.0"}
+      {:jason, "~> 1.1"}
     ]
   end
 

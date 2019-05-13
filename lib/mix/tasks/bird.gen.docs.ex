@@ -9,12 +9,38 @@ defmodule Mix.Tasks.Bird.Gen.Docs do
 
   alias Mix.Project
 
+  @aglio_default "aglio"
+
+  @aglio_missing """
+  Install Aglio to convert Blueprint API to HTML:
+
+  - `npm install aglio -g` to install it globally on your system.
+
+  - `npm install aglio` in your prefered location, then use e.g.
+
+  `config :blue_bird, aglio_path: "node_modules/.bin/aglio"` to configure the path to it.
+  """
+
   @doc false
   def run(_args) do
-    if System.find_executable("aglio") == nil do
-      raise "Install Aglio to convert Blueprint API to HTML: " <>
-              "\"npm install aglio -g\""
-    end
+    aglio_path =
+      case Application.get_env(:blue_bird, :aglio_path, @aglio_default) do
+        @aglio_default ->
+          if System.find_executable(@aglio_default) == nil do
+            raise @aglio_missing
+          end
+
+          @aglio_default
+
+        local_path ->
+          absolute_local_path = Path.absname(local_path)
+
+          if File.exists?(absolute_local_path) == false do
+            raise @aglio_missing
+          end
+
+          absolute_local_path
+      end
 
     docs_path = Application.get_env(:blue_bird, :docs_path, "docs")
     docs_theme = Application.get_env(:blue_bird, :docs_theme, "triple")
@@ -25,7 +51,7 @@ defmodule Mix.Tasks.Bird.Gen.Docs do
       |> Enum.at(0)
       |> Path.join(docs_path)
 
-    System.cmd("aglio", [
+    System.cmd(aglio_path, [
       "--theme-template",
       docs_theme,
       "-i",

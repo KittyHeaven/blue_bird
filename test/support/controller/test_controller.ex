@@ -5,7 +5,7 @@ defmodule BlueBird.Test.Support.TestController do
   use BlueBird.Controller
   use Phoenix.Controller
 
-  @json_response Poison.encode!(%{status: "ok"})
+  @json_response Jason.encode!(%{status: "ok"})
 
   api :GET, "/waldorf" do
     title("Get Waldorf")

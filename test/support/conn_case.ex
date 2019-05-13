@@ -45,7 +45,7 @@ defmodule BlueBird.Test.Support.ConnCase do
 
       test "'#{unquote(module) |> module_to_title}' is rendered to swagger" do
         output = Swagger.generate_output(unquote(module).api_doc)
-        assert output == Poison.encode!(unquote(module).swagger)
+        assert output == Jason.encode!(unquote(module).swagger)
       end
     end
   end

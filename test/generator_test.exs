@@ -215,7 +215,7 @@ defmodule BlueBird.Test.GeneratorTest do
 
     test "includes params" do
       :post
-      |> build_conn("/statler/137?s=poodle", Poison.encode!(%{betty: "white"}))
+      |> build_conn("/statler/137?s=poodle", Jason.encode!(%{betty: "white"}))
       |> put_req_header("content-type", "application/json")
       |> Router.call(@opts)
       |> ConnLogger.save()

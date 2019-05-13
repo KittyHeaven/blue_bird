@@ -5,7 +5,7 @@ defmodule BlueBird.Test.Support.UndocumentedController do
   use BlueBird.Controller
   use Phoenix.Controller
 
-  @json_response Poison.encode!(%{status: "ok"})
+  @json_response Jason.encode!(%{status: "ok"})
 
   def catchall(conn, params) do
     body = Map.get(params, "body", @json_response)
