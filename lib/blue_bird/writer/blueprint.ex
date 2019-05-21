@@ -258,6 +258,7 @@ defmodule BlueBird.Writer.Blueprint do
 
   @spec print_attribute({String.t(), any}) :: String.t()
   defp print_attribute({key, value}) when is_map(value) do
+    IO.inspect "#{key}: #{value}"
     print_attribute_name_and_type(key, value) <>
       walk_through_attributes(value, 4)
   end
