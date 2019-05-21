@@ -82,6 +82,7 @@ defmodule BlueBird.Generator do
 
   @spec prepare_docs() :: ApiDoc.t()
   defp prepare_docs() do
+    IO.inspect Config.get()
     router_module = Config.get(:router)
     info = blue_bird_info()
     contact = Keyword.get(info, :contact, [])
