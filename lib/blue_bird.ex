@@ -14,9 +14,6 @@ defmodule BlueBird do
   end
 
   def start(options \\ []) do
-    app = Mix.Project.get().project()
-          |> Keyword.get(:app)
-    IO.puts "BlueBird started by #{inspect app}"
     Application.start(:blue_bird)
 
     Enum.each(options, fn {k, v} ->
