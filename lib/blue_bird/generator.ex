@@ -172,7 +172,14 @@ defmodule BlueBird.Generator do
     Enum.reduce(test_conns, [], fn conn, list ->
       route = find_route(routes, conn.request_path)
 
-      [request_map(route, conn) | list]
+      case route do
+        nil ->
+          IO.puts "Couldn't find a route for #{conn.request_path}"
+          list
+
+        request ->
+          [request_map(route, conn) | list]
+      end
     end)
   end
 
