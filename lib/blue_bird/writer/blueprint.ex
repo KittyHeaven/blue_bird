@@ -132,6 +132,7 @@ defmodule BlueBird.Writer.Blueprint do
   end
 
   defp process_request(request) do
+    IO.inspect request
     content_type = get_content_type(request.headers)
 
     req_str =
