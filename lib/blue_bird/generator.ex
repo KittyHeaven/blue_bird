@@ -82,7 +82,6 @@ defmodule BlueBird.Generator do
 
   @spec prepare_docs() :: ApiDoc.t()
   defp prepare_docs() do
-    IO.inspect Config.get()
     router_module = Config.get(:router)
     info = blue_bird_info()
     contact = Keyword.get(info, :contact, [])
@@ -175,7 +174,7 @@ defmodule BlueBird.Generator do
 
       case route do
         nil ->
-          IO.puts "Couldn't find a route for #{conn.request_path}"
+          #IO.puts "Couldn't find a route for #{conn.request_path}"
           list
 
         request ->
