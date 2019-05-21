@@ -5,9 +5,6 @@ defmodule BlueBird do
   import Supervisor.Spec
 
   def start(_type, []) do
-    app = Mix.Project.get().project()
-          |> Keyword.get(:app)
-    IO.puts "BlueBird started by #{inspect app}"
     children = [
       worker(BlueBird.ConnLogger, [])
     ]
@@ -17,6 +14,9 @@ defmodule BlueBird do
   end
 
   def start(options \\ []) do
+    app = Mix.Project.get().project()
+          |> Keyword.get(:app)
+    IO.puts "BlueBird started by #{inspect app}"
     Application.start(:blue_bird)
 
     Enum.each(options, fn {k, v} ->
