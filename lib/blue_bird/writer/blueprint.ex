@@ -58,7 +58,7 @@ defmodule BlueBird.Writer.Blueprint do
 
   @spec process_resource({String.t() | nil, [Route.t()]}) :: String.t()
   defp process_resource({_path, routes}) do
-    "## #{routes |> Enum.at(0) |> display_path}\n\n" <> process_routes(routes)
+    "## Sample Resource [#{routes |> Enum.at(0) |> display_path}]\n\n" <> process_routes(routes)
   end
 
   ## Routes
