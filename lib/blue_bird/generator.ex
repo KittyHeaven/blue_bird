@@ -174,7 +174,6 @@ defmodule BlueBird.Generator do
 
       case route do
         nil ->
-          #IO.puts "Couldn't find a route for #{conn.request_path}"
           list
 
         request ->
@@ -211,7 +210,8 @@ defmodule BlueBird.Generator do
         status: conn.status,
         body: conn.resp_body,
         headers: filter_headers(conn.resp_headers, :response)
-      }
+      },
+      name: Map.get(conn.assigns, :request_name, nil)
     }
   end
 

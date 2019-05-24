@@ -9,7 +9,8 @@ defmodule BlueBird.Request do
     path_params: %{},
     body_params: %{},
     headers: [],
-    query_params: %{}
+    query_params: %{},
+    name: nil
   ]
 
   @typedoc """
@@ -22,6 +23,7 @@ defmodule BlueBird.Request do
           path_params: %{optional(String.t()) => String.t()},
           body_params: %{optional(String.t()) => String.t()},
           query_params: %{optional(String.t()) => String.t()},
-          response: BlueBird.Response.t()
+          response: BlueBird.Response.t(),
+          name: String.t() | nil
         }
 end

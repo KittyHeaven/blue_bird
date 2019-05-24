@@ -31,12 +31,11 @@ defmodule BlueBird.Writer.Blueprint do
   @spec process_group({String.t() | nil, [Route.t()]}, map) :: String.t()
   defp process_group({nil, routes}, _) do
     routes
-    |> group_routes(:path)
+    |> group_routes(:resource)
     |> process_resources
   end
-
   defp process_group({group_name, routes}, groups_map) do
-    grouped_routes = group_routes(routes, :path)
+    grouped_routes = group_routes(routes, :resource)
 
     "# Group #{group_name}\n\n" <>
       group_description(Map.get(groups_map, group_name, "")) <>
@@ -58,7 +57,8 @@ defmodule BlueBird.Writer.Blueprint do
 
   @spec process_resource({String.t() | nil, [Route.t()]}) :: String.t()
   defp process_resource({_path, routes}) do
-    "## Sample Resource [#{routes |> Enum.at(0) |> display_path}]\n\n" <> process_routes(routes)
+    first_route = Enum.at(routes, 0)
+    "## #{first_route.resource} [#{display_path(first_route)}]\n\n" <> process_routes(routes)
   end
 
   ## Routes
@@ -128,7 +128,7 @@ defmodule BlueBird.Writer.Blueprint do
 
   @spec process_conn(Request.t()) :: String.t()
   defp process_conn(request) do
-    process_request(request) <> (request.response |> process_response())
+    process_request(request) <> process_response(request)
   end
 
   defp process_request(request) do
@@ -146,22 +146,33 @@ defmodule BlueBird.Writer.Blueprint do
     if req_str == "" && content_type == "" do
       ""
     else
-      "+ Request #{request.response.status}#{content_type}\n\n" <>
-        req_str <> "\n"
+      request_title = request_title(request.response.status, content_type, request.name)
+      "+ Request #{request_title} \n\n" <> req_str <> "\n"
     end
   end
 
   ## Responses
 
-  @spec process_response(Response.t()) :: String.t()
-  defp process_response(response) do
-    [
-      "+ Response #{response.status}#{get_content_type(response.headers)}\n",
+  @spec process_response(Request.t()) :: String.t()
+  defp process_response(request) do
+    response = request.response
+    content_type = get_content_type(response.headers)
+    status = response.status
+    request_title = request_title(status, content_type, request.name)
+
+    ["+ Response #{request_title} \n",
       response.headers |> filter_headers() |> print_headers() |> indent(4),
-      response.body |> print_body() |> indent(4)
-    ]
+      response.body |> print_body() |> indent(4)]
     |> Enum.reject(&(&1 == ""))
     |> Enum.join("\n")
+  end
+
+  @spec request_title(integer(), String.t(), String.t()) :: String.t()
+  defp request_title(status, content_type, nil = _name) do
+    "#{status}#{content_type}"
+  end
+  defp request_title(status, content_type, name) do
+    "#{status} #{name}#{content_type}"
   end
 
   @spec get_content_type([{String.t(), String.t()}]) :: String.t()

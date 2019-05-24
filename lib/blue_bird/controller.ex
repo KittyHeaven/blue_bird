@@ -78,6 +78,7 @@ defmodule BlueBird.Controller do
   defmacro api(method, path, do: block) do
     method_str = method_to_string(method)
     metadata = extract_metadata(block)
+    resource = extract_option(metadata, :resource)
     title = extract_option(metadata, :title)
     description = extract_option(metadata, :description)
     note = extract_option(metadata, :note)
@@ -87,6 +88,7 @@ defmodule BlueBird.Controller do
     quote do
       def api_doc(unquote(method_str), unquote(path)) do
         %Route{
+          resource: unquote(resource),
           title: unquote(title),
           description: unquote(description),
           note: unquote(note),

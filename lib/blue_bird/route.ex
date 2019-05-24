@@ -4,6 +4,7 @@ defmodule BlueBird.Route do
   """
   defstruct [
     :group,
+    :resource,
     :title,
     :description,
     :note,
@@ -21,6 +22,7 @@ defmodule BlueBird.Route do
           method: String.t(),
           path: String.t(),
           group: String.t() | nil,
+          resource: String.t() | nil,
           title: String.t() | nil,
           description: String.t() | nil,
           note: String.t() | nil,
