@@ -228,6 +228,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
             %Request{
               method: POST,
               path: "/users/:id/pets",
+              title: "Add pet",
               headers: [{"accept", "application/json"}],
               path_params: %{},
               body_params: %{},
@@ -265,7 +266,7 @@ defmodule BlueBird.Test.Writer.BlueprintTest do
 
                          {"name":"George","kind":"dog"}
 
-             + Request 200
+             + Request Add pet
 
                  + Headers
 

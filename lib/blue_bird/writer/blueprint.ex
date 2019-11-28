@@ -132,6 +132,7 @@ defmodule BlueBird.Writer.Blueprint do
   end
 
   defp process_request(request) do
+    title = request.title || request.response.status
     content_type = get_content_type(request.headers)
 
     req_str =
@@ -146,7 +147,7 @@ defmodule BlueBird.Writer.Blueprint do
     if req_str == "" && content_type == "" do
       ""
     else
-      "+ Request #{request.response.status}#{content_type}\n\n" <>
+      "+ Request #{title}#{content_type}\n\n" <>
         req_str <> "\n"
     end
   end

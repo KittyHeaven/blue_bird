@@ -75,8 +75,10 @@ defmodule BlueBird.ConnLogger do
       iex> save(conn)
       :ok
   """
-  @spec save(Plug.Conn.t()) :: :ok
-  def save(conn) do
+  @type save_option :: {:title, String.t()}
+  @spec save(Plug.Conn.t(), [save_option()]) :: Plug.Conn.t()
+  def save(conn, opts \\ []) do
+    conn = Plug.Conn.assign(conn, :blue_bird_opts, opts)
     GenServer.cast(__MODULE__, {:save, conn})
     conn
   end

@@ -212,9 +212,12 @@ defmodule BlueBird.Generator do
 
   @spec request_map(%PhxRoute{}, %Plug.Conn{}) :: Request.t()
   defp request_map(route, conn) do
+    opts = conn.assigns[:blue_bird_opts]
+
     %Request{
       method: conn.method,
       path: route.path,
+      title: Keyword.get(opts, :title),
       headers: filter_headers(conn.req_headers, :request),
       path_params: conn.path_params,
       body_params: conn.body_params,

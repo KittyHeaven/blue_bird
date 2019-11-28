@@ -133,8 +133,8 @@ test "list comments for post", %{conn: conn} do
   insert_posts_with_comments()
 
   conn = conn
-  |> get(comments_path(conn, :index)
-  |> BlueBird.ConnLogger.save()
+  |> get(comments_path(conn, :index))
+  |> BlueBird.ConnLogger.save(title: "Without params")
 
   assert json_response(conn, 200)
 end

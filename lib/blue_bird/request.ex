@@ -6,6 +6,7 @@ defmodule BlueBird.Request do
     :method,
     :path,
     :response,
+    :title,
     path_params: %{},
     body_params: %{},
     headers: [],
@@ -18,10 +19,11 @@ defmodule BlueBird.Request do
   @type t :: %BlueBird.Request{
           method: String.t(),
           path: String.t(),
-          headers: [{String.t(), String.t()}],
+          response: BlueBird.Response.t(),
+          title: String.t(),
           path_params: %{optional(String.t()) => String.t()},
           body_params: %{optional(String.t()) => String.t()},
-          query_params: %{optional(String.t()) => String.t()},
-          response: BlueBird.Response.t()
+          headers: [{String.t(), String.t()}],
+          query_params: %{optional(String.t()) => String.t()}
         }
 end
