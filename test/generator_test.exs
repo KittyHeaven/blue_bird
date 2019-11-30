@@ -267,6 +267,19 @@ defmodule BlueBird.Test.GeneratorTest do
       assert length(post_route.requests) == 1
     end
 
+    test "includes request title" do
+      :get
+      |> build_conn("/waldorf")
+      |> Router.call(@opts)
+      |> ConnLogger.save(title: "Waldorf")
+
+      Logger.disable(self())
+      route = Generator.run() |> find_route("GET", "/waldorf")
+      request = hd(route.requests)
+
+      assert request.title == "Waldorf"
+    end
+
     test "includes response status, headers and body" do
       :get
       |> build_conn("/waldorf")

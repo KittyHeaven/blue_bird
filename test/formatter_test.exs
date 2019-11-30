@@ -3,6 +3,7 @@ defmodule BlueBird.Test.FormatterTest do
 
   alias BlueBird.Formatter
 
+  @tag :capture_log
   test "Formatter runs Generator and Writer" do
     path_apib = Path.join(["priv", "static", "docs", "api.apib"])
     # path_swagger = Path.join(["priv", "static", "docs", "swagger.json"])
